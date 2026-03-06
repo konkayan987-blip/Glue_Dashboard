@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glue Usage & Cost Analytics</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Sarabun:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', 'Sarabun', sans-serif;
+            background-color: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        @media (min-width: 1024px) {
+            .kpi-value {
+                font-size: 1.75rem;
+            }
+        }
+
+        .kpi-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .kpi-sub {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8">
+
+    <div id="main-dashboard" class="max-w-[1400px] mx-auto space-y-6">
+
+        <header
+            class="glass-card rounded-2xl p-6 flex flex-col xl:flex-row justify-between items-center gap-4 border-l-4 border-l-emerald-500">
+            <div>
+                <h1
+                    class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
+                    🛢️ Glue Usage Analytics
+                </h1>
+                <p class="text-slate-400 text-sm mt-1" id="dataStatus">กำลังโหลดและตรวจสอบข้อมูล...</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
+                    <label class="text-sm text-slate-300">เดือน/ปี:</label>
+                    <input type="month" id="monthFilter" onchange="applyMonthFilter()"
+                        class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-slate-400">
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-slate-300">ตั้งแต่:</label>
+                    <input type="text" id="startDate"
+                        class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white w-28 text-center placeholder-slate-400">
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-slate-300">ถึง:</label>
+                    <input type="text" id="endDate"
+                        class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white w-28 text-center placeholder-slate-400">
+                </div>
+                <button onclick="applyFilter()"
+                    class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-emerald-500/30">
+                    🔍 กรองข้อมูล
+                </button>
+                <button onclick="resetFilter()"
+                    class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200">
+                    รีเซ็ต
+                </button>
+                <button onclick="loadData()" id="refreshBtn"
+                    class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-teal-500/30 flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล
+                </button>
+                <button onclick="downloadDashboard(event)"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-indigo-500/30"
+                    title="บันทึกภาพรวมแดชบอร์ดทั้งหมด">
+                    <i class="fa-solid fa-camera"></i> แคปทั้งหน้า
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-4 right-4 text-emerald-400 opacity-20"><i
+                        class="fa-solid fa-flask text-3xl"></i></div>
+                <div class="kpi-label">ปริมาณกาวที่ใช้รวม</div>
+                <div id="kpiTotalUsage" class="kpi-value text-emerald-400 mt-2">--</div>
+                <div class="kpi-sub">หน่วย: กิโลกรัม (kg)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
+                        class="fa-solid fa-money-bill-wave text-3xl"></i></div>
+                <div class="kpi-label">ต้นทุนค่ากาวรวม</div>
+                <div id="kpiTotalCost" class="kpi-value text-rose-400 mt-2">--</div>
+                <div class="kpi-sub">หน่วย: บาท (Baht)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-4 right-4 text-blue-400 opacity-20"><i
+                        class="fa-solid fa-box-open text-3xl"></i></div>
+                <div class="kpi-label">ยอดผลิตรวม (Output)</div>
+                <div id="kpiTotalOutput" class="kpi-value text-blue-400 mt-2">--</div>
+                <div class="kpi-sub">หน่วย: Output / เมตร</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i
+                        class="fa-solid fa-chart-pie text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย ต้นทุน ฿ / Output</div>
+                <div id="kpiAvgRatio" class="kpi-value text-amber-400 mt-2">--</div>
+                <div class="kpi-sub">ค่ากาวต่อหน่วยผลิต Target: 0.316 (น้อย=ดี)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-purple-500/50">
+                <div class="absolute top-4 right-4 text-purple-400 opacity-20"><i
+                        class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม / ตรม.</div>
+                <div id="kpiGramSqm" class="kpi-value text-purple-400 mt-2">--</div>
+                <div class="kpi-sub">g/Sqm Target: 29.250 (น้อย=ดี)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-pink-500/50">
+                <div class="absolute top-4 right-4 text-pink-400 opacity-20"><i
+                        class="fa-solid fa-weight-scale text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย kg / Output</div>
+                <div id="kpiKgOutput" class="kpi-value text-pink-400 mt-2">--</div>
+                <div class="kpi-sub">kg/Output Target: 0.083 (น้อย=ดี)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-violet-500/50">
+                <div class="absolute top-4 right-4 text-violet-400 opacity-20"><i
+                        class="fa-solid fa-percent text-3xl"></i></div>
+                <div class="kpi-label">เปอร์เซ็นต์คุณภาพกาว</div>
+                <div id="kpiQuality" class="kpi-value text-violet-400 mt-2">--</div>
+                <div class="kpi-sub">%คณภาพกาว Target: 90% (มาก=ดี)</div>
+            </div>
+
+            <div id="cardYueMix"
+                class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-cyan-500/50">
+                <div class="absolute top-4 right-4 opacity-20"><i id="iconYueMix"
+                        class="fa-solid fa-bullseye text-3xl text-cyan-400"></i></div>
+                <div class="kpi-label">เฉลี่ย ต้นทุนผสมกาว</div>
+                <div id="kpiYueMix" class="kpi-value text-cyan-400 mt-2">--</div>
+                <div class="kpi-sub">Target: 3.82 ฿ (น้อย=ดี)</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-emerald-300">📊 ปริมาณกาวที่ใช้ (kg)</h3>
+                <div class="w-full h-[250px]"><canvas id="barUsage"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-rose-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-rose-300">💰 ต้นทุนค่ากาว (Baht)</h3>
+                <div class="w-full h-[250px]"><canvas id="barCost"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-purple-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-purple-300">📐 กรัม / ตรม. (g/Sqm)</h3>
+                <div class="w-full h-[250px]"><canvas id="barGramSqm"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-lg font-semibold mb-4 text-amber-300">📉 แนวโน้มความคุ้มค่า (฿ / Output)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendRatio"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-lg font-semibold mb-4 text-purple-300">📉 แนวโน้ม กรัม / ตรม. (g/Sqm)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqm"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-lg font-semibold mb-4 text-pink-300">📉 แนวโน้ม kg / Output</h3>
+                <div class="w-full h-[250px]"><canvas id="trendKgOutput"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-lg font-semibold mb-4 text-violet-300">🧪 แนวโน้มเปอร์เซ็นต์คุณภาพกาว (%)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendQuality"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-cyan-300">🎯 ต้นทุนผสมกาวรายวัน (เทียบ Target)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendYueMix"></canvas></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
+
+        let allData = [];
+        let filteredData = [];
+        let charts = {};
+
+        const colors = {
+            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   // Rose (ISOWA)
+            bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  // Blue (BHS)
+            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   // Amber (YUELI)
+        };
+
+        const fpStartDate = flatpickr("#startDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
+        const fpEndDate = flatpickr("#endDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
+
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', 'Sarabun', sans-serif";
+
+        const parseNum = (val) => {
+            if (!val) return 0;
+            const parsed = parseFloat(String(val).replace(/,/g, ""));
+            return isNaN(parsed) ? 0 : parsed;
+        };
+
+        function parseDateString(dateStr) {
+            if (!dateStr) return 0;
+            let cleanStr = String(dateStr).replace(/\uFEFF/g, '').replace(/"/g, '').trim();
+
+            const thaiMonths = {
+                "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4, "พ.ค.": 5, "มิ.ย.": 6,
+                "ก.ค.": 7, "ส.ค.": 8, "ก.ย.": 9, "ต.ค.": 10, "พ.ย.": 11, "ธ.ค.": 12,
+                "มกราคม": 1, "กุมภาพันธ์": 2, "มีนาคม": 3, "เมษายน": 4, "พฤษภาคม": 5, "มิถุนายน": 6,
+                "กรกฎาคม": 7, "สิงหาคม": 8, "กันยายน": 9, "ตุลาคม": 10, "พฤศจิกายน": 11, "ธันวาคม": 12
+            };
+
+            for (let m in thaiMonths) {
+                if (cleanStr.includes(m)) {
+                    cleanStr = cleanStr.replace(m, "/" + thaiMonths[m] + "/");
+                }
+            }
+
+            cleanStr = cleanStr.replace(/\s+/g, '/').replace(/-+/g, '/').replace(/\/+/g, '/');
+
+            const parts = cleanStr.split('/');
+            if (parts.length >= 3) {
+                let day = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let year = parseInt(parts[2].substring(0, 4), 10);
+
+                if (month > 11) {
+                    month = parseInt(parts[0], 10) - 1;
+                    day = parseInt(parts[1], 10);
+                }
+
+                if (year > 2500) year -= 543;
+                if (year < 100) year += 2000;
+
+                return new Date(year, month, day).getTime();
+            }
+
+            let d = new Date(dateStr);
+            if (!isNaN(d.getTime())) return d.getTime();
+
+            return 0;
+        }
+
+        function loadData() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> กำลังโหลด...';
+                refreshBtn.disabled = true;
+            }
+
+            allData = [];
+            const fetchUrl = sheetUrl + "&_t=" + new Date().getTime();
+
+            fetch(fetchUrl)
+                .then(res => res.text())
+                .then(csv => {
+                    if (csv.toLowerCase().includes("<html") || csv.toLowerCase().includes("sign in")) {
+                        alert("🚨 ระบบถูกบล็อก ไม่สามารถเข้าถึงข้อมูลได้!\n\nกรุณากลับไปที่หน้า Google Sheets แล้วตั้งค่า แชร์ (Share) มุมขวาบน เป็น 'ทุกคนที่มีลิงก์' (Anyone with the link) ก่อนครับ");
+                        resetBtnState();
+                        return;
+                    }
+
+                    const rows = csv.trim().split("\n");
+                    if (rows.length < 2) return;
+
+                    let header = rows[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim().toLowerCase());
+
+                    let getIdx = (k1, k2, defaultIdx) => {
+                        let idx = header.findIndex(x => x.includes(k1) && x.includes(k2));
+                        return idx !== -1 ? idx : defaultIdx;
+                    };
+
+                    let col = {
+                        yue_u: getIdx('ปริมาณ', 'yue', 4),
+                        yue_c: getIdx('ค่ากาว', 'yue', 5),
+                        yue_o: getIdx('output', 'yue', 6),
+                        yue_sqm: getIdx('sqm', 'yue', -1),
+                        yue_mix: getIdx('ต้นทุน', 'yue', 7), // 🌟 เพิ่มคอลัมน์ต้นทุนผสม yueli
+
+                        bhs_u: getIdx('ปริมาณ', 'bhs', 10),
+                        bhs_c: getIdx('ค่ากาว', 'bhs', 11),
+                        bhs_o: getIdx('output', 'bhs', 12),
+                        bhs_sqm: getIdx('sqm', 'bhs', -1),
+
+                        iso_u: getIdx('ปริมาณ', 'iso', 15),
+                        iso_c: getIdx('ค่ากาว', 'iso', 16),
+                        iso_o: getIdx('output', 'iso', 17),
+                        iso_sqm: getIdx('sqm', 'iso', -1),
+
+                        quality: -1
+                    };
+
+                    let qAll = header.findIndex(x => x.includes('คุณภาพ') && (x.includes('all') || x.includes('รวม')));
+                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') && !x.includes('-'));
+                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') || x.includes('solid'));
+                    col.quality = qAll;
+
+                    rows.forEach((r, idx) => {
+                        if (idx === 0) return;
+
+                        const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
+                        if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total') || c[0] === '') return;
+
+                        const ts = parseDateString(c[0]);
+                        if (!ts) return;
+
+                        const dObj = new Date(ts);
+                        const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
+
+                        const y_u = parseNum(c[col.yue_u]);
+                        const y_c = parseNum(c[col.yue_c]);
+                        const y_o = parseNum(c[col.yue_o]);
+                        const y_sqm = col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0;
+                        const y_mix = col.yue_mix !== -1 ? parseNum(c[col.yue_mix]) : 0; // 🌟 ดึงข้อมูลต้นทุนผสม
+
+                        const b_u = parseNum(c[col.bhs_u]);
+                        const b_c = parseNum(c[col.bhs_c]);
+                        const b_o = parseNum(c[col.bhs_o]);
+                        const b_sqm = col.bhs_sqm !== -1 ? parseNum(c[col.bhs_sqm]) : 0;
+
+                        const i_u = parseNum(c[col.iso_u]);
+                        const i_c = parseNum(c[col.iso_c]);
+                        const i_o = parseNum(c[col.iso_o]);
+                        const i_sqm = col.iso_sqm !== -1 ? parseNum(c[col.iso_sqm]) : 0;
+
+                        const q = col.quality !== -1 ? parseNum(c[col.quality]) : 0;
+
+                        allData.push({
+                            dateStr: formattedDate, timestamp: ts,
+                            yue_usage: y_u, yue_cost: y_c, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
+                            bhs_usage: b_u, bhs_cost: b_c, bhs_out: b_o, bhs_sqm: b_sqm,
+                            iso_usage: i_u, iso_cost: i_c, iso_out: i_o, iso_sqm: i_sqm,
+                            quality: q
+                        });
+                    });
+
+                    if (allData.length === 0) {
+                        alert("⚠️ อ่านไฟล์ได้สำเร็จ แต่หาข้อมูลกาวไม่เจอเลยครับ! (ตรวจสอบรูปแบบวันที่ใน Sheet)");
+                        document.getElementById('dataStatus').innerText = "❌ ไม่พบข้อมูล (รูปแบบวันที่อาจไม่ถูกต้อง)";
+                        resetBtnState();
+                        return;
+                    }
+
+                    allData.sort((a, b) => a.timestamp - b.timestamp);
+                    document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
+
+                    if (allData.length > 0) {
+                        const minDate = new Date(allData[0].timestamp);
+                        const maxDate = new Date(allData[allData.length - 1].timestamp);
+
+                        if (fpStartDate.selectedDates.length === 0) fpStartDate.setDate(minDate);
+                        fpEndDate.setDate(maxDate);
+                    }
+
+                    applyFilterLogic();
+                    resetBtnState();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + err.message);
+                    resetBtnState();
+                });
+
+            function resetBtnState() {
+                if (refreshBtn) {
+                    refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล';
+                    refreshBtn.disabled = false;
+                }
+            }
+        }
+
+        loadData();
+
+        function applyFilterLogic() {
+            let startTimestamp = 0;
+            let endTimestamp = Infinity;
+
+            if (fpStartDate.selectedDates.length > 0) {
+                const sDate = fpStartDate.selectedDates[0];
+                startTimestamp = new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate()).getTime();
+            }
+
+            if (fpEndDate.selectedDates.length > 0) {
+                const eDate = fpEndDate.selectedDates[0];
+                endTimestamp = new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), 23, 59, 59).getTime();
+            }
+
+            filteredData = allData.filter(d => d.timestamp >= startTimestamp && d.timestamp <= endTimestamp);
+            processDashboard();
+        }
+
+        function applyFilter() { applyFilterLogic(); }
+
+        function applyMonthFilter() {
+            const monthVal = document.getElementById('monthFilter').value;
+            if (!monthVal) return;
+
+            const [year, month] = monthVal.split('-');
+            const firstDay = new Date(year, parseInt(month) - 1, 1);
+            const lastDay = new Date(year, parseInt(month), 0);
+
+            fpStartDate.setDate(firstDay);
+            fpEndDate.setDate(lastDay);
+
+            applyFilterLogic();
+        }
+
+        function resetFilter() {
+            document.getElementById('monthFilter').value = '';
+            if (allData.length > 0) {
+                fpStartDate.setDate(new Date(allData[0].timestamp));
+                fpEndDate.setDate(new Date(allData[allData.length - 1].timestamp));
+            }
+            applyFilterLogic();
+        }
+
+        function downloadDashboard(event) {
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> กำลังบันทึก...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const dashboardElement = document.getElementById('main-dashboard');
+                const wrapper = document.createElement('div');
+                wrapper.style.padding = '20px';
+                wrapper.style.backgroundColor = '#0f172a';
+                wrapper.style.position = 'absolute';
+                wrapper.style.left = '-9999px';
+
+                const clone = dashboardElement.cloneNode(true);
+                clone.style.width = dashboardElement.offsetWidth + 'px';
+                wrapper.appendChild(clone);
+                document.body.appendChild(wrapper);
+
+                const originalCanvases = dashboardElement.getElementsByTagName('canvas');
+                const clonedCanvases = clone.getElementsByTagName('canvas');
+                for (let i = 0; i < originalCanvases.length; i++) {
+                    clonedCanvases[i].getContext('2d').drawImage(originalCanvases[i], 0, 0);
+                }
+
+                html2canvas(wrapper, { backgroundColor: '#0f172a', scale: 2, useCORS: true, logging: false })
+                    .then(canvas => {
+                        const link = document.createElement('a');
+                        const dateStr = new Date().toISOString().slice(0, 10);
+                        link.download = `Glue_Dashboard_Full_${dateStr}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+
+                        document.body.removeChild(wrapper);
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    }).catch(err => {
+                        console.error('Error capturing:', err);
+                        alert('เกิดข้อผิดพลาดในการแคปหน้าจอ');
+                        document.body.removeChild(wrapper);
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    });
+            }, 100);
+        }
+
+        function processDashboard() {
+            let sum = {
+                iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
+                bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
+                yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
+                yue_mix_total: 0, yue_mix_count: 0, // 🌟 ตัวแปรสำหรับคำนวณเฉลี่ยต้นทุนผสม
+                quality: 0, q_count: 0
+            };
+
+            filteredData.forEach(d => {
+                sum.iso_usage += d.iso_usage; sum.iso_cost += d.iso_cost; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
+                sum.bhs_usage += d.bhs_usage; sum.bhs_cost += d.bhs_cost; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
+                sum.yue_usage += d.yue_usage; sum.yue_cost += d.yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
+
+                if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
+                if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; } // 🌟 นับยอดรวมและจำนวนวัน
+            });
+
+            const totalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
+            const totalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost;
+            const totalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
+            const totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
+
+            const avgRatio = totalOutput > 0 ? (totalCost / totalOutput) : 0;
+            const avgGramSqm = totalSqm > 0 ? ((totalUsage / totalSqm) * 1000) : 0;
+            const avgKgOutput = totalOutput > 0 ? (totalUsage / totalOutput) : 0;
+            const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
+
+            // 🌟 คำนวณค่าเฉลี่ยต้นทุนผสม Yueli
+            const avgYueMix = sum.yue_mix_count > 0 ? (sum.yue_mix_total / sum.yue_mix_count) : 0;
+
+            const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
+            const kpi = {
+                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: safeDiv(sum.iso_usage, sum.iso_sqm) * 1000 },
+                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: safeDiv(sum.bhs_usage, sum.bhs_sqm) * 1000 },
+                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: safeDiv(sum.yue_usage, sum.yue_sqm) * 1000 }
+            };
+
+            // Update DOM
+            document.getElementById('kpiTotalUsage').innerText = totalUsage.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            document.getElementById('kpiTotalCost').innerText = "฿" + totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            document.getElementById('kpiTotalOutput').innerText = totalOutput.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            document.getElementById('kpiAvgRatio').innerText = "฿ " + avgRatio.toFixed(3);
+            document.getElementById('kpiGramSqm').innerText = avgGramSqm > 0 ? avgGramSqm.toFixed(2) : "0.00";
+            document.getElementById('kpiKgOutput').innerText = avgKgOutput > 0 ? avgKgOutput.toFixed(4) : "0.0000";
+            document.getElementById('kpiQuality').innerText = avgQuality > 0 ? avgQuality.toFixed(2) + "%" : "--";
+
+            // 🌟 Update DOM สำหรับ KPI กล่องใหม่ (เปลี่ยนสีอัตโนมัติตามเป้า 3.82)
+            const kpiYueMixEl = document.getElementById('kpiYueMix');
+            const cardYueMixEl = document.getElementById('cardYueMix');
+            const iconYueMixEl = document.getElementById('iconYueMix');
+
+            if (avgYueMix > 0) {
+                kpiYueMixEl.innerText = "฿ " + avgYueMix.toFixed(2);
+                if (avgYueMix <= 3.82) { // อยู่ในเป้าหมาย (น้อย=ดี) -> สีเขียว
+                    kpiYueMixEl.className = "kpi-value text-emerald-400 mt-2";
+                    cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50";
+                    iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-emerald-400";
+                } else { // เกินเป้าหมาย -> สีแดง
+                    kpiYueMixEl.className = "kpi-value text-rose-400 mt-2";
+                    cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50";
+                    iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-rose-400";
+                }
+            } else {
+                kpiYueMixEl.innerText = "--";
+                kpiYueMixEl.className = "kpi-value text-slate-400 mt-2";
+                cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
+                iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-slate-400";
+            }
+
+            try {
+                updateBarChart('barUsage', 'ปริมาณกาว (kg)', [kpi.iso.usage, kpi.bhs.usage, kpi.yue.usage]);
+                updateBarChart('barCost', 'ค่ากาว (Baht)', [kpi.iso.cost, kpi.bhs.cost, kpi.yue.cost]);
+                updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', [kpi.iso.gSqm, kpi.bhs.gSqm, kpi.yue.gSqm]);
+
+                updateTrendRatioChart();
+                updateTrendGramSqmChart();
+                updateTrendKgOutputChart();
+                updateTrendQualityChart();
+                updateTrendYueMixChart(); // 🌟 วาดกราฟต้นทุนผสมรายวัน
+            } catch (error) {
+                console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
+            }
+        }
+
+        function updateBarChart(canvasId, label, dataArr) {
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ISOWA', 'BHS', 'YUELI'],
+                    datasets: [{
+                        label: label, data: dataArr,
+                        backgroundColor: [colors.iso.bg, colors.bhs.bg, colors.yue.bg],
+                        borderColor: [colors.iso.border, colors.bhs.border, colors.yue.border],
+                        borderWidth: 2, borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}` } } },
+                    scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        function updateTrendRatioChart() {
+            if (charts['trendRatio']) charts['trendRatio'].destroy();
+            const ctx = document.getElementById('trendRatio').getContext('2d');
+            const labels = filteredData.map(d => d.dateStr);
+            const calcDailyKPI = (cost, out) => out > 0 ? (cost / out) : null;
+            charts['trendRatio'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'ISOWA', data: filteredData.map(d => calcDailyKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true },
+                        { label: 'BHS', data: filteredData.map(d => calcDailyKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true },
+                        { label: 'YUELI', data: filteredData.map(d => calcDailyKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqmChart() {
+            if (charts['trendGramSqm']) charts['trendGramSqm'].destroy();
+            const ctx = document.getElementById('trendGramSqm').getContext('2d');
+            const calcGramSqm = (usage, sqm) => sqm > 0 ? ((usage / sqm) * 1000) : null;
+            charts['trendGramSqm'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredData.map(d => d.dateStr),
+                    datasets: [
+                        { label: 'ISOWA', data: filteredData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'BHS', data: filteredData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'YUELI', data: filteredData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendKgOutputChart() {
+            if (charts['trendKgOutput']) charts['trendKgOutput'].destroy();
+            const ctx = document.getElementById('trendKgOutput').getContext('2d');
+            const calcKgOut = (usage, out) => out > 0 ? (usage / out) : null;
+            charts['trendKgOutput'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredData.map(d => d.dateStr),
+                    datasets: [
+                        { label: 'ISOWA', data: filteredData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'BHS', data: filteredData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'YUELI', data: filteredData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendQualityChart() {
+            if (charts['trendQuality']) charts['trendQuality'].destroy();
+            const ctx = document.getElementById('trendQuality').getContext('2d');
+            charts['trendQuality'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredData.map(d => d.dateStr),
+                    datasets: [{ label: '% คุณภาพกาวเฉลี่ย', data: filteredData.map(d => d.quality > 0 ? d.quality : null), borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        // 🌟 กราฟใหม่: แนวโน้มต้นทุนผสมรายวัน YUELI
+        function updateTrendYueMixChart() {
+            if (charts['trendYueMix']) charts['trendYueMix'].destroy();
+            const ctx = document.getElementById('trendYueMix').getContext('2d');
+
+            const labels = filteredData.map(d => d.dateStr);
+            const actualData = filteredData.map(d => d.yue_mix > 0 ? d.yue_mix : null);
+            const targetData = filteredData.map(() => 3.82); // เส้นเป้าหมายคงที่ 3.82
+
+            charts['trendYueMix'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'ต้นทุนผสมจริง',
+                            data: actualData,
+                            borderColor: '#06b6d4', // Cyan
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Target (3.82)',
+                            data: targetData,
+                            borderColor: '#f43f5e', // Rose (สีแดง)
+                            borderDash: [5, 5], // เส้นประ
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false },
+                        x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
