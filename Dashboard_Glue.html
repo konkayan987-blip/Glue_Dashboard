@@ -90,6 +90,16 @@
 
             <div class="flex flex-wrap items-center gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-700">
                 <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
+                    <label class="text-sm text-slate-300">เครื่อง (MC):</label>
+                    <select id="machineFilter" onchange="applyFilter()"
+                        class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="iso">ISOWA</option>
+                        <option value="bhs">BHS</option>
+                        <option value="yue">YUELI</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
                     <label class="text-sm text-slate-300">เดือน/ปี:</label>
                     <input type="month" id="monthFilter" onchange="applyMonthFilter()"
                         class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-slate-400">
@@ -468,6 +478,7 @@
         }
 
         function resetFilter() {
+            if (document.getElementById('machineFilter')) document.getElementById('machineFilter').value = 'all';
             document.getElementById('monthFilter').value = '';
             if (allData.length > 0) {
                 fpStartDate.setDate(new Date(allData[0].timestamp));
@@ -540,10 +551,22 @@
                 if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; } // 🌟 นับยอดรวมและจำนวนวัน
             });
 
-            const totalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
-            const totalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost;
-            const totalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
-            const totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+
+            let totalUsage = 0, totalCost = 0, totalOutput = 0, totalSqm = 0;
+
+            if (mcFilter === 'all') {
+                totalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
+                totalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost;
+                totalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
+                totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
+            } else if (mcFilter === 'iso') {
+                totalUsage = sum.iso_usage; totalCost = sum.iso_cost; totalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
+            } else if (mcFilter === 'bhs') {
+                totalUsage = sum.bhs_usage; totalCost = sum.bhs_cost; totalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
+            } else if (mcFilter === 'yue') {
+                totalUsage = sum.yue_usage; totalCost = sum.yue_cost; totalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
+            }
 
             const avgRatio = totalOutput > 0 ? (totalCost / totalOutput) : 0;
             const avgGramSqm = totalSqm > 0 ? ((totalUsage / totalSqm) * 1000) : 0;
@@ -593,9 +616,9 @@
             }
 
             try {
-                updateBarChart('barUsage', 'ปริมาณกาว (kg)', [kpi.iso.usage, kpi.bhs.usage, kpi.yue.usage]);
-                updateBarChart('barCost', 'ค่ากาว (Baht)', [kpi.iso.cost, kpi.bhs.cost, kpi.yue.cost]);
-                updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', [kpi.iso.gSqm, kpi.bhs.gSqm, kpi.yue.gSqm]);
+                updateBarChart('barUsage', 'ปริมาณกาว (kg)', { iso: kpi.iso.usage, bhs: kpi.bhs.usage, yue: kpi.yue.usage });
+                updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
+                updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
                 updateTrendRatioChart();
                 updateTrendGramSqmChart();
@@ -607,17 +630,24 @@
             }
         }
 
-        function updateBarChart(canvasId, label, dataArr) {
+        function updateBarChart(canvasId, label, dataObj) {
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = document.getElementById(canvasId).getContext('2d');
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+
+            let dispLabels = []; let dispData = []; let dispBg = []; let dispBorder = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') { dispLabels.push('ISOWA'); dispData.push(dataObj.iso); dispBg.push(colors.iso.bg); dispBorder.push(colors.iso.border); }
+            if (mcFilter === 'all' || mcFilter === 'bhs') { dispLabels.push('BHS'); dispData.push(dataObj.bhs); dispBg.push(colors.bhs.bg); dispBorder.push(colors.bhs.border); }
+            if (mcFilter === 'all' || mcFilter === 'yue') { dispLabels.push('YUELI'); dispData.push(dataObj.yue); dispBg.push(colors.yue.bg); dispBorder.push(colors.yue.border); }
+
             charts[canvasId] = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['ISOWA', 'BHS', 'YUELI'],
+                    labels: dispLabels,
                     datasets: [{
-                        label: label, data: dataArr,
-                        backgroundColor: [colors.iso.bg, colors.bhs.bg, colors.yue.bg],
-                        borderColor: [colors.iso.border, colors.bhs.border, colors.yue.border],
+                        label: label, data: dispData,
+                        backgroundColor: dispBg,
+                        borderColor: dispBorder,
                         borderWidth: 2, borderRadius: 8
                     }]
                 },
@@ -634,15 +664,18 @@
             const ctx = document.getElementById('trendRatio').getContext('2d');
             const labels = filteredData.map(d => d.dateStr);
             const calcDailyKPI = (cost, out) => out > 0 ? (cost / out) : null;
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcDailyKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcDailyKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcDailyKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+
             charts['trendRatio'] = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        { label: 'ISOWA', data: filteredData.map(d => calcDailyKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true },
-                        { label: 'BHS', data: filteredData.map(d => calcDailyKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true },
-                        { label: 'YUELI', data: filteredData.map(d => calcDailyKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true }
-                    ]
+                    datasets: datasets
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
@@ -652,15 +685,18 @@
             if (charts['trendGramSqm']) charts['trendGramSqm'].destroy();
             const ctx = document.getElementById('trendGramSqm').getContext('2d');
             const calcGramSqm = (usage, sqm) => sqm > 0 ? ((usage / sqm) * 1000) : null;
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+
             charts['trendGramSqm'] = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: filteredData.map(d => d.dateStr),
-                    datasets: [
-                        { label: 'ISOWA', data: filteredData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
-                        { label: 'BHS', data: filteredData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
-                        { label: 'YUELI', data: filteredData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true }
-                    ]
+                    datasets: datasets
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
@@ -670,15 +706,18 @@
             if (charts['trendKgOutput']) charts['trendKgOutput'].destroy();
             const ctx = document.getElementById('trendKgOutput').getContext('2d');
             const calcKgOut = (usage, out) => out > 0 ? (usage / out) : null;
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+
             charts['trendKgOutput'] = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: filteredData.map(d => d.dateStr),
-                    datasets: [
-                        { label: 'ISOWA', data: filteredData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
-                        { label: 'BHS', data: filteredData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
-                        { label: 'YUELI', data: filteredData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true }
-                    ]
+                    datasets: datasets
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
