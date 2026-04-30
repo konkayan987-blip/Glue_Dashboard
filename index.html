@@ -184,7 +184,7 @@
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalCost" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub text-rose-300/80 text-xs mt-1">(คิดจาก: ปริมาณใช้ × ต้นทุนผสม)</div>
+                <div class="kpi-sub text-rose-300/80 text-xs mt-1">หน่วย: บาท (Baht)</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
@@ -528,17 +528,21 @@
                         });
                     };
 
+                    // คืนค่าการอ่าน Column ค่ากาว กลับมาให้ครบทุกเครื่อง เพื่อให้ยอดเงินรวมตรงเป๊ะ
                     let col = {
                         yue_u: getIdx('ปริมาณ', 'yue', 4),
+                        yue_c: getIdx('ค่ากาว', 'yue', 5), 
                         yue_o: getIdx('output', 'yue', 6),
                         yue_sqm: getIdx('sqm', 'yue', -1),
-                        yue_mix: getIdx('ต้นทุน', 'yue', 7), // Mix Cost
+                        yue_mix: getIdx('ต้นทุน', 'yue', 7),
 
                         bhs_u: getIdx('ปริมาณ', 'bhs', 10),
+                        bhs_c: getIdx('ค่ากาว', 'bhs', 11), 
                         bhs_o: getIdx('output', 'bhs', 12),
                         bhs_sqm: getIdx('sqm', 'bhs', -1),
 
                         iso_u: getIdx('ปริมาณ', 'iso', 15),
+                        iso_c: getIdx('ค่ากาว', 'iso', 16), 
                         iso_o: getIdx('output', 'iso', 17),
                         iso_sqm: getIdx('sqm', 'iso', -1),
 
@@ -572,15 +576,18 @@
                         const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
 
                         const y_u = parseNum(c[col.yue_u]);
+                        const y_c = col.yue_c !== -1 ? parseNum(c[col.yue_c]) : 0;
                         const y_o = parseNum(c[col.yue_o]);
                         const y_sqm = col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0;
                         const y_mix = col.yue_mix !== -1 ? parseNum(c[col.yue_mix]) : 0; 
 
                         const b_u = parseNum(c[col.bhs_u]);
+                        const b_c = col.bhs_c !== -1 ? parseNum(c[col.bhs_c]) : 0;
                         const b_o = parseNum(c[col.bhs_o]);
                         const b_sqm = col.bhs_sqm !== -1 ? parseNum(c[col.bhs_sqm]) : 0;
 
                         const i_u = parseNum(c[col.iso_u]);
+                        const i_c = col.iso_c !== -1 ? parseNum(c[col.iso_c]) : 0;
                         const i_o = parseNum(c[col.iso_o]);
                         const i_sqm = col.iso_sqm !== -1 ? parseNum(c[col.iso_sqm]) : 0;
 
@@ -595,9 +602,9 @@
 
                         allData.push({
                             dateStr: formattedDate, timestamp: ts,
-                            yue_usage: y_u, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
-                            bhs_usage: b_u, bhs_out: b_o, bhs_sqm: b_sqm,
-                            iso_usage: i_u, iso_out: i_o, iso_sqm: i_sqm,
+                            yue_usage: y_u, yue_cost: y_c, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
+                            bhs_usage: b_u, bhs_cost: b_c, bhs_out: b_o, bhs_sqm: b_sqm,
+                            iso_usage: i_u, iso_cost: i_c, iso_out: i_o, iso_sqm: i_sqm,
                             quality: q,
                             iso_sf: iso_sf, iso_df: iso_df,
                             bhs_sf: bhs_sf, bhs_df: bhs_df,
@@ -825,10 +832,9 @@
 
         function processDashboard() {
             let sum = {
-                iso_usage: 0, iso_out: 0, iso_sqm: 0,
-                bhs_usage: 0, bhs_out: 0, bhs_sqm: 0,
-                yue_usage: 0, yue_out: 0, yue_sqm: 0,
-                yue_mix_total: 0, yue_mix_count: 0,
+                iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
+                bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
+                yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
                 quality: 0, q_count: 0
             };
 
@@ -841,12 +847,11 @@
             let df_total = 0, df_count = 0;
 
             filteredData.forEach(d => {
-                sum.iso_usage += d.iso_usage; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
-                sum.bhs_usage += d.bhs_usage; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
-                sum.yue_usage += d.yue_usage; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
+                sum.iso_usage += d.iso_usage; sum.iso_cost += d.iso_cost; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
+                sum.bhs_usage += d.bhs_usage; sum.bhs_cost += d.bhs_cost; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
+                sum.yue_usage += d.yue_usage; sum.yue_cost += d.yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
 
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
-                if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; }
                 
                 let d_sf = 0;
                 let d_df = 0;
@@ -885,10 +890,6 @@
                 if (d.yue_df > 0) { mc_df_sum.yue += d.yue_df; mc_df_count.yue++; }
             });
 
-            // ✅ 1. หาต้นทุนผสมกาวเฉลี่ย แล้วล็อกทศนิยม 2 ตำแหน่งให้ตรงกับหน้าจอทันที
-            const rawAvgMixCost = sum.yue_mix_count > 0 ? (sum.yue_mix_total / sum.yue_mix_count) : 0;
-            const dispMixCost = parseFloat(rawAvgMixCost.toFixed(2));
-
             const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
             const groups = {};
 
@@ -904,53 +905,48 @@
                         bhs_cost: 0, bhs_out: 0, bhs_usage: 0, bhs_sqm: 0,
                         yue_cost: 0, yue_out: 0, yue_usage: 0, yue_sqm: 0,
                         quality_sum: 0, quality_count: 0,
-                        yue_mix_sum: 0, yue_mix_count: 0,
                         sf_sum: 0, sf_count: 0,
                         df_sum: 0, df_count: 0
                     };
                 }
 
                 let g = groups[key];
-                g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm;
-                g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm;
-                g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm;
+                g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm; g.iso_cost += d.iso_cost;
+                g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm; g.bhs_cost += d.bhs_cost;
+                g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm; g.yue_cost += d.yue_cost;
 
                 if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
-                if (d.yue_mix > 0) { g.yue_mix_sum += d.yue_mix; g.yue_mix_count++; }
                 if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
                 if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
-
-                // คำนวณต้นทุนรายวันใน Group ให้สอดคล้องกับสมการ (Usage * Mix Rate ที่ปัดเศษแล้ว)
-                let dailyMix = d.yue_mix > 0 ? parseFloat(d.yue_mix.toFixed(2)) : dispMixCost;
-                g.iso_cost += (d.iso_usage * dailyMix);
-                g.bhs_cost += (d.bhs_usage * dailyMix);
-                g.yue_cost += (d.yue_usage * dailyMix);
             });
 
             let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
 
-            let rawTotalUsage = 0, rawTotalOutput = 0, totalSqm = 0;
+            let rawTotalUsage = 0, rawTotalOutput = 0, rawTotalCost = 0, totalSqm = 0;
 
             if (mcFilter === 'all') {
                 rawTotalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
+                rawTotalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost;
                 rawTotalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
                 totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
             } else if (mcFilter === 'iso') {
-                rawTotalUsage = sum.iso_usage; rawTotalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
+                rawTotalUsage = sum.iso_usage; rawTotalCost = sum.iso_cost; rawTotalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
             } else if (mcFilter === 'bhs') {
-                rawTotalUsage = sum.bhs_usage; rawTotalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
+                rawTotalUsage = sum.bhs_usage; rawTotalCost = sum.bhs_cost; rawTotalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
             } else if (mcFilter === 'yue') {
-                rawTotalUsage = sum.yue_usage; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
+                rawTotalUsage = sum.yue_usage; rawTotalCost = sum.yue_cost; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
             }
 
-            // ✅ ล็อกค่า ปริมาณกาว และ ยอดผลิต ให้เป็นตัวเลขกลมๆ แบบเดียวกับที่แสดงบนหน้าจอเป๊ะๆ
+            // ✅ หาค่าเฉลี่ยต้นทุนผสมกาวที่แท้จริง = ต้นทุนกาวรวมดิบๆ / ปริมาณการใช้รวมดิบๆ
+            const trueMixCost = rawTotalUsage > 0 ? (rawTotalCost / rawTotalUsage) : 0;
+
+            // ล็อกค่าทศนิยมสำหรับแสดงผล
             const dispTotalUsage = Math.round(rawTotalUsage);
             const dispTotalOutput = Math.round(rawTotalOutput);
+            const dispTotalCost = rawTotalCost; // ดึงยอดเงินรวมเป๊ะๆ จาก Sheet มาโชว์เลยครับ
+            const dispMixCost = parseFloat(trueMixCost.toFixed(2)); 
 
-            // ✅ 2. หาต้นทุนรวมที่แท้จริง = ปริมาณใช้(บนจอ) × ต้นทุนผสมเฉลี่ย(บนจอ)
-            const totalCost = dispTotalUsage * dispMixCost;
-
-            const avgRatio = dispTotalOutput > 0 ? (totalCost / dispTotalOutput) : 0;
+            const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
             const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
             const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
             
@@ -971,13 +967,11 @@
             };
 
             const kpi = {
-                // ✅ ต้นทุนรายเครื่องก็ต้องคิดจาก ปริมาณใช้ที่ปัดเศษแล้ว × ต้นทุนผสมเฉลี่ย เช่นเดียวกัน
-                iso: { usage: Math.round(sum.iso_usage), cost: Math.round(sum.iso_usage) * dispMixCost, gSqm: getMcGSqm('iso') },
-                bhs: { usage: Math.round(sum.bhs_usage), cost: Math.round(sum.bhs_usage) * dispMixCost, gSqm: getMcGSqm('bhs') },
-                yue: { usage: Math.round(sum.yue_usage), cost: Math.round(sum.yue_usage) * dispMixCost, gSqm: getMcGSqm('yue') }
+                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: getMcGSqm('iso') },
+                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: getMcGSqm('bhs') },
+                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: getMcGSqm('yue') }
             };
 
-            // ✅ แปลงค่าให้เป็นตัวเลขตามทศนิยมที่แสดงบนหน้าจอเป๊ะๆ เพื่อคำนวณ % ให้ตรงกับเครื่องคิดเลข 100%
             const dispRatio = parseFloat(avgRatio.toFixed(3));
             const dispGramSqm = parseFloat(avgGramSqm.toFixed(2));
             const dispKgOutput = parseFloat(avgKgOutput.toFixed(4));
@@ -985,14 +979,11 @@
             const dispSingleG = parseFloat(avgSingleG.toFixed(2));
             const dispDoubleG = parseFloat(avgDoubleG.toFixed(2));
 
-            // อัปเดตตัวเลข KPI หลักโดยใช้ค่าที่ล็อกทศนิยมแล้ว
+            // แสดงผลขึ้นหน้าจอ (ตัวเลขจะเป็นยอดจริง 100% จากชีต)
             document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US');
-            
-            // แสดงจุดทศนิยม 2 ตำแหน่งให้รู้ว่ายอดเป๊ะ 100%
-            document.getElementById('kpiTotalCost').innerText = "฿" + totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
             document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US');
             
-            // ใชัตัวเลขที่ปัดเศษแล้ว (disp...) ไปแสดงผลและคำนวณเป้าหมาย
             document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(3);
             if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.316, true);
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
@@ -1201,8 +1192,23 @@
 
             const labels = trendData.map(d => d.label);
             
-            // กราฟต้นทุนผสมกาวแสดงเฉพาะค่าเฉลี่ยของ 'ต้นทุน' ในแต่ละวัน/กลุ่ม 
-            const actualData = trendData.map(d => d.yue_mix_count > 0 ? (d.yue_mix_sum / d.yue_mix_count) : null);
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            const calcMixCost = (g) => {
+                let cost = 0, usage = 0;
+                if (mcFilter === 'all') {
+                    cost = g.iso_cost + g.bhs_cost + g.yue_cost;
+                    usage = g.iso_usage + g.bhs_usage + g.yue_usage;
+                } else if (mcFilter === 'iso') {
+                    cost = g.iso_cost; usage = g.iso_usage;
+                } else if (mcFilter === 'bhs') {
+                    cost = g.bhs_cost; usage = g.bhs_usage;
+                } else if (mcFilter === 'yue') {
+                    cost = g.yue_cost; usage = g.yue_usage;
+                }
+                return usage > 0 ? (cost / usage) : null;
+            };
+
+            const actualData = trendData.map(d => calcMixCost(d));
             const targetData = trendData.map(() => 3.82); 
 
             charts['trendYueMix'] = new Chart(ctx, {
