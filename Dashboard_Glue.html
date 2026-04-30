@@ -8,6 +8,8 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- เพิ่ม Plugin สำหรับแสดงตัวเลขบนกราฟ -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -127,6 +129,13 @@
                     class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-teal-500/30 flex items-center gap-2">
                     <i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล
                 </button>
+
+                <!-- ปุ่มแสดงตัวเลขกราฟ -->
+                <button onclick="toggleLabels()" id="toggleLabelsBtn"
+                    class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-fuchsia-500/30 flex items-center gap-2">
+                    <i class="fa-solid fa-hashtag"></i> แสดงตัวเลข
+                </button>
+
                 <button onclick="downloadDashboard(event)"
                     class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-indigo-500/30"
                     title="บันทึกภาพรวมแดชบอร์ดทั้งหมด">
@@ -135,13 +144,15 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                 <div class="absolute top-4 right-4 text-emerald-400 opacity-20"><i
                         class="fa-solid fa-flask text-3xl"></i></div>
                 <div class="kpi-label">ปริมาณกาวที่ใช้รวม</div>
-                <div id="kpiTotalUsage" class="kpi-value text-emerald-400 mt-2">--</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalUsage" class="kpi-value text-emerald-400">--</div>
+                </div>
                 <div class="kpi-sub">หน่วย: กิโลกรัม (kg)</div>
             </div>
 
@@ -149,7 +160,9 @@
                 <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
                         class="fa-solid fa-money-bill-wave text-3xl"></i></div>
                 <div class="kpi-label">ต้นทุนค่ากาวรวม</div>
-                <div id="kpiTotalCost" class="kpi-value text-rose-400 mt-2">--</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalCost" class="kpi-value text-rose-400">--</div>
+                </div>
                 <div class="kpi-sub">หน่วย: บาท (Baht)</div>
             </div>
 
@@ -157,15 +170,20 @@
                 <div class="absolute top-4 right-4 text-blue-400 opacity-20"><i
                         class="fa-solid fa-box-open text-3xl"></i></div>
                 <div class="kpi-label">ยอดผลิตรวม (Output)</div>
-                <div id="kpiTotalOutput" class="kpi-value text-blue-400 mt-2">--</div>
-                <div class="kpi-sub">หน่วย: Output / เมตร</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalOutput" class="kpi-value text-blue-400">--</div>
+                </div>
+                <div class="kpi-sub">หน่วย: Output / Kg</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                 <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i
                         class="fa-solid fa-chart-pie text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย ต้นทุน ฿ / Output</div>
-                <div id="kpiAvgRatio" class="kpi-value text-amber-400 mt-2">--</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiAvgRatio" class="kpi-value text-amber-400">--</div>
+                    <div id="kpiAvgRatioPct"></div>
+                </div>
                 <div class="kpi-sub">ค่ากาวต่อหน่วยผลิต Target: 0.316 (น้อย=ดี)</div>
             </div>
 
@@ -173,7 +191,10 @@
                 <div class="absolute top-4 right-4 text-purple-400 opacity-20"><i
                         class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม / ตรม.</div>
-                <div id="kpiGramSqm" class="kpi-value text-purple-400 mt-2">--</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiGramSqm" class="kpi-value text-purple-400">--</div>
+                    <div id="kpiGramSqmPct"></div>
+                </div>
                 <div class="kpi-sub">g/Sqm Target: 29.250 (น้อย=ดี)</div>
             </div>
 
@@ -181,7 +202,10 @@
                 <div class="absolute top-4 right-4 text-pink-400 opacity-20"><i
                         class="fa-solid fa-weight-scale text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย kg / Output</div>
-                <div id="kpiKgOutput" class="kpi-value text-pink-400 mt-2">--</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiKgOutput" class="kpi-value text-pink-400">--</div>
+                    <div id="kpiKgOutputPct"></div>
+                </div>
                 <div class="kpi-sub">kg/Output Target: 0.083 (น้อย=ดี)</div>
             </div>
 
@@ -189,8 +213,11 @@
                 <div class="absolute top-4 right-4 text-violet-400 opacity-20"><i
                         class="fa-solid fa-percent text-3xl"></i></div>
                 <div class="kpi-label">เปอร์เซ็นต์คุณภาพกาว</div>
-                <div id="kpiQuality" class="kpi-value text-violet-400 mt-2">--</div>
-                <div class="kpi-sub">%คณภาพกาว Target: 90% (มาก=ดี)</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiQuality" class="kpi-value text-violet-400">--</div>
+                    <div id="kpiQualityPct"></div>
+                </div>
+                <div class="kpi-sub">%คุณภาพกาว Target: 90% (มาก=ดี)</div>
             </div>
 
             <div id="cardYueMix"
@@ -198,8 +225,31 @@
                 <div class="absolute top-4 right-4 opacity-20"><i id="iconYueMix"
                         class="fa-solid fa-bullseye text-3xl text-cyan-400"></i></div>
                 <div class="kpi-label">เฉลี่ย ต้นทุนผสมกาว</div>
-                <div id="kpiYueMix" class="kpi-value text-cyan-400 mt-2">--</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiYueMix" class="kpi-value text-cyan-400">--</div>
+                    <div id="kpiYueMixPct"></div>
+                </div>
                 <div class="kpi-sub">Target: 3.82 ฿ (น้อย=ดี)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-orange-500/50">
+                <div class="absolute top-4 right-4 text-orange-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Single)</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiGramSqmSingle" class="kpi-value text-orange-400">--</div>
+                    <div id="kpiGramSqmSinglePct"></div>
+                </div>
+                <div class="kpi-sub">g/Sqm Target: 13.50 (น้อย=ดี)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
+                <div class="absolute top-4 right-4 text-indigo-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Double)</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiGramSqmDouble" class="kpi-value text-indigo-400">--</div>
+                    <div id="kpiGramSqmDoublePct"></div>
+                </div>
+                <div class="kpi-sub">g/Sqm Target: 15.75 (น้อย=ดี)</div>
             </div>
         </div>
 
@@ -244,9 +294,63 @@
             </div>
         </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-orange-300">📉 แนวโน้ม กรัม/ตรม. (Single)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqmSingle"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-indigo-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-indigo-300">📉 แนวโน้ม กรัม/ตรม. (Double)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqmDouble"></canvas></div>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        // ==========================================
+        // ตั้งค่า Plugin DataLabels (ปุ่มแสดงตัวเลข)
+        // ==========================================
+        let showLabels = false;
+        Chart.register(ChartDataLabels);
+
+        Chart.defaults.plugins.datalabels = {
+            display: function(context) {
+                let val = context.dataset.data[context.dataIndex];
+                return showLabels && val !== null && val !== 0 && val !== undefined;
+            },
+            color: '#e2e8f0', // สีตัวอักษร
+            anchor: 'end',
+            align: 'top',
+            offset: 4,
+            font: { size: 10, family: "'Inter', 'Sarabun', sans-serif" },
+            formatter: function(value) {
+                return Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
+            }
+        };
+
+        // เผื่อพื้นที่ด้านบนกราฟไม่ให้ตัวเลขโดนตัด
+        Chart.defaults.layout = { padding: { top: 25 } };
+
+        function toggleLabels() {
+            showLabels = !showLabels;
+            const btn = document.getElementById('toggleLabelsBtn');
+            
+            if (showLabels) {
+                btn.classList.replace('bg-fuchsia-600', 'bg-fuchsia-500');
+                btn.innerHTML = '<i class="fa-solid fa-hashtag"></i> ซ่อนตัวเลข';
+            } else {
+                btn.classList.replace('bg-fuchsia-500', 'bg-fuchsia-600');
+                btn.innerHTML = '<i class="fa-solid fa-hashtag"></i> แสดงตัวเลข';
+            }
+            
+            // อัปเดตการแสดงผลกราฟทั้งหมด
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.update();
+            });
+        }
+        // ==========================================
+
         const sheetUrl = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
 
         let allData = [];
@@ -342,12 +446,22 @@
                         return idx !== -1 ? idx : defaultIdx;
                     };
 
+                    let findCol = (keywords) => {
+                        return header.findIndex(h => {
+                            let match = true;
+                            for (let k of keywords) {
+                                if (!h.includes(k.toLowerCase())) match = false;
+                            }
+                            return match;
+                        });
+                    };
+
                     let col = {
                         yue_u: getIdx('ปริมาณ', 'yue', 4),
                         yue_c: getIdx('ค่ากาว', 'yue', 5),
                         yue_o: getIdx('output', 'yue', 6),
                         yue_sqm: getIdx('sqm', 'yue', -1),
-                        yue_mix: getIdx('ต้นทุน', 'yue', 7), // 🌟 เพิ่มคอลัมน์ต้นทุนผสม yueli
+                        yue_mix: getIdx('ต้นทุน', 'yue', 7),
 
                         bhs_u: getIdx('ปริมาณ', 'bhs', 10),
                         bhs_c: getIdx('ค่ากาว', 'bhs', 11),
@@ -359,7 +473,16 @@
                         iso_o: getIdx('output', 'iso', 17),
                         iso_sqm: getIdx('sqm', 'iso', -1),
 
-                        quality: -1
+                        quality: -1,
+                        
+                        iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
+                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'df(i)']),
+                        
+                        bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
+                        bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
+                        
+                        yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1 ? findCol(['g/sqm', 'sf(y)']) : findCol(['g/sqm', 'sfy']),
+                        yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1 ? findCol(['g/sqm', 'df(y)']) : findCol(['g/sqm', 'dfy'])
                     };
 
                     let qAll = header.findIndex(x => x.includes('คุณภาพ') && (x.includes('all') || x.includes('รวม')));
@@ -383,7 +506,7 @@
                         const y_c = parseNum(c[col.yue_c]);
                         const y_o = parseNum(c[col.yue_o]);
                         const y_sqm = col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0;
-                        const y_mix = col.yue_mix !== -1 ? parseNum(c[col.yue_mix]) : 0; // 🌟 ดึงข้อมูลต้นทุนผสม
+                        const y_mix = col.yue_mix !== -1 ? parseNum(c[col.yue_mix]) : 0; 
 
                         const b_u = parseNum(c[col.bhs_u]);
                         const b_c = parseNum(c[col.bhs_c]);
@@ -397,12 +520,22 @@
 
                         const q = col.quality !== -1 ? parseNum(c[col.quality]) : 0;
 
+                        let iso_sf = col.iso_sf_g !== -1 ? parseNum(c[col.iso_sf_g]) : 0;
+                        let iso_df = col.iso_df_g !== -1 ? parseNum(c[col.iso_df_g]) : 0;
+                        let bhs_sf = col.bhs_sf_g !== -1 ? parseNum(c[col.bhs_sf_g]) : 0;
+                        let bhs_df = col.bhs_df_g !== -1 ? parseNum(c[col.bhs_df_g]) : 0;
+                        let yue_sf = col.yue_sf_g !== -1 ? parseNum(c[col.yue_sf_g]) : 0;
+                        let yue_df = col.yue_df_g !== -1 ? parseNum(c[col.yue_df_g]) : 0;
+
                         allData.push({
                             dateStr: formattedDate, timestamp: ts,
                             yue_usage: y_u, yue_cost: y_c, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
                             bhs_usage: b_u, bhs_cost: b_c, bhs_out: b_o, bhs_sqm: b_sqm,
                             iso_usage: i_u, iso_cost: i_c, iso_out: i_o, iso_sqm: i_sqm,
-                            quality: q
+                            quality: q,
+                            iso_sf: iso_sf, iso_df: iso_df,
+                            bhs_sf: bhs_sf, bhs_df: bhs_df,
+                            yue_sf: yue_sf, yue_df: yue_df
                         });
                     });
 
@@ -441,7 +574,10 @@
             }
         }
 
-        loadData();
+        // รอให้หน้าเว็บโหลดเสร็จสมบูรณ์ก่อนเริ่มโหลดข้อมูล เพื่อป้องกัน error ไม่พบ element กราฟ
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
 
         function applyFilterLogic() {
             let startTimestamp = 0;
@@ -533,14 +669,52 @@
             }, 100);
         }
 
+        // ฟังก์ชันคำนวณและแสดงผล % เทียบกับเป้าหมาย
+        function renderTargetPct(elementId, actual, target, isLessBetter, isPercentageMetric = false) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (actual === 0 || isNaN(actual)) {
+                el.innerHTML = "";
+                return;
+            }
+            
+            const diff = actual - target;
+            let displayVal = "";
+            
+            if (isPercentageMetric) {
+                // สำหรับค่าที่เดิมทีเป็นเปอร์เซ็นต์อยู่แล้ว แสดงส่วนต่างแบบตรงๆ
+                displayVal = Math.abs(diff).toFixed(2) + "%";
+            } else {
+                // สำหรับค่าทั่วไป แสดง % ความแตกต่าง
+                const pct = (diff / target) * 100;
+                displayVal = Math.abs(pct).toFixed(2) + "%";
+            }
+            
+            let isGood = isLessBetter ? diff <= 0 : diff >= 0;
+            let icon = diff > 0 ? "fa-arrow-up" : (diff < 0 ? "fa-arrow-down" : "fa-minus");
+            
+            if (diff === 0) {
+                 el.innerHTML = `<span class="text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded-md text-xs font-semibold border border-slate-600/50"><i class="fa-solid ${icon}"></i> 0.00%</span>`;
+                 return;
+            }
+
+            let colorClass = isGood ? "text-emerald-400 bg-emerald-900/30 border border-emerald-500/30" : "text-rose-400 bg-rose-900/30 border border-rose-500/30";
+            el.innerHTML = `<span class="${colorClass} px-2 py-0.5 rounded-md text-xs font-semibold shadow-sm"><i class="fa-solid ${icon}"></i> ${displayVal}</span>`;
+        }
+
         function processDashboard() {
             let sum = {
                 iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
                 bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
                 yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
-                yue_mix_total: 0, yue_mix_count: 0, // 🌟 ตัวแปรสำหรับคำนวณเฉลี่ยต้นทุนผสม
+                yue_mix_total: 0, yue_mix_count: 0,
                 quality: 0, q_count: 0
             };
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            
+            let sf_total = 0, sf_count = 0;
+            let df_total = 0, df_count = 0;
 
             filteredData.forEach(d => {
                 sum.iso_usage += d.iso_usage; sum.iso_cost += d.iso_cost; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
@@ -548,10 +722,37 @@
                 sum.yue_usage += d.yue_usage; sum.yue_cost += d.yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
 
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
-                if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; } // 🌟 นับยอดรวมและจำนวนวัน
-            });
+                if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; }
+                
+                let d_sf = 0;
+                let d_df = 0;
 
-            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+                if (mcFilter === 'all') {
+                    let sf_s = 0, sf_c = 0;
+                    if (d.iso_sf > 0) { sf_s += d.iso_sf; sf_c++; }
+                    if (d.bhs_sf > 0) { sf_s += d.bhs_sf; sf_c++; }
+                    if (d.yue_sf > 0) { sf_s += d.yue_sf; sf_c++; }
+                    d_sf = sf_c > 0 ? sf_s / sf_c : 0;
+
+                    let df_s = 0, df_c = 0;
+                    if (d.iso_df > 0) { df_s += d.iso_df; df_c++; }
+                    if (d.bhs_df > 0) { df_s += d.bhs_df; df_c++; }
+                    if (d.yue_df > 0) { df_s += d.yue_df; df_c++; }
+                    d_df = df_c > 0 ? df_s / df_c : 0;
+                } else if (mcFilter === 'iso') {
+                    d_sf = d.iso_sf; d_df = d.iso_df;
+                } else if (mcFilter === 'bhs') {
+                    d_sf = d.bhs_sf; d_df = d.bhs_df;
+                } else if (mcFilter === 'yue') {
+                    d_sf = d.yue_sf; d_df = d.yue_df;
+                }
+
+                d.display_sf = d_sf;
+                d.display_df = d_df;
+
+                if (d_sf > 0) { sf_total += d_sf; sf_count++; }
+                if (d_df > 0) { df_total += d_df; df_count++; }
+            });
 
             let totalUsage = 0, totalCost = 0, totalOutput = 0, totalSqm = 0;
 
@@ -573,8 +774,10 @@
             const avgKgOutput = totalOutput > 0 ? (totalUsage / totalOutput) : 0;
             const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
 
-            // 🌟 คำนวณค่าเฉลี่ยต้นทุนผสม Yueli
             const avgYueMix = sum.yue_mix_count > 0 ? (sum.yue_mix_total / sum.yue_mix_count) : 0;
+            
+            let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
+            let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
 
             const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
             const kpi = {
@@ -583,34 +786,57 @@
                 yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: safeDiv(sum.yue_usage, sum.yue_sqm) * 1000 }
             };
 
-            // Update DOM
+            // อัปเดตตัวเลข KPI หลัก
             document.getElementById('kpiTotalUsage').innerText = totalUsage.toLocaleString(undefined, { maximumFractionDigits: 0 });
             document.getElementById('kpiTotalCost').innerText = "฿" + totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 });
             document.getElementById('kpiTotalOutput').innerText = totalOutput.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            
+            // อัปเดตตัวเลข Target KPI พร้อมแสดง Percentage วงเล็บท้ายค่า
             document.getElementById('kpiAvgRatio').innerText = "฿ " + avgRatio.toFixed(3);
-            document.getElementById('kpiGramSqm').innerText = avgGramSqm > 0 ? avgGramSqm.toFixed(2) : "0.00";
-            document.getElementById('kpiKgOutput').innerText = avgKgOutput > 0 ? avgKgOutput.toFixed(4) : "0.0000";
-            document.getElementById('kpiQuality').innerText = avgQuality > 0 ? avgQuality.toFixed(2) + "%" : "--";
+            if(avgRatio > 0) renderTargetPct('kpiAvgRatioPct', avgRatio, 0.316, true);
+            else document.getElementById('kpiAvgRatioPct').innerHTML = "";
 
-            // 🌟 Update DOM สำหรับ KPI กล่องใหม่ (เปลี่ยนสีอัตโนมัติตามเป้า 3.82)
+            document.getElementById('kpiGramSqm').innerText = avgGramSqm > 0 ? avgGramSqm.toFixed(2) : "0.00";
+            if (avgGramSqm > 0) renderTargetPct('kpiGramSqmPct', avgGramSqm, 29.250, true);
+            else document.getElementById('kpiGramSqmPct').innerHTML = "";
+
+            document.getElementById('kpiKgOutput').innerText = avgKgOutput > 0 ? avgKgOutput.toFixed(4) : "0.0000";
+            if (avgKgOutput > 0) renderTargetPct('kpiKgOutputPct', avgKgOutput, 0.083, true);
+            else document.getElementById('kpiKgOutputPct').innerHTML = "";
+
+            document.getElementById('kpiQuality').innerText = avgQuality > 0 ? avgQuality.toFixed(2) + "%" : "--";
+            if (avgQuality > 0) renderTargetPct('kpiQualityPct', avgQuality, 90.0, false, true); // มาก=ดี, isPercentageMetric=true
+            else document.getElementById('kpiQualityPct').innerHTML = "";
+
+            document.getElementById('kpiGramSqmSingle').innerText = avgSingleG > 0 ? avgSingleG.toFixed(2) : "--";
+            if (avgSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', avgSingleG, 13.50, true);
+            else document.getElementById('kpiGramSqmSinglePct').innerHTML = "";
+
+            document.getElementById('kpiGramSqmDouble').innerText = avgDoubleG > 0 ? avgDoubleG.toFixed(2) : "--";
+            if (avgDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', avgDoubleG, 15.75, true);
+            else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
+
             const kpiYueMixEl = document.getElementById('kpiYueMix');
             const cardYueMixEl = document.getElementById('cardYueMix');
             const iconYueMixEl = document.getElementById('iconYueMix');
 
             if (avgYueMix > 0) {
                 kpiYueMixEl.innerText = "฿ " + avgYueMix.toFixed(2);
-                if (avgYueMix <= 3.82) { // อยู่ในเป้าหมาย (น้อย=ดี) -> สีเขียว
-                    kpiYueMixEl.className = "kpi-value text-emerald-400 mt-2";
+                renderTargetPct('kpiYueMixPct', avgYueMix, 3.82, true);
+                
+                if (avgYueMix <= 3.82) {
+                    kpiYueMixEl.className = "kpi-value text-emerald-400";
                     cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50";
                     iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-emerald-400";
-                } else { // เกินเป้าหมาย -> สีแดง
-                    kpiYueMixEl.className = "kpi-value text-rose-400 mt-2";
+                } else {
+                    kpiYueMixEl.className = "kpi-value text-rose-400";
                     cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50";
                     iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-rose-400";
                 }
             } else {
                 kpiYueMixEl.innerText = "--";
-                kpiYueMixEl.className = "kpi-value text-slate-400 mt-2";
+                document.getElementById('kpiYueMixPct').innerHTML = "";
+                kpiYueMixEl.className = "kpi-value text-slate-400";
                 cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
                 iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-slate-400";
             }
@@ -624,15 +850,22 @@
                 updateTrendGramSqmChart();
                 updateTrendKgOutputChart();
                 updateTrendQualityChart();
-                updateTrendYueMixChart(); // 🌟 วาดกราฟต้นทุนผสมรายวัน
+                updateTrendYueMixChart();
+                updateTrendGramSqmSingleChart();
+                updateTrendGramSqmDoubleChart();
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
             }
         }
 
         function updateBarChart(canvasId, label, dataObj) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) {
+                console.warn(`ไม่พบ Element Graph: ${canvasId}`);
+                return;
+            }
             if (charts[canvasId]) charts[canvasId].destroy();
-            const ctx = document.getElementById(canvasId).getContext('2d');
+            const ctx = canvas.getContext('2d');
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
 
             let dispLabels = []; let dispData = []; let dispBg = []; let dispBorder = [];
@@ -660,8 +893,10 @@
         }
 
         function updateTrendRatioChart() {
+            const canvas = document.getElementById('trendRatio');
+            if (!canvas) return;
             if (charts['trendRatio']) charts['trendRatio'].destroy();
-            const ctx = document.getElementById('trendRatio').getContext('2d');
+            const ctx = canvas.getContext('2d');
             const labels = filteredData.map(d => d.dateStr);
             const calcDailyKPI = (cost, out) => out > 0 ? (cost / out) : null;
 
@@ -682,8 +917,10 @@
         }
 
         function updateTrendGramSqmChart() {
+            const canvas = document.getElementById('trendGramSqm');
+            if (!canvas) return;
             if (charts['trendGramSqm']) charts['trendGramSqm'].destroy();
-            const ctx = document.getElementById('trendGramSqm').getContext('2d');
+            const ctx = canvas.getContext('2d');
             const calcGramSqm = (usage, sqm) => sqm > 0 ? ((usage / sqm) * 1000) : null;
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
@@ -703,8 +940,10 @@
         }
 
         function updateTrendKgOutputChart() {
+            const canvas = document.getElementById('trendKgOutput');
+            if (!canvas) return;
             if (charts['trendKgOutput']) charts['trendKgOutput'].destroy();
-            const ctx = document.getElementById('trendKgOutput').getContext('2d');
+            const ctx = canvas.getContext('2d');
             const calcKgOut = (usage, out) => out > 0 ? (usage / out) : null;
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
@@ -724,8 +963,10 @@
         }
 
         function updateTrendQualityChart() {
+            const canvas = document.getElementById('trendQuality');
+            if (!canvas) return;
             if (charts['trendQuality']) charts['trendQuality'].destroy();
-            const ctx = document.getElementById('trendQuality').getContext('2d');
+            const ctx = canvas.getContext('2d');
             charts['trendQuality'] = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -736,14 +977,15 @@
             });
         }
 
-        // 🌟 กราฟใหม่: แนวโน้มต้นทุนผสมรายวัน YUELI
         function updateTrendYueMixChart() {
+            const canvas = document.getElementById('trendYueMix');
+            if (!canvas) return;
             if (charts['trendYueMix']) charts['trendYueMix'].destroy();
-            const ctx = document.getElementById('trendYueMix').getContext('2d');
+            const ctx = canvas.getContext('2d');
 
             const labels = filteredData.map(d => d.dateStr);
             const actualData = filteredData.map(d => d.yue_mix > 0 ? d.yue_mix : null);
-            const targetData = filteredData.map(() => 3.82); // เส้นเป้าหมายคงที่ 3.82
+            const targetData = filteredData.map(() => 3.82); 
 
             charts['trendYueMix'] = new Chart(ctx, {
                 type: 'line',
@@ -753,7 +995,7 @@
                         {
                             label: 'ต้นทุนผสมจริง',
                             data: actualData,
-                            borderColor: '#06b6d4', // Cyan
+                            borderColor: '#06b6d4', 
                             backgroundColor: 'rgba(6, 182, 212, 0.1)',
                             fill: true,
                             tension: 0.3,
@@ -763,11 +1005,12 @@
                         {
                             label: 'Target (3.82)',
                             data: targetData,
-                            borderColor: '#f43f5e', // Rose (สีแดง)
-                            borderDash: [5, 5], // เส้นประ
+                            borderColor: '#f43f5e', 
+                            borderDash: [5, 5], 
                             borderWidth: 2,
                             pointRadius: 0,
-                            fill: false
+                            fill: false,
+                            datalabels: { display: false }
                         }
                     ]
                 },
@@ -781,6 +1024,36 @@
                         x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }
                     }
                 }
+            });
+        }
+
+        function updateTrendGramSqmSingleChart() {
+            const canvas = document.getElementById('trendGramSqmSingle');
+            if (!canvas) return;
+            if (charts['trendGramSqmSingle']) charts['trendGramSqmSingle'].destroy();
+            const ctx = canvas.getContext('2d');
+            charts['trendGramSqmSingle'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredData.map(d => d.dateStr),
+                    datasets: [{ label: 'กรัม/ตรม. Single', data: filteredData.map(d => d.display_sf > 0 ? d.display_sf : null), borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqmDoubleChart() {
+            const canvas = document.getElementById('trendGramSqmDouble');
+            if (!canvas) return;
+            if (charts['trendGramSqmDouble']) charts['trendGramSqmDouble'].destroy();
+            const ctx = canvas.getContext('2d');
+            charts['trendGramSqmDouble'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredData.map(d => d.dateStr),
+                    datasets: [{ label: 'กรัม/ตรม. Double', data: filteredData.map(d => d.display_df > 0 ? d.display_df : null), borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
     </script>
