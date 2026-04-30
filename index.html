@@ -335,7 +335,7 @@
         function getStartOfWeek(date) {
             const d = new Date(date);
             const day = d.getDay();
-            const diff = d.getDate() - day; // วันอาทิตย์คือ 0 ลบด้วยค่า day จะได้วันอาทิตย์ของสัปดาห์นั้น
+            const diff = d.getDate() - day; 
             return new Date(d.setDate(diff)).getTime();
         }
 
@@ -528,13 +528,12 @@
                         });
                     };
 
-                    // คืนค่าการอ่าน Column ค่ากาว กลับมาให้ครบทุกเครื่อง เพื่อให้ยอดเงินรวมตรงเป๊ะ
                     let col = {
                         yue_u: getIdx('ปริมาณ', 'yue', 4),
                         yue_c: getIdx('ค่ากาว', 'yue', 5), 
                         yue_o: getIdx('output', 'yue', 6),
                         yue_sqm: getIdx('sqm', 'yue', -1),
-                        yue_mix: getIdx('ต้นทุน', 'yue', 7),
+                        yue_mix: getIdx('ต้นทุน', 'yue', 7), // ดึงคอลัมน์ ต้นทุนผสมกาว
 
                         bhs_u: getIdx('ปริมาณ', 'bhs', 10),
                         bhs_c: getIdx('ค่ากาว', 'bhs', 11), 
@@ -835,7 +834,8 @@
                 iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
                 bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
                 yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
-                quality: 0, q_count: 0
+                quality: 0, q_count: 0,
+                mix_sum: 0, mix_count: 0 // เพิ่มตัวแปรเก็บยอดต้นทุนผสมกาว
             };
 
             let mc_sf_sum = { iso: 0, bhs: 0, yue: 0 }, mc_sf_count = { iso: 0, bhs: 0, yue: 0 };
@@ -852,6 +852,7 @@
                 sum.yue_usage += d.yue_usage; sum.yue_cost += d.yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
 
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
+                if (d.yue_mix > 0) { sum.mix_sum += d.yue_mix; sum.mix_count++; } // คำนวณยอดสะสมจากคอลัมน์ yue_mix
                 
                 let d_sf = 0;
                 let d_df = 0;
@@ -906,7 +907,8 @@
                         yue_cost: 0, yue_out: 0, yue_usage: 0, yue_sqm: 0,
                         quality_sum: 0, quality_count: 0,
                         sf_sum: 0, sf_count: 0,
-                        df_sum: 0, df_count: 0
+                        df_sum: 0, df_count: 0,
+                        mix_sum: 0, mix_count: 0 // เพิ่มตัวแปรกลุ่ม
                     };
                 }
 
@@ -918,6 +920,7 @@
                 if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
                 if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
                 if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
+                if (d.yue_mix > 0) { g.mix_sum += d.yue_mix; g.mix_count++; } // สะสมเข้ากลุ่มกราฟ
             });
 
             let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
@@ -937,8 +940,8 @@
                 rawTotalUsage = sum.yue_usage; rawTotalCost = sum.yue_cost; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
             }
 
-            // ✅ หาค่าเฉลี่ยต้นทุนผสมกาวที่แท้จริง = ต้นทุนกาวรวมดิบๆ / ปริมาณการใช้รวมดิบๆ
-            const trueMixCost = rawTotalUsage > 0 ? (rawTotalCost / rawTotalUsage) : 0;
+            // ✅ หาค่าเฉลี่ยต้นทุนผสมกาวที่แท้จริง จากคอลัมน์ yue_mix
+            const trueMixCost = sum.mix_count > 0 ? (sum.mix_sum / sum.mix_count) : 0;
 
             // ล็อกค่าทศนิยมสำหรับแสดงผล
             const dispTotalUsage = Math.round(rawTotalUsage);
@@ -1192,20 +1195,9 @@
 
             const labels = trendData.map(d => d.label);
             
-            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            // ดึงค่าเฉลี่ยต้นทุนผสมกาวตรงๆ จากคอลัมน์ yue_mix แทนการคำนวณรวม
             const calcMixCost = (g) => {
-                let cost = 0, usage = 0;
-                if (mcFilter === 'all') {
-                    cost = g.iso_cost + g.bhs_cost + g.yue_cost;
-                    usage = g.iso_usage + g.bhs_usage + g.yue_usage;
-                } else if (mcFilter === 'iso') {
-                    cost = g.iso_cost; usage = g.iso_usage;
-                } else if (mcFilter === 'bhs') {
-                    cost = g.bhs_cost; usage = g.bhs_usage;
-                } else if (mcFilter === 'yue') {
-                    cost = g.yue_cost; usage = g.yue_usage;
-                }
-                return usage > 0 ? (cost / usage) : null;
+                return g.mix_count > 0 ? (g.mix_sum / g.mix_count) : null;
             };
 
             const actualData = trendData.map(d => calcMixCost(d));
