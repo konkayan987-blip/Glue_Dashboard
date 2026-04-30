@@ -8,7 +8,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- เพิ่ม Plugin สำหรับแสดงตัวเลขบนกราฟ -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,7 +21,6 @@
         body {
             font-family: 'Inter', 'Sarabun', sans-serif;
             background-color: #0f172a;
-            /* Slate 900 */
             color: #f8fafc;
         }
 
@@ -102,7 +100,6 @@
                     </select>
                 </div>
                 
-                <!-- ตัวกรองมุมมองกราฟ -->
                 <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
                     <label class="text-sm text-slate-300">มุมมองกราฟ:</label>
                     <select id="timeGroupFilter" onchange="applyFilter()"
@@ -120,7 +117,6 @@
                         class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-slate-400">
                 </div>
 
-                <!-- เพิ่มตัวกรองสัปดาห์ (Week) พร้อมระบุปี -->
                 <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
                     <label class="text-sm text-slate-300" title="ระบุช่วงสัปดาห์ (Week)">W (สัปดาห์):</label>
                     <input type="number" id="startWeekNum" min="1" max="53" placeholder="14" onchange="applyWeekFilter()"
@@ -156,7 +152,6 @@
                     <i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล
                 </button>
 
-                <!-- ปุ่มแสดงตัวเลขกราฟ -->
                 <button onclick="toggleLabels()" id="toggleLabelsBtn"
                     class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition duration-200 shadow-lg shadow-fuchsia-500/30 flex items-center gap-2">
                     <i class="fa-solid fa-hashtag"></i> แสดงตัวเลข
@@ -182,14 +177,14 @@
                 <div class="kpi-sub">หน่วย: กิโลกรัม (kg)</div>
             </div>
 
-            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50">
                 <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
                         class="fa-solid fa-money-bill-wave text-3xl"></i></div>
                 <div class="kpi-label">ต้นทุนค่ากาวรวม</div>
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalCost" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub">หน่วย: บาท (Baht)</div>
+                <div class="kpi-sub text-rose-300/80 text-xs mt-1">(คิดจาก: ปริมาณใช้ × ต้นทุนผสม)</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
@@ -344,7 +339,6 @@
             return new Date(d.setDate(diff)).getTime();
         }
 
-        // ฟังก์ชันหาวันที่วันอาทิตย์แรกของสัปดาห์ (เริ่มวันอาทิตย์ - วันเสาร์)
         function getDateOfWeek(w, y) {
             const startOfYear = new Date(y, 0, 1);
             const startDay = startOfYear.getDay();
@@ -353,7 +347,6 @@
             return firstSunday;
         }
 
-        // ฟังก์ชันหาหมายเลขสัปดาห์ของปี (สัปดาห์เริ่มวันอาทิตย์)
         function getWeekNumber(date) {
             const d = new Date(date);
             const startOfYear = new Date(d.getFullYear(), 0, 1);
@@ -384,7 +377,6 @@
                     label: `${d.getFullYear()}`
                 };
             }
-            // mode === 'daily'
             return {
                 key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,
                 label: `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`
@@ -392,7 +384,7 @@
         }
 
         // ==========================================
-        // ตั้งค่า Plugin DataLabels (ปุ่มแสดงตัวเลข)
+        // ตั้งค่า Plugin DataLabels
         // ==========================================
         let showLabels = false;
         Chart.register(ChartDataLabels);
@@ -402,7 +394,7 @@
                 let val = context.dataset.data[context.dataIndex];
                 return showLabels && val !== null && val !== 0 && val !== undefined;
             },
-            color: '#e2e8f0', // สีตัวอักษร
+            color: '#e2e8f0',
             anchor: 'end',
             align: 'top',
             offset: 4,
@@ -412,7 +404,6 @@
             }
         };
 
-        // เผื่อพื้นที่ด้านบนกราฟไม่ให้ตัวเลขโดนตัด
         Chart.defaults.layout = { padding: { top: 25 } };
 
         function toggleLabels() {
@@ -427,12 +418,10 @@
                 btn.innerHTML = '<i class="fa-solid fa-hashtag"></i> แสดงตัวเลข';
             }
             
-            // อัปเดตการแสดงผลกราฟทั้งหมด
             Object.values(charts).forEach(chart => {
                 if (chart) chart.update();
             });
         }
-        // ==========================================
 
         const sheetUrl = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
 
@@ -441,9 +430,9 @@
         let charts = {};
 
         const colors = {
-            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   // Rose (ISOWA)
-            bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  // Blue (BHS)
-            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   // Amber (YUELI)
+            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   
+            bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  
+            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   
         };
 
         const fpStartDate = flatpickr("#startDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
@@ -541,18 +530,15 @@
 
                     let col = {
                         yue_u: getIdx('ปริมาณ', 'yue', 4),
-                        yue_c: getIdx('ค่ากาว', 'yue', 5),
                         yue_o: getIdx('output', 'yue', 6),
                         yue_sqm: getIdx('sqm', 'yue', -1),
-                        yue_mix: getIdx('ต้นทุน', 'yue', 7),
+                        yue_mix: getIdx('ต้นทุน', 'yue', 7), // Mix Cost
 
                         bhs_u: getIdx('ปริมาณ', 'bhs', 10),
-                        bhs_c: getIdx('ค่ากาว', 'bhs', 11),
                         bhs_o: getIdx('output', 'bhs', 12),
                         bhs_sqm: getIdx('sqm', 'bhs', -1),
 
                         iso_u: getIdx('ปริมาณ', 'iso', 15),
-                        iso_c: getIdx('ค่ากาว', 'iso', 16),
                         iso_o: getIdx('output', 'iso', 17),
                         iso_sqm: getIdx('sqm', 'iso', -1),
 
@@ -586,18 +572,15 @@
                         const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
 
                         const y_u = parseNum(c[col.yue_u]);
-                        const y_c = parseNum(c[col.yue_c]);
                         const y_o = parseNum(c[col.yue_o]);
                         const y_sqm = col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0;
                         const y_mix = col.yue_mix !== -1 ? parseNum(c[col.yue_mix]) : 0; 
 
                         const b_u = parseNum(c[col.bhs_u]);
-                        const b_c = parseNum(c[col.bhs_c]);
                         const b_o = parseNum(c[col.bhs_o]);
                         const b_sqm = col.bhs_sqm !== -1 ? parseNum(c[col.bhs_sqm]) : 0;
 
                         const i_u = parseNum(c[col.iso_u]);
-                        const i_c = parseNum(c[col.iso_c]);
                         const i_o = parseNum(c[col.iso_o]);
                         const i_sqm = col.iso_sqm !== -1 ? parseNum(c[col.iso_sqm]) : 0;
 
@@ -612,9 +595,9 @@
 
                         allData.push({
                             dateStr: formattedDate, timestamp: ts,
-                            yue_usage: y_u, yue_cost: y_c, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
-                            bhs_usage: b_u, bhs_cost: b_c, bhs_out: b_o, bhs_sqm: b_sqm,
-                            iso_usage: i_u, iso_cost: i_c, iso_out: i_o, iso_sqm: i_sqm,
+                            yue_usage: y_u, yue_out: y_o, yue_sqm: y_sqm, yue_mix: y_mix,
+                            bhs_usage: b_u, bhs_out: b_o, bhs_sqm: b_sqm,
+                            iso_usage: i_u, iso_out: i_o, iso_sqm: i_sqm,
                             quality: q,
                             iso_sf: iso_sf, iso_df: iso_df,
                             bhs_sf: bhs_sf, bhs_df: bhs_df,
@@ -657,7 +640,6 @@
             }
         }
 
-        // รอให้หน้าเว็บโหลดเสร็จสมบูรณ์ก่อนเริ่มโหลดข้อมูล เพื่อป้องกัน error ไม่พบ element กราฟ
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
         });
@@ -693,7 +675,6 @@
             fpStartDate.setDate(firstDay);
             fpEndDate.setDate(lastDay);
 
-            // เคลียร์ค่าในช่องสัปดาห์และปี
             if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
             if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
             if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
@@ -701,7 +682,6 @@
             applyFilterLogic();
         }
 
-        // ฟังก์ชันใหม่: กรองข้อมูลด้วยหมายเลขสัปดาห์และระบุปีให้ชัดเจน
         function applyWeekFilter() {
             let startWStr = document.getElementById('startWeekNum').value;
             let endWStr = document.getElementById('endWeekNum').value;
@@ -711,7 +691,6 @@
 
             if (!startW && !endW) return;
             
-            // ถ้ากรอกแค่ช่องใดช่องหนึ่ง ให้ถือว่าดูสัปดาห์เดียว
             if (startW && !endW) {
                 endW = startW;
                 document.getElementById('endWeekNum').value = startW;
@@ -721,19 +700,16 @@
                 document.getElementById('startWeekNum').value = endW;
             }
 
-            // สลับค่าถ้ากรอกสลับกัน
             if (startW > endW) {
                 let temp = startW;
                 startW = endW;
                 endW = temp;
             }
 
-            // หาค่าปีจากช่องที่ผู้ใช้กรอก
             let yearVal = parseInt(document.getElementById('weekYear').value);
             let year = yearVal;
             
             if (!year || isNaN(year)) {
-                // หากไม่ได้กรอกปี ให้ดึงปีจากข้อมูลล่าสุด (end date) เพื่อไม่ให้หลุดไปปีเก่าๆ
                 year = new Date().getFullYear();
                 if (fpEndDate.selectedDates.length > 0) {
                     year = fpEndDate.selectedDates[0].getFullYear();
@@ -745,12 +721,11 @@
 
             const startDate = getDateOfWeek(startW, year);
             const endDate = getDateOfWeek(endW, year);
-            endDate.setDate(endDate.getDate() + 6); // สิ้นสุดที่วันเสาร์ของสัปดาห์นั้น
+            endDate.setDate(endDate.getDate() + 6); 
 
             fpStartDate.setDate(startDate);
             fpEndDate.setDate(endDate);
             
-            // บังคับเปลี่ยนมุมมองเป็น "รายสัปดาห์" และลบเดือนออก
             if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'weekly';
             if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
 
@@ -818,7 +793,6 @@
             }, 100);
         }
 
-        // ฟังก์ชันคำนวณและแสดงผล % เทียบกับเป้าหมาย
         function renderTargetPct(elementId, actual, target, isLessBetter, isPercentageMetric = false) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -851,12 +825,15 @@
 
         function processDashboard() {
             let sum = {
-                iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
-                bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
-                yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
+                iso_usage: 0, iso_out: 0, iso_sqm: 0,
+                bhs_usage: 0, bhs_out: 0, bhs_sqm: 0,
+                yue_usage: 0, yue_out: 0, yue_sqm: 0,
                 yue_mix_total: 0, yue_mix_count: 0,
                 quality: 0, q_count: 0
             };
+
+            let mc_sf_sum = { iso: 0, bhs: 0, yue: 0 }, mc_sf_count = { iso: 0, bhs: 0, yue: 0 };
+            let mc_df_sum = { iso: 0, bhs: 0, yue: 0 }, mc_df_count = { iso: 0, bhs: 0, yue: 0 };
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             
@@ -864,9 +841,9 @@
             let df_total = 0, df_count = 0;
 
             filteredData.forEach(d => {
-                sum.iso_usage += d.iso_usage; sum.iso_cost += d.iso_cost; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
-                sum.bhs_usage += d.bhs_usage; sum.bhs_cost += d.bhs_cost; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
-                sum.yue_usage += d.yue_usage; sum.yue_cost += d.yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
+                sum.iso_usage += d.iso_usage; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
+                sum.bhs_usage += d.bhs_usage; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
+                sum.yue_usage += d.yue_usage; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
 
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
                 if (d.yue_mix > 0) { sum.yue_mix_total += d.yue_mix; sum.yue_mix_count++; }
@@ -899,11 +876,19 @@
 
                 if (d_sf > 0) { sf_total += d_sf; sf_count++; }
                 if (d_df > 0) { df_total += d_df; df_count++; }
+
+                if (d.iso_sf > 0) { mc_sf_sum.iso += d.iso_sf; mc_sf_count.iso++; }
+                if (d.iso_df > 0) { mc_df_sum.iso += d.iso_df; mc_df_count.iso++; }
+                if (d.bhs_sf > 0) { mc_sf_sum.bhs += d.bhs_sf; mc_sf_count.bhs++; }
+                if (d.bhs_df > 0) { mc_df_sum.bhs += d.bhs_df; mc_df_count.bhs++; }
+                if (d.yue_sf > 0) { mc_sf_sum.yue += d.yue_sf; mc_sf_count.yue++; }
+                if (d.yue_df > 0) { mc_df_sum.yue += d.yue_df; mc_df_count.yue++; }
             });
 
-            // --------------------------------------------------------
-            // การจัดกลุ่มข้อมูลสำหรับกราฟแนวโน้ม (Daily, Weekly, Monthly, Yearly)
-            // --------------------------------------------------------
+            // ✅ 1. หาต้นทุนผสมกาวเฉลี่ย แล้วล็อกทศนิยม 2 ตำแหน่งให้ตรงกับหน้าจอทันที
+            const rawAvgMixCost = sum.yue_mix_count > 0 ? (sum.yue_mix_total / sum.yue_mix_count) : 0;
+            const dispMixCost = parseFloat(rawAvgMixCost.toFixed(2));
+
             const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
             const groups = {};
 
@@ -926,91 +911,121 @@
                 }
 
                 let g = groups[key];
-                g.iso_cost += d.iso_cost; g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm;
-                g.bhs_cost += d.bhs_cost; g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm;
-                g.yue_cost += d.yue_cost; g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm;
+                g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm;
+                g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm;
+                g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm;
 
                 if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
                 if (d.yue_mix > 0) { g.yue_mix_sum += d.yue_mix; g.yue_mix_count++; }
                 if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
                 if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
+
+                // คำนวณต้นทุนรายวันใน Group ให้สอดคล้องกับสมการ (Usage * Mix Rate ที่ปัดเศษแล้ว)
+                let dailyMix = d.yue_mix > 0 ? parseFloat(d.yue_mix.toFixed(2)) : dispMixCost;
+                g.iso_cost += (d.iso_usage * dailyMix);
+                g.bhs_cost += (d.bhs_usage * dailyMix);
+                g.yue_cost += (d.yue_usage * dailyMix);
             });
 
-            // แปลง Object เป็น Array และเรียงตามวันที่
             let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
-            // --------------------------------------------------------
 
-            let totalUsage = 0, totalCost = 0, totalOutput = 0, totalSqm = 0;
+            let rawTotalUsage = 0, rawTotalOutput = 0, totalSqm = 0;
 
             if (mcFilter === 'all') {
-                totalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
-                totalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost;
-                totalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
+                rawTotalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
+                rawTotalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
                 totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
             } else if (mcFilter === 'iso') {
-                totalUsage = sum.iso_usage; totalCost = sum.iso_cost; totalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
+                rawTotalUsage = sum.iso_usage; rawTotalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
             } else if (mcFilter === 'bhs') {
-                totalUsage = sum.bhs_usage; totalCost = sum.bhs_cost; totalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
+                rawTotalUsage = sum.bhs_usage; rawTotalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
             } else if (mcFilter === 'yue') {
-                totalUsage = sum.yue_usage; totalCost = sum.yue_cost; totalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
+                rawTotalUsage = sum.yue_usage; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
             }
 
-            const avgRatio = totalOutput > 0 ? (totalCost / totalOutput) : 0;
-            const avgGramSqm = totalSqm > 0 ? ((totalUsage / totalSqm) * 1000) : 0;
-            const avgKgOutput = totalOutput > 0 ? (totalUsage / totalOutput) : 0;
-            const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
+            // ✅ ล็อกค่า ปริมาณกาว และ ยอดผลิต ให้เป็นตัวเลขกลมๆ แบบเดียวกับที่แสดงบนหน้าจอเป๊ะๆ
+            const dispTotalUsage = Math.round(rawTotalUsage);
+            const dispTotalOutput = Math.round(rawTotalOutput);
 
-            const avgYueMix = sum.yue_mix_count > 0 ? (sum.yue_mix_total / sum.yue_mix_count) : 0;
+            // ✅ 2. หาต้นทุนรวมที่แท้จริง = ปริมาณใช้(บนจอ) × ต้นทุนผสมเฉลี่ย(บนจอ)
+            const totalCost = dispTotalUsage * dispMixCost;
+
+            const avgRatio = dispTotalOutput > 0 ? (totalCost / dispTotalOutput) : 0;
+            const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
+            const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
             
             let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
             let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
 
+            const avgGramSqm = (avgSingleG > 0 || avgDoubleG > 0) 
+                                ? (avgSingleG + avgDoubleG) 
+                                : (totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0);
+
             const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
-            const kpi = {
-                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: safeDiv(sum.iso_usage, sum.iso_sqm) * 1000 },
-                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: safeDiv(sum.bhs_usage, sum.bhs_sqm) * 1000 },
-                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: safeDiv(sum.yue_usage, sum.yue_sqm) * 1000 }
+            
+            const getMcGSqm = (mc) => {
+                let sf_avg = mc_sf_count[mc] > 0 ? mc_sf_sum[mc] / mc_sf_count[mc] : 0;
+                let df_avg = mc_df_count[mc] > 0 ? mc_df_sum[mc] / mc_df_count[mc] : 0;
+                let total = sf_avg + df_avg;
+                return total > 0 ? total : safeDiv(Math.round(sum[`${mc}_usage`]), sum[`${mc}_sqm`]) * 1000;
             };
 
-            // อัปเดตตัวเลข KPI หลัก
-            document.getElementById('kpiTotalUsage').innerText = totalUsage.toLocaleString(undefined, { maximumFractionDigits: 0 });
-            document.getElementById('kpiTotalCost').innerText = "฿" + totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 });
-            document.getElementById('kpiTotalOutput').innerText = totalOutput.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            const kpi = {
+                // ✅ ต้นทุนรายเครื่องก็ต้องคิดจาก ปริมาณใช้ที่ปัดเศษแล้ว × ต้นทุนผสมเฉลี่ย เช่นเดียวกัน
+                iso: { usage: Math.round(sum.iso_usage), cost: Math.round(sum.iso_usage) * dispMixCost, gSqm: getMcGSqm('iso') },
+                bhs: { usage: Math.round(sum.bhs_usage), cost: Math.round(sum.bhs_usage) * dispMixCost, gSqm: getMcGSqm('bhs') },
+                yue: { usage: Math.round(sum.yue_usage), cost: Math.round(sum.yue_usage) * dispMixCost, gSqm: getMcGSqm('yue') }
+            };
+
+            // ✅ แปลงค่าให้เป็นตัวเลขตามทศนิยมที่แสดงบนหน้าจอเป๊ะๆ เพื่อคำนวณ % ให้ตรงกับเครื่องคิดเลข 100%
+            const dispRatio = parseFloat(avgRatio.toFixed(3));
+            const dispGramSqm = parseFloat(avgGramSqm.toFixed(2));
+            const dispKgOutput = parseFloat(avgKgOutput.toFixed(4));
+            const dispQuality = parseFloat(avgQuality.toFixed(2));
+            const dispSingleG = parseFloat(avgSingleG.toFixed(2));
+            const dispDoubleG = parseFloat(avgDoubleG.toFixed(2));
+
+            // อัปเดตตัวเลข KPI หลักโดยใช้ค่าที่ล็อกทศนิยมแล้ว
+            document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US');
             
-            // อัปเดตตัวเลข Target KPI พร้อมแสดง Percentage วงเล็บท้ายค่า
-            document.getElementById('kpiAvgRatio').innerText = "฿ " + avgRatio.toFixed(3);
-            if(avgRatio > 0) renderTargetPct('kpiAvgRatioPct', avgRatio, 0.316, true);
+            // แสดงจุดทศนิยม 2 ตำแหน่งให้รู้ว่ายอดเป๊ะ 100%
+            document.getElementById('kpiTotalCost').innerText = "฿" + totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US');
+            
+            // ใชัตัวเลขที่ปัดเศษแล้ว (disp...) ไปแสดงผลและคำนวณเป้าหมาย
+            document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(3);
+            if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.316, true);
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
 
-            document.getElementById('kpiGramSqm').innerText = avgGramSqm > 0 ? avgGramSqm.toFixed(2) : "0.00";
-            if (avgGramSqm > 0) renderTargetPct('kpiGramSqmPct', avgGramSqm, 29.250, true);
+            document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(2) : "0.00";
+            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 29.250, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
 
-            document.getElementById('kpiKgOutput').innerText = avgKgOutput > 0 ? avgKgOutput.toFixed(4) : "0.0000";
-            if (avgKgOutput > 0) renderTargetPct('kpiKgOutputPct', avgKgOutput, 0.083, true);
+            document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(4) : "0.0000";
+            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.083, true);
             else document.getElementById('kpiKgOutputPct').innerHTML = "";
 
-            document.getElementById('kpiQuality').innerText = avgQuality > 0 ? avgQuality.toFixed(2) + "%" : "--";
-            if (avgQuality > 0) renderTargetPct('kpiQualityPct', avgQuality, 90.0, false, true); // มาก=ดี, isPercentageMetric=true
+            document.getElementById('kpiQuality').innerText = dispQuality > 0 ? dispQuality.toFixed(2) + "%" : "--";
+            if (dispQuality > 0) renderTargetPct('kpiQualityPct', dispQuality, 90.0, false, true); 
             else document.getElementById('kpiQualityPct').innerHTML = "";
 
-            document.getElementById('kpiGramSqmSingle').innerText = avgSingleG > 0 ? avgSingleG.toFixed(2) : "--";
-            if (avgSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', avgSingleG, 13.50, true);
+            document.getElementById('kpiGramSqmSingle').innerText = dispSingleG > 0 ? dispSingleG.toFixed(2) : "--";
+            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 13.50, true);
             else document.getElementById('kpiGramSqmSinglePct').innerHTML = "";
 
-            document.getElementById('kpiGramSqmDouble').innerText = avgDoubleG > 0 ? avgDoubleG.toFixed(2) : "--";
-            if (avgDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', avgDoubleG, 15.75, true);
+            document.getElementById('kpiGramSqmDouble').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(2) : "--";
+            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 15.75, true);
             else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
 
             const kpiYueMixEl = document.getElementById('kpiYueMix');
             const cardYueMixEl = document.getElementById('cardYueMix');
             const iconYueMixEl = document.getElementById('iconYueMix');
 
-            if (avgYueMix > 0) {
-                kpiYueMixEl.innerText = "฿ " + avgYueMix.toFixed(2);
-                renderTargetPct('kpiYueMixPct', avgYueMix, 3.82, true);
+            if (dispMixCost > 0) {
+                kpiYueMixEl.innerText = "฿ " + dispMixCost.toFixed(2);
+                renderTargetPct('kpiYueMixPct', dispMixCost, 3.82, true);
                 
-                if (avgYueMix <= 3.82) {
+                if (dispMixCost <= 3.82) {
                     kpiYueMixEl.className = "kpi-value text-emerald-400";
                     cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50";
                     iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-emerald-400";
@@ -1028,12 +1043,10 @@
             }
 
             try {
-                // กราฟแท่งใช้ข้อมูลรวมทั้งหมด ไม่ขึ้นกับ trendData (time mode)
                 updateBarChart('barUsage', 'ปริมาณกาว (kg)', { iso: kpi.iso.usage, bhs: kpi.bhs.usage, yue: kpi.yue.usage });
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
-                // กราฟแนวโน้มใช้ข้อมูลที่ถูก Group ตามเวลาแล้ว (trendData)
                 updateTrendRatioChart(trendData);
                 updateTrendGramSqmChart(trendData);
                 updateTrendKgOutputChart(trendData);
@@ -1112,13 +1125,19 @@
             const ctx = canvas.getContext('2d');
             
             const labels = trendData.map(d => d.label);
-            const calcGramSqm = (usage, sqm) => sqm > 0 ? ((usage / sqm) * 1000) : null;
+            
+            const calcGramSqm = (g, mc) => {
+                let sf_avg = g[`${mc}_sf_count`] > 0 ? g[`${mc}_sf_sum`] / g[`${mc}_sf_count`] : 0;
+                let df_avg = g[`${mc}_df_count`] > 0 ? g[`${mc}_df_sum`] / g[`${mc}_df_count`] : 0;
+                let total = sf_avg + df_avg;
+                return total > 0 ? total : (g[`${mc}_sqm`] > 0 ? ((g[`${mc}_usage`] / g[`${mc}_sqm`]) * 1000) : null);
+            };
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             let datasets = [];
-            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcGramSqm(d, 'iso')), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcGramSqm(d, 'bhs')), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcGramSqm(d, 'yue')), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
 
             charts['trendGramSqm'] = new Chart(ctx, {
                 type: 'line',
@@ -1181,6 +1200,8 @@
             const ctx = canvas.getContext('2d');
 
             const labels = trendData.map(d => d.label);
+            
+            // กราฟต้นทุนผสมกาวแสดงเฉพาะค่าเฉลี่ยของ 'ต้นทุน' ในแต่ละวัน/กลุ่ม 
             const actualData = trendData.map(d => d.yue_mix_count > 0 ? (d.yue_mix_sum / d.yue_mix_count) : null);
             const targetData = trendData.map(() => 3.82); 
 
