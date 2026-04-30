@@ -101,10 +101,36 @@
                         <option value="yue">YUELI</option>
                     </select>
                 </div>
+                
+                <!-- ตัวกรองมุมมองกราฟ -->
+                <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
+                    <label class="text-sm text-slate-300">มุมมองกราฟ:</label>
+                    <select id="timeGroupFilter" onchange="applyFilter()"
+                        class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white">
+                        <option value="daily">รายวัน</option>
+                        <option value="weekly">รายสัปดาห์</option>
+                        <option value="monthly">รายเดือน</option>
+                        <option value="yearly">รายปี</option>
+                    </select>
+                </div>
+
                 <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
                     <label class="text-sm text-slate-300">เดือน/ปี:</label>
                     <input type="month" id="monthFilter" onchange="applyMonthFilter()"
                         class="bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white placeholder-slate-400">
+                </div>
+
+                <!-- เพิ่มตัวกรองสัปดาห์ (Week) พร้อมระบุปี -->
+                <div class="flex items-center gap-2 border-r border-slate-600 pr-3">
+                    <label class="text-sm text-slate-300" title="ระบุช่วงสัปดาห์ (Week)">W (สัปดาห์):</label>
+                    <input type="number" id="startWeekNum" min="1" max="53" placeholder="14" onchange="applyWeekFilter()"
+                        class="w-14 bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white text-center">
+                    <span class="text-slate-400">-</span>
+                    <input type="number" id="endWeekNum" min="1" max="53" placeholder="15" onchange="applyWeekFilter()"
+                        class="w-14 bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white text-center">
+                    <label class="text-sm text-slate-300 ml-1">ปี:</label>
+                    <input type="number" id="weekYear" min="2020" max="2050" placeholder="2026" onchange="applyWeekFilter()"
+                        class="w-20 bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-emerald-500 text-white text-center">
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -289,7 +315,7 @@
                 <div class="w-full h-[250px]"><canvas id="trendQuality"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-cyan-300">🎯 ต้นทุนผสมกาวรายวัน (เทียบ Target)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-cyan-300">🎯 ต้นทุนผสมกาว (เทียบ Target)</h3>
                 <div class="w-full h-[250px]"><canvas id="trendYueMix"></canvas></div>
             </div>
         </div>
@@ -308,6 +334,63 @@
     </div>
 
     <script>
+        // ==========================================
+        // ฟังก์ชันช่วยเหลือสำหรับจัดกลุ่มเวลา
+        // ==========================================
+        function getStartOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day; // วันอาทิตย์คือ 0 ลบด้วยค่า day จะได้วันอาทิตย์ของสัปดาห์นั้น
+            return new Date(d.setDate(diff)).getTime();
+        }
+
+        // ฟังก์ชันหาวันที่วันอาทิตย์แรกของสัปดาห์ (เริ่มวันอาทิตย์ - วันเสาร์)
+        function getDateOfWeek(w, y) {
+            const startOfYear = new Date(y, 0, 1);
+            const startDay = startOfYear.getDay();
+            const firstSunday = new Date(y, 0, 1 - startDay);
+            firstSunday.setDate(firstSunday.getDate() + (w - 1) * 7);
+            return firstSunday;
+        }
+
+        // ฟังก์ชันหาหมายเลขสัปดาห์ของปี (สัปดาห์เริ่มวันอาทิตย์)
+        function getWeekNumber(date) {
+            const d = new Date(date);
+            const startOfYear = new Date(d.getFullYear(), 0, 1);
+            const startDay = startOfYear.getDay();
+            const pastDaysOfYear = (d - startOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + startDay + 1) / 7);
+        }
+
+        function getGroupKeyAndLabel(timestamp, mode) {
+            const d = new Date(timestamp);
+            if (mode === 'weekly') {
+                const sow = new Date(getStartOfWeek(timestamp));
+                const weekNo = getWeekNumber(timestamp);
+                return {
+                    key: `${sow.getFullYear()}-W${String(weekNo).padStart(2,'0')}`,
+                    label: `Week ${weekNo}`
+                };
+            }
+            if (mode === 'monthly') {
+                return {
+                    key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,
+                    label: `${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`
+                };
+            }
+            if (mode === 'yearly') {
+                return {
+                    key: `${d.getFullYear()}`,
+                    label: `${d.getFullYear()}`
+                };
+            }
+            // mode === 'daily'
+            return {
+                key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,
+                label: `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`
+            };
+        }
+
         // ==========================================
         // ตั้งค่า Plugin DataLabels (ปุ่มแสดงตัวเลข)
         // ==========================================
@@ -610,12 +693,78 @@
             fpStartDate.setDate(firstDay);
             fpEndDate.setDate(lastDay);
 
+            // เคลียร์ค่าในช่องสัปดาห์และปี
+            if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
+            if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
+            if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
+
+            applyFilterLogic();
+        }
+
+        // ฟังก์ชันใหม่: กรองข้อมูลด้วยหมายเลขสัปดาห์และระบุปีให้ชัดเจน
+        function applyWeekFilter() {
+            let startWStr = document.getElementById('startWeekNum').value;
+            let endWStr = document.getElementById('endWeekNum').value;
+            
+            let startW = parseInt(startWStr);
+            let endW = parseInt(endWStr);
+
+            if (!startW && !endW) return;
+            
+            // ถ้ากรอกแค่ช่องใดช่องหนึ่ง ให้ถือว่าดูสัปดาห์เดียว
+            if (startW && !endW) {
+                endW = startW;
+                document.getElementById('endWeekNum').value = startW;
+            }
+            if (!startW && endW) {
+                startW = endW;
+                document.getElementById('startWeekNum').value = endW;
+            }
+
+            // สลับค่าถ้ากรอกสลับกัน
+            if (startW > endW) {
+                let temp = startW;
+                startW = endW;
+                endW = temp;
+            }
+
+            // หาค่าปีจากช่องที่ผู้ใช้กรอก
+            let yearVal = parseInt(document.getElementById('weekYear').value);
+            let year = yearVal;
+            
+            if (!year || isNaN(year)) {
+                // หากไม่ได้กรอกปี ให้ดึงปีจากข้อมูลล่าสุด (end date) เพื่อไม่ให้หลุดไปปีเก่าๆ
+                year = new Date().getFullYear();
+                if (fpEndDate.selectedDates.length > 0) {
+                    year = fpEndDate.selectedDates[0].getFullYear();
+                }
+                if (document.getElementById('weekYear')) {
+                    document.getElementById('weekYear').value = year;
+                }
+            }
+
+            const startDate = getDateOfWeek(startW, year);
+            const endDate = getDateOfWeek(endW, year);
+            endDate.setDate(endDate.getDate() + 6); // สิ้นสุดที่วันเสาร์ของสัปดาห์นั้น
+
+            fpStartDate.setDate(startDate);
+            fpEndDate.setDate(endDate);
+            
+            // บังคับเปลี่ยนมุมมองเป็น "รายสัปดาห์" และลบเดือนออก
+            if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'weekly';
+            if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
+
             applyFilterLogic();
         }
 
         function resetFilter() {
             if (document.getElementById('machineFilter')) document.getElementById('machineFilter').value = 'all';
-            document.getElementById('monthFilter').value = '';
+            if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'daily';
+            if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
+            if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
+            if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
+            if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
+            
             if (allData.length > 0) {
                 fpStartDate.setDate(new Date(allData[0].timestamp));
                 fpEndDate.setDate(new Date(allData[allData.length - 1].timestamp));
@@ -682,10 +831,8 @@
             let displayVal = "";
             
             if (isPercentageMetric) {
-                // สำหรับค่าที่เดิมทีเป็นเปอร์เซ็นต์อยู่แล้ว แสดงส่วนต่างแบบตรงๆ
                 displayVal = Math.abs(diff).toFixed(2) + "%";
             } else {
-                // สำหรับค่าทั่วไป แสดง % ความแตกต่าง
                 const pct = (diff / target) * 100;
                 displayVal = Math.abs(pct).toFixed(2) + "%";
             }
@@ -753,6 +900,45 @@
                 if (d_sf > 0) { sf_total += d_sf; sf_count++; }
                 if (d_df > 0) { df_total += d_df; df_count++; }
             });
+
+            // --------------------------------------------------------
+            // การจัดกลุ่มข้อมูลสำหรับกราฟแนวโน้ม (Daily, Weekly, Monthly, Yearly)
+            // --------------------------------------------------------
+            const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
+            const groups = {};
+
+            filteredData.forEach(d => {
+                const groupInfo = getGroupKeyAndLabel(d.timestamp, timeMode);
+                const key = groupInfo.key;
+
+                if (!groups[key]) {
+                    groups[key] = {
+                        label: groupInfo.label,
+                        timestamp: d.timestamp,
+                        iso_cost: 0, iso_out: 0, iso_usage: 0, iso_sqm: 0,
+                        bhs_cost: 0, bhs_out: 0, bhs_usage: 0, bhs_sqm: 0,
+                        yue_cost: 0, yue_out: 0, yue_usage: 0, yue_sqm: 0,
+                        quality_sum: 0, quality_count: 0,
+                        yue_mix_sum: 0, yue_mix_count: 0,
+                        sf_sum: 0, sf_count: 0,
+                        df_sum: 0, df_count: 0
+                    };
+                }
+
+                let g = groups[key];
+                g.iso_cost += d.iso_cost; g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm;
+                g.bhs_cost += d.bhs_cost; g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm;
+                g.yue_cost += d.yue_cost; g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm;
+
+                if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
+                if (d.yue_mix > 0) { g.yue_mix_sum += d.yue_mix; g.yue_mix_count++; }
+                if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
+                if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
+            });
+
+            // แปลง Object เป็น Array และเรียงตามวันที่
+            let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
+            // --------------------------------------------------------
 
             let totalUsage = 0, totalCost = 0, totalOutput = 0, totalSqm = 0;
 
@@ -842,17 +1028,19 @@
             }
 
             try {
+                // กราฟแท่งใช้ข้อมูลรวมทั้งหมด ไม่ขึ้นกับ trendData (time mode)
                 updateBarChart('barUsage', 'ปริมาณกาว (kg)', { iso: kpi.iso.usage, bhs: kpi.bhs.usage, yue: kpi.yue.usage });
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
-                updateTrendRatioChart();
-                updateTrendGramSqmChart();
-                updateTrendKgOutputChart();
-                updateTrendQualityChart();
-                updateTrendYueMixChart();
-                updateTrendGramSqmSingleChart();
-                updateTrendGramSqmDoubleChart();
+                // กราฟแนวโน้มใช้ข้อมูลที่ถูก Group ตามเวลาแล้ว (trendData)
+                updateTrendRatioChart(trendData);
+                updateTrendGramSqmChart(trendData);
+                updateTrendKgOutputChart(trendData);
+                updateTrendQualityChart(trendData);
+                updateTrendYueMixChart(trendData);
+                updateTrendGramSqmSingleChart(trendData);
+                updateTrendGramSqmDoubleChart(trendData);
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
             }
@@ -892,19 +1080,20 @@
             });
         }
 
-        function updateTrendRatioChart() {
+        function updateTrendRatioChart(trendData) {
             const canvas = document.getElementById('trendRatio');
             if (!canvas) return;
             if (charts['trendRatio']) charts['trendRatio'].destroy();
             const ctx = canvas.getContext('2d');
-            const labels = filteredData.map(d => d.dateStr);
-            const calcDailyKPI = (cost, out) => out > 0 ? (cost / out) : null;
+            
+            const labels = trendData.map(d => d.label);
+            const calcKPI = (cost, out) => out > 0 ? (cost / out) : null;
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             let datasets = [];
-            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcDailyKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcDailyKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcDailyKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
 
             charts['trendRatio'] = new Chart(ctx, {
                 type: 'line',
@@ -916,76 +1105,84 @@
             });
         }
 
-        function updateTrendGramSqmChart() {
+        function updateTrendGramSqmChart(trendData) {
             const canvas = document.getElementById('trendGramSqm');
             if (!canvas) return;
             if (charts['trendGramSqm']) charts['trendGramSqm'].destroy();
             const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
             const calcGramSqm = (usage, sqm) => sqm > 0 ? ((usage / sqm) * 1000) : null;
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             let datasets = [];
-            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcGramSqm(d.iso_usage, d.iso_sqm)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcGramSqm(d.bhs_usage, d.bhs_sqm)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcGramSqm(d.yue_usage, d.yue_sqm)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
 
             charts['trendGramSqm'] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: filteredData.map(d => d.dateStr),
+                    labels: labels,
                     datasets: datasets
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
-        function updateTrendKgOutputChart() {
+        function updateTrendKgOutputChart(trendData) {
             const canvas = document.getElementById('trendKgOutput');
             if (!canvas) return;
             if (charts['trendKgOutput']) charts['trendKgOutput'].destroy();
             const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
             const calcKgOut = (usage, out) => out > 0 ? (usage / out) : null;
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             let datasets = [];
-            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: filteredData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: filteredData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
-            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: filteredData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
 
             charts['trendKgOutput'] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: filteredData.map(d => d.dateStr),
+                    labels: labels,
                     datasets: datasets
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
-        function updateTrendQualityChart() {
+        function updateTrendQualityChart(trendData) {
             const canvas = document.getElementById('trendQuality');
             if (!canvas) return;
             if (charts['trendQuality']) charts['trendQuality'].destroy();
             const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.quality_count > 0 ? (d.quality_sum / d.quality_count) : null);
+
             charts['trendQuality'] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: filteredData.map(d => d.dateStr),
-                    datasets: [{ label: '% คุณภาพกาวเฉลี่ย', data: filteredData.map(d => d.quality > 0 ? d.quality : null), borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                    labels: labels,
+                    datasets: [{ label: '% คุณภาพกาวเฉลี่ย', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
-        function updateTrendYueMixChart() {
+        function updateTrendYueMixChart(trendData) {
             const canvas = document.getElementById('trendYueMix');
             if (!canvas) return;
             if (charts['trendYueMix']) charts['trendYueMix'].destroy();
             const ctx = canvas.getContext('2d');
 
-            const labels = filteredData.map(d => d.dateStr);
-            const actualData = filteredData.map(d => d.yue_mix > 0 ? d.yue_mix : null);
-            const targetData = filteredData.map(() => 3.82); 
+            const labels = trendData.map(d => d.label);
+            const actualData = trendData.map(d => d.yue_mix_count > 0 ? (d.yue_mix_sum / d.yue_mix_count) : null);
+            const targetData = trendData.map(() => 3.82); 
 
             charts['trendYueMix'] = new Chart(ctx, {
                 type: 'line',
@@ -1027,31 +1224,39 @@
             });
         }
 
-        function updateTrendGramSqmSingleChart() {
+        function updateTrendGramSqmSingleChart(trendData) {
             const canvas = document.getElementById('trendGramSqmSingle');
             if (!canvas) return;
             if (charts['trendGramSqmSingle']) charts['trendGramSqmSingle'].destroy();
             const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.sf_count > 0 ? (d.sf_sum / d.sf_count) : null);
+
             charts['trendGramSqmSingle'] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: filteredData.map(d => d.dateStr),
-                    datasets: [{ label: 'กรัม/ตรม. Single', data: filteredData.map(d => d.display_sf > 0 ? d.display_sf : null), borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                    labels: labels,
+                    datasets: [{ label: 'กรัม/ตรม. Single', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
-        function updateTrendGramSqmDoubleChart() {
+        function updateTrendGramSqmDoubleChart(trendData) {
             const canvas = document.getElementById('trendGramSqmDouble');
             if (!canvas) return;
             if (charts['trendGramSqmDouble']) charts['trendGramSqmDouble'].destroy();
             const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.df_count > 0 ? (d.df_sum / d.df_count) : null);
+
             charts['trendGramSqmDouble'] = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: filteredData.map(d => d.dateStr),
-                    datasets: [{ label: 'กรัม/ตรม. Double', data: filteredData.map(d => d.display_df > 0 ? d.display_df : null), borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
+                    labels: labels,
+                    datasets: [{ label: 'กรัม/ตรม. Double', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
