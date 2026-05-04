@@ -401,7 +401,7 @@
             offset: 4,
             font: { size: 10, family: "'Inter', 'Sarabun', sans-serif" },
             formatter: function(value) {
-                return Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
+                return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         };
 
@@ -937,8 +937,8 @@
             costNoteEl.className = "kpi-sub text-emerald-400/80 font-semibold mt-1";
 
             const trueMixCost = sum.mix_count > 0 ? (sum.mix_sum / sum.mix_count) : 0;
-            const dispTotalUsage = Math.round(rawTotalUsage);
-            const dispTotalOutput = Math.round(rawTotalOutput);
+            const dispTotalUsage = rawTotalUsage;
+            const dispTotalOutput = rawTotalOutput;
             const dispMixCost = parseFloat(trueMixCost.toFixed(2)); 
 
             // คำนวณอัตราส่วนเฉลี่ยใหม่โดยใช้ dispTotalCost
@@ -960,7 +960,7 @@
                 let sf_avg = mc_sf_count[mc] > 0 ? mc_sf_sum[mc] / mc_sf_count[mc] : 0;
                 let df_avg = mc_df_count[mc] > 0 ? mc_df_sum[mc] / mc_df_count[mc] : 0;
                 let total = sf_avg + df_avg;
-                return total > 0 ? total : safeDiv(Math.round(sum[`${mc}_usage`]), sum[`${mc}_sqm`]) * 1000;
+                return total > 0 ? total : safeDiv(sum[`${mc}_usage`], sum[`${mc}_sqm`]) * 1000;
             };
 
             const kpi = {
@@ -969,19 +969,19 @@
                 yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: getMcGSqm('yue') }
             };
 
-            const dispRatio = parseFloat(avgRatio.toFixed(3));
+            const dispRatio = parseFloat(avgRatio.toFixed(2));
             const dispGramSqm = parseFloat(avgGramSqm.toFixed(2));
-            const dispKgOutput = parseFloat(avgKgOutput.toFixed(4));
+            const dispKgOutput = parseFloat(avgKgOutput.toFixed(2));
             const dispQuality = parseFloat(avgQuality.toFixed(2));
             const dispSingleG = parseFloat(avgSingleG.toFixed(2));
             const dispDoubleG = parseFloat(avgDoubleG.toFixed(2));
 
             // แสดงผลขึ้นหน้าจอ
-            document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US');
+            document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US');
+            document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
-            document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(3);
+            document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(2);
             if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.316, true);
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
 
@@ -989,7 +989,7 @@
             if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 29.250, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
 
-            document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(4) : "0.0000";
+            document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(2) : "0.00";
             if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.083, true);
             else document.getElementById('kpiKgOutputPct').innerHTML = "";
 
@@ -1076,7 +1076,7 @@
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}` } } },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } } },
                     scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
                 }
             });
