@@ -165,7 +165,7 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-4">
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                 <div class="absolute top-4 right-4 text-emerald-400 opacity-20"><i
@@ -177,7 +177,7 @@
                 <div class="kpi-sub">หน่วย: กิโลกรัม (kg)</div>
             </div>
 
-            <!-- กล่อง KPI ต้นทุนกาว จะแสดงสถานะแหล่งข้อมูล -->
+            <!-- กล่อง KPI ต้นทุนกาว -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50">
                 <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
                         class="fa-solid fa-money-bill-wave text-3xl"></i></div>
@@ -185,7 +185,7 @@
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalCost" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub text-rose-300/80 text-xs mt-1 font-semibold" id="costNote">กำลังดึงข้อมูลบัญชี...</div>
+                <div class="kpi-sub text-rose-300/80 text-xs mt-1 font-semibold" id="costNote">กำลังดึงข้อมูล...</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
@@ -198,6 +198,17 @@
                 <div class="kpi-sub">หน่วย: Output / Kg</div>
             </div>
 
+            <!-- กล่อง KPI ตารางเมตรรวม -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-teal-500/50">
+                <div class="absolute top-4 right-4 text-teal-400 opacity-20"><i
+                        class="fa-solid fa-ruler-combined text-3xl"></i></div>
+                <div class="kpi-label">พื้นที่ผลิตรวม (Sqm)</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalSqm" class="kpi-value text-teal-400">--</div>
+                </div>
+                <div class="kpi-sub">หน่วย: ตารางเมตร (Sqm)</div>
+            </div>
+
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                 <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i
                         class="fa-solid fa-chart-pie text-3xl"></i></div>
@@ -206,7 +217,7 @@
                     <div id="kpiAvgRatio" class="kpi-value text-amber-400">--</div>
                     <div id="kpiAvgRatioPct"></div>
                 </div>
-                <div class="kpi-sub">ค่ากาวต่อหน่วยผลิต Target: 0.316 (น้อย=ดี)</div>
+                <div class="kpi-sub">ค่ากาวต่อหน่วยผลิต Target: 0.316</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-purple-500/50">
@@ -220,6 +231,16 @@
                 <div class="kpi-sub">g/Sqm Target: 29.250 (น้อย=ดี)</div>
             </div>
 
+            <!-- กล่องใหม่: การสูญเสียน้ำกาว -->
+            <div id="cardLostGlue" class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20">
+                <div class="absolute top-4 right-4 opacity-20"><i id="iconLostGlue" class="fa-solid fa-droplet-slash text-3xl text-rose-400"></i></div>
+                <div class="kpi-label">การสูญเสียน้ำกาว</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiLostGlue" class="kpi-value text-rose-400">--</div>
+                </div>
+                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 29.25) * Sqm / 1000</span></div>
+            </div>
+
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-pink-500/50">
                 <div class="absolute top-4 right-4 text-pink-400 opacity-20"><i
                         class="fa-solid fa-weight-scale text-3xl"></i></div>
@@ -228,7 +249,7 @@
                     <div id="kpiKgOutput" class="kpi-value text-pink-400">--</div>
                     <div id="kpiKgOutputPct"></div>
                 </div>
-                <div class="kpi-sub">kg/Output Target: 0.083 (น้อย=ดี)</div>
+                <div class="kpi-sub">kg/Output Target: 0.083</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-violet-500/50">
@@ -239,7 +260,7 @@
                     <div id="kpiQuality" class="kpi-value text-violet-400">--</div>
                     <div id="kpiQualityPct"></div>
                 </div>
-                <div class="kpi-sub">%คุณภาพกาว Target: 90% (มาก=ดี)</div>
+                <div class="kpi-sub">%คุณภาพกาว Target: 90%</div>
             </div>
 
             <div id="cardYueMix"
@@ -261,7 +282,7 @@
                     <div id="kpiGramSqmSingle" class="kpi-value text-orange-400">--</div>
                     <div id="kpiGramSqmSinglePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 13.50 (น้อย=ดี)</div>
+                <div class="kpi-sub">g/Sqm Target: 13.50</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
@@ -271,7 +292,7 @@
                     <div id="kpiGramSqmDouble" class="kpi-value text-indigo-400">--</div>
                     <div id="kpiGramSqmDoublePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 15.75 (น้อย=ดี)</div>
+                <div class="kpi-sub">g/Sqm Target: 15.75</div>
             </div>
         </div>
 
@@ -424,7 +445,7 @@
             });
         }
 
-        // URL ดึงข้อมูลฝ่ายผลิต (ข้อมูลกาว Output คุณภาพ)
+        // URL ดึงข้อมูลฝ่ายผลิต
         const sheetUrlProd = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
 
         let allData = [];
@@ -929,7 +950,6 @@
                 rawTotalUsage = sum.yue_usage; rawTotalCost = sum.yue_cost; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
             }
 
-            // ตัวแปรสำหรับแสดงผลต้นทุน
             let dispTotalCost = rawTotalCost;
             const costNoteEl = document.getElementById('costNote');
             
@@ -941,7 +961,6 @@
             const dispTotalOutput = rawTotalOutput;
             const dispMixCost = parseFloat(trueMixCost.toFixed(2)); 
 
-            // คำนวณอัตราส่วนเฉลี่ยใหม่โดยใช้ dispTotalCost
             const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
             
             const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
@@ -981,6 +1000,10 @@
             document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
+            if (document.getElementById('kpiTotalSqm')) {
+                document.getElementById('kpiTotalSqm').innerText = totalSqm.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+            
             document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(2);
             if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.316, true);
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
@@ -988,6 +1011,39 @@
             document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(2) : "0.00";
             if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 29.250, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
+
+            // การคำนวณและการแสดงผล การสูญเสียน้ำกาว (Lost Glue)
+            const targetGSqm = 29.250;
+            let lostGlueKg = 0;
+            if (totalSqm > 0) {
+                // (ปริมาณกรัม/ตรม - เป้าหมาย) * ตารางเมตรทั้งหมด / 1000
+                lostGlueKg = ((avgGramSqm - targetGSqm) * totalSqm) / 1000;
+            }
+
+            const kpiLostGlueEl = document.getElementById('kpiLostGlue');
+            const cardLostGlueEl = document.getElementById('cardLostGlue');
+            const iconLostGlueEl = document.getElementById('iconLostGlue');
+
+            if (lostGlueKg > 0) {
+                // ขาดทุน (Loss) -> สีแดง
+                kpiLostGlueEl.innerText = "+" + lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                kpiLostGlueEl.className = "kpi-value text-rose-400";
+                cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20";
+                iconLostGlueEl.className = "fa-solid fa-arrow-trend-up text-3xl text-rose-400";
+            } else if (lostGlueKg < 0) {
+                // ประหยัดได้ (Savings) -> สีเขียว (แสดงผลลบตามธรรมชาติ)
+                kpiLostGlueEl.innerText = lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                kpiLostGlueEl.className = "kpi-value text-emerald-400";
+                cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50 bg-emerald-950/20";
+                iconLostGlueEl.className = "fa-solid fa-arrow-trend-down text-3xl text-emerald-400";
+            } else {
+                // ตามเป้าหมายพอดี
+                kpiLostGlueEl.innerText = "0.00";
+                kpiLostGlueEl.className = "kpi-value text-slate-400";
+                cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
+                iconLostGlueEl.className = "fa-solid fa-minus text-3xl text-slate-400";
+            }
+
 
             document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(2) : "0.00";
             if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.083, true);
@@ -1032,7 +1088,6 @@
 
             try {
                 updateBarChart('barUsage', 'ปริมาณกาว (kg)', { iso: kpi.iso.usage, bhs: kpi.bhs.usage, yue: kpi.yue.usage });
-                // กราฟแท่งต้นทุน ยังคงใช้ข้อมูลผลิต เพราะข้อมูลชีต1 ไม่มีรหัสเครื่อง
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
