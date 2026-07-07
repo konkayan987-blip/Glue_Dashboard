@@ -238,7 +238,7 @@
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiLostGlue" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 32.750) * Sqm / 1000</span></div>
+                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 32.75) * Sqm / 1000</span></div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-pink-500/50">
@@ -249,7 +249,7 @@
                     <div id="kpiKgOutput" class="kpi-value text-pink-400">--</div>
                     <div id="kpiKgOutputPct"></div>
                 </div>
-                <div class="kpi-sub">kg/Output Target: 0.095</div>
+                <div class="kpi-sub">kg/Output Target: 0.090</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-violet-500/50">
@@ -282,7 +282,7 @@
                     <div id="kpiGramSqmSingle" class="kpi-value text-orange-400">--</div>
                     <div id="kpiGramSqmSinglePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 14.59</div>
+                <div class="kpi-sub">g/Sqm Target: 14.590</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
@@ -292,7 +292,7 @@
                     <div id="kpiGramSqmDouble" class="kpi-value text-indigo-400">--</div>
                     <div id="kpiGramSqmDoublePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 18.16</div>
+                <div class="kpi-sub">g/Sqm Target: 18.160</div>
             </div>
         </div>
 
@@ -422,7 +422,7 @@
             offset: 4,
             font: { size: 10, family: "'Inter', 'Sarabun', sans-serif" },
             formatter: function(value) {
-                return Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return Number(value).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             }
         };
 
@@ -470,9 +470,22 @@
             return isNaN(parsed) ? 0 : parsed;
         };
 
+        // ==========================================
+        // ฟังก์ชันแปลงวันที่ (ปรับปรุงใหม่ รองรับทุกรูปแบบและทนทานต่อข้อมูลขยะ)
+        // ==========================================
         function parseDateString(dateStr) {
             if (!dateStr) return 0;
-            let cleanStr = String(dateStr).replace(/\uFEFF/g, '').replace(/"/g, '').trim();
+            // ลบอักขระซ่อนเร้นและเว้นวรรค
+            let cleanStr = String(dateStr).replace(/[\uFEFF\r\n]/g, '').replace(/"/g, '').trim();
+
+            // ดักจับกรณี Google ส่งมาเป็น YYYY-MM-DD ตรงๆ
+            if (/^\d{4}-\d{2}-\d{2}/.test(cleanStr)) {
+                let parts = cleanStr.split('-');
+                let year = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let day = parseInt(parts[2].substring(0, 2), 10);
+                return new Date(year, month, day).getTime();
+            }
 
             const thaiMonths = {
                 "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4, "พ.ค.": 5, "มิ.ย.": 6,
@@ -488,19 +501,42 @@
             }
 
             cleanStr = cleanStr.replace(/\s+/g, '/').replace(/-+/g, '/').replace(/\/+/g, '/');
-
             const parts = cleanStr.split('/');
-            if (parts.length >= 3) {
-                let day = parseInt(parts[0], 10);
-                let month = parseInt(parts[1], 10) - 1;
-                let year = parseInt(parts[2].substring(0, 4), 10);
+            
+            if (parts.length >= 2) {
+                let p0 = parseInt(parts[0], 10);
+                let p1 = parseInt(parts[1], 10);
+                let day, month, year;
 
-                if (month > 11) {
-                    month = parseInt(parts[0], 10) - 1;
-                    day = parseInt(parts[1], 10);
+                // หากมีแค่ วัน/เดือน ให้ใช้ปีปัจจุบัน
+                if (parts.length === 2) {
+                    year = new Date().getFullYear();
+                    // สลับกรณี MM/DD
+                    if (p0 > 12) {
+                        day = p0; month = p1 - 1;
+                    } else {
+                        day = p0; month = p1 - 1; 
+                    }
+                } else {
+                    let p2 = parseInt(parts[2].substring(0, 4), 10);
+                    // เช็คตำแหน่งของ ปี/เดือน/วัน
+                    if (p0 > 1000) { // YYYY/MM/DD
+                        year = p0; month = p1 - 1; day = p2;
+                    } else { // DD/MM/YYYY หรือ MM/DD/YYYY
+                        year = p2;
+                        if (p1 > 12) { // กรณีเป็น MM/DD/YYYY 
+                            day = p1; month = p0 - 1;
+                        } else if (p0 > 12) { // กรณีมั่นใจว่าค่าแรกคือวัน
+                            day = p0; month = p1 - 1;
+                        } else { // กรณีปกติ DD/MM/YYYY
+                            day = p0; month = p1 - 1;
+                        }
+                    }
                 }
 
+                // ปรับปี พ.ศ. เป็น ค.ศ.
                 if (year > 2500) year -= 543;
+                // ปรับปี 2 หลักเป็น 4 หลัก
                 if (year < 100) year += 2000;
 
                 return new Date(year, month, day).getTime();
@@ -521,8 +557,10 @@
 
             allData = [];
 
-            // ดึงข้อมูลชีตผลิต
-            fetch(sheetUrlProd + "&_t=" + new Date().getTime())
+            // ดึงข้อมูลชีตผลิต (เพิ่ม random param เพื่อป้องกัน Cache แบบเด็ดขาด)
+            const noCacheUrl = sheetUrlProd + "&_t=" + new Date().getTime() + "_" + Math.random().toString(36).substring(7);
+
+            fetch(noCacheUrl)
             .then(res => res.text())
             .then(csvProd => {
                 
@@ -592,6 +630,7 @@
                         const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
                         if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total') || c[0] === '') return;
 
+                        // โค้ดจะดึงข้อมูลวันที่จากคอลัมน์ A (c[0]) เสมอ
                         const ts = parseDateString(c[0]);
                         if (!ts) return;
 
@@ -620,6 +659,7 @@
                 }
 
                 allData.sort((a, b) => a.timestamp - b.timestamp);
+                
                 document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
 
                 if (allData.length > 0) {
@@ -662,11 +702,10 @@
 
             if (fpEndDate.selectedDates.length > 0) {
                 const eDate = fpEndDate.selectedDates[0];
-                endTimestamp = new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), 23, 59, 59).getTime();
+                endTimestamp = new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate() + 1, 23, 59, 59).getTime();
             }
 
             filteredData = allData.filter(d => d.timestamp >= startTimestamp && d.timestamp <= endTimestamp);
-
             processDashboard(startTimestamp, endTimestamp);
         }
 
@@ -813,17 +852,17 @@
             let displayVal = "";
             
             if (isPercentageMetric) {
-                displayVal = Math.abs(diff).toFixed(2) + "%";
+                displayVal = Math.abs(diff).toFixed(3) + "%";
             } else {
                 const pct = (diff / target) * 100;
-                displayVal = Math.abs(pct).toFixed(2) + "%";
+                displayVal = Math.abs(pct).toFixed(3) + "%";
             }
             
             let isGood = isLessBetter ? diff <= 0 : diff >= 0;
             let icon = diff > 0 ? "fa-arrow-up" : (diff < 0 ? "fa-arrow-down" : "fa-minus");
             
             if (diff === 0) {
-                 el.innerHTML = `<span class="text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded-md text-xs font-semibold border border-slate-600/50"><i class="fa-solid ${icon}"></i> 0.00%</span>`;
+                 el.innerHTML = `<span class="text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded-md text-xs font-semibold border border-slate-600/50"><i class="fa-solid ${icon}"></i> 0.000%</span>`;
                  return;
             }
 
@@ -959,7 +998,7 @@
             const trueMixCost = sum.mix_count > 0 ? (sum.mix_sum / sum.mix_count) : 0;
             const dispTotalUsage = rawTotalUsage;
             const dispTotalOutput = rawTotalOutput;
-            const dispMixCost = parseFloat(trueMixCost.toFixed(2)); 
+            const dispMixCost = parseFloat(trueMixCost.toFixed(3)); 
 
             const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
             
@@ -988,32 +1027,32 @@
                 yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: getMcGSqm('yue') }
             };
 
-            const dispRatio = parseFloat(avgRatio.toFixed(2));
-            const dispGramSqm = parseFloat(avgGramSqm.toFixed(2));
-            const dispKgOutput = parseFloat(avgKgOutput.toFixed(2));
-            const dispQuality = parseFloat(avgQuality.toFixed(2));
-            const dispSingleG = parseFloat(avgSingleG.toFixed(2));
-            const dispDoubleG = parseFloat(avgDoubleG.toFixed(2));
+            const dispRatio = parseFloat(avgRatio.toFixed(3));
+            const dispGramSqm = parseFloat(avgGramSqm.toFixed(3));
+            const dispKgOutput = parseFloat(avgKgOutput.toFixed(3));
+            const dispQuality = parseFloat(avgQuality.toFixed(3));
+            const dispSingleG = parseFloat(avgSingleG.toFixed(3));
+            const dispDoubleG = parseFloat(avgDoubleG.toFixed(3));
 
             // แสดงผลขึ้นหน้าจอ
-            document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             
             if (document.getElementById('kpiTotalSqm')) {
-                document.getElementById('kpiTotalSqm').innerText = totalSqm.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                document.getElementById('kpiTotalSqm').innerText = totalSqm.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             }
             
-            document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(2);
-            if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.316, true);
+            document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(3);
+            if(dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, 0.464, true);
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
 
-            document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(2) : "0.00";
-            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 29.250, true);
+            document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(3) : "0.000";
+            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 32.750, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
 
             // การคำนวณและการแสดงผล การสูญเสียน้ำกาว (Lost Glue)
-            const targetGSqm = 29.250;
+            const targetGSqm = 32.750;
             let lostGlueKg = 0;
             if (totalSqm > 0) {
                 // (ปริมาณกรัม/ตรม - เป้าหมาย) * ตารางเมตรทั้งหมด / 1000
@@ -1026,39 +1065,38 @@
 
             if (lostGlueKg > 0) {
                 // ขาดทุน (Loss) -> สีแดง
-                kpiLostGlueEl.innerText = "+" + lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                kpiLostGlueEl.innerText = "+" + lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
                 kpiLostGlueEl.className = "kpi-value text-rose-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20";
                 iconLostGlueEl.className = "fa-solid fa-arrow-trend-up text-3xl text-rose-400";
             } else if (lostGlueKg < 0) {
                 // ประหยัดได้ (Savings) -> สีเขียว (แสดงผลลบตามธรรมชาติ)
-                kpiLostGlueEl.innerText = lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                kpiLostGlueEl.innerText = lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
                 kpiLostGlueEl.className = "kpi-value text-emerald-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50 bg-emerald-950/20";
                 iconLostGlueEl.className = "fa-solid fa-arrow-trend-down text-3xl text-emerald-400";
             } else {
                 // ตามเป้าหมายพอดี
-                kpiLostGlueEl.innerText = "0.00";
+                kpiLostGlueEl.innerText = "0.000";
                 kpiLostGlueEl.className = "kpi-value text-slate-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
                 iconLostGlueEl.className = "fa-solid fa-minus text-3xl text-slate-400";
             }
 
-
-            document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(2) : "0.00";
-            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.083, true);
+            document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(3) : "0.000";
+            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.090, true);
             else document.getElementById('kpiKgOutputPct').innerHTML = "";
 
-            document.getElementById('kpiQuality').innerText = dispQuality > 0 ? dispQuality.toFixed(2) + "%" : "--";
+            document.getElementById('kpiQuality').innerText = dispQuality > 0 ? dispQuality.toFixed(3) + "%" : "--";
             if (dispQuality > 0) renderTargetPct('kpiQualityPct', dispQuality, 90.0, false, true); 
             else document.getElementById('kpiQualityPct').innerHTML = "";
 
-            document.getElementById('kpiGramSqmSingle').innerText = dispSingleG > 0 ? dispSingleG.toFixed(2) : "--";
-            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 13.50, true);
+            document.getElementById('kpiGramSqmSingle').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
+            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 14.590, true);
             else document.getElementById('kpiGramSqmSinglePct').innerHTML = "";
 
-            document.getElementById('kpiGramSqmDouble').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(2) : "--";
-            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 15.75, true);
+            document.getElementById('kpiGramSqmDouble').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
+            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.160, true);
             else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
 
             const kpiYueMixEl = document.getElementById('kpiYueMix');
@@ -1066,10 +1104,10 @@
             const iconYueMixEl = document.getElementById('iconYueMix');
 
             if (dispMixCost > 0) {
-                kpiYueMixEl.innerText = "฿ " + dispMixCost.toFixed(2);
-                renderTargetPct('kpiYueMixPct', dispMixCost, 3.82, true);
+                kpiYueMixEl.innerText = "฿ " + dispMixCost.toFixed(3);
+                renderTargetPct('kpiYueMixPct', dispMixCost, 5.090, true);
                 
-                if (dispMixCost <= 3.82) {
+                if (dispMixCost <= 5.090) {
                     kpiYueMixEl.className = "kpi-value text-emerald-400";
                     cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50";
                     iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-emerald-400";
@@ -1131,7 +1169,7 @@
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } } },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })}` } } },
                     scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
                 }
             });
@@ -1250,7 +1288,7 @@
             };
 
             const actualData = trendData.map(d => calcMixCost(d));
-            const targetData = trendData.map(() => 3.82); 
+            const targetData = trendData.map(() => 5.090); 
 
             charts['trendYueMix'] = new Chart(ctx, {
                 type: 'line',
@@ -1268,7 +1306,7 @@
                             spanGaps: true
                         },
                         {
-                            label: 'Target (3.82)',
+                            label: 'Target (5.090)',
                             data: targetData,
                             borderColor: '#f43f5e', 
                             borderDash: [5, 5], 
