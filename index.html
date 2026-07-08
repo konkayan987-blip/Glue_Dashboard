@@ -228,7 +228,7 @@
                     <div id="kpiGramSqm" class="kpi-value text-purple-400">--</div>
                     <div id="kpiGramSqmPct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 32.750 (น้อย=ดี)</div>
+                <div class="kpi-sub">g/Sqm Target: 33.020 (น้อย=ดี)</div>
             </div>
 
             <!-- กล่องใหม่: การสูญเสียน้ำกาว -->
@@ -238,7 +238,7 @@
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiLostGlue" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 32.75) * Sqm / 1000</span></div>
+                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 33.020) * Sqm / 1000</span></div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-pink-500/50">
@@ -249,7 +249,7 @@
                     <div id="kpiKgOutput" class="kpi-value text-pink-400">--</div>
                     <div id="kpiKgOutputPct"></div>
                 </div>
-                <div class="kpi-sub">kg/Output Target: 0.090</div>
+                <div class="kpi-sub">kg/Output Target: 0.096</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-violet-500/50">
@@ -282,7 +282,7 @@
                     <div id="kpiGramSqmSingle" class="kpi-value text-orange-400">--</div>
                     <div id="kpiGramSqmSinglePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 14.590</div>
+                <div class="kpi-sub">g/Sqm Target: 14.710</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
@@ -292,7 +292,7 @@
                     <div id="kpiGramSqmDouble" class="kpi-value text-indigo-400">--</div>
                     <div id="kpiGramSqmDoublePct"></div>
                 </div>
-                <div class="kpi-sub">g/Sqm Target: 18.160</div>
+                <div class="kpi-sub">g/Sqm Target: 18.310</div>
             </div>
         </div>
 
@@ -1048,11 +1048,11 @@
             else document.getElementById('kpiAvgRatioPct').innerHTML = "";
 
             document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(3) : "0.000";
-            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 32.750, true);
+            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 33.020, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
 
             // การคำนวณและการแสดงผล การสูญเสียน้ำกาว (Lost Glue)
-            const targetGSqm = 32.750;
+            const targetGSqm = 33.020;
             let lostGlueKg = 0;
             if (totalSqm > 0) {
                 // (ปริมาณกรัม/ตรม - เป้าหมาย) * ตารางเมตรทั้งหมด / 1000
@@ -1084,7 +1084,7 @@
             }
 
             document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(3) : "0.000";
-            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.090, true);
+            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.096, true);
             else document.getElementById('kpiKgOutputPct').innerHTML = "";
 
             document.getElementById('kpiQuality').innerText = dispQuality > 0 ? dispQuality.toFixed(3) + "%" : "--";
@@ -1092,11 +1092,11 @@
             else document.getElementById('kpiQualityPct').innerHTML = "";
 
             document.getElementById('kpiGramSqmSingle').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
-            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 14.590, true);
+            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 14.710, true);
             else document.getElementById('kpiGramSqmSinglePct').innerHTML = "";
 
             document.getElementById('kpiGramSqmDouble').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
-            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.160, true);
+            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.310, true);
             else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
 
             const kpiYueMixEl = document.getElementById('kpiYueMix');
