@@ -348,6 +348,33 @@
             </div>
         </div>
 
+        <!-- ===== ส่วนเพิ่มใหม่: Donut / Target vs Actual / Saving Gauge ===== -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-fuchsia-300">🍩 สัดส่วนต้นทุนแต่ละเครื่อง (%)</h3>
+                <div class="w-full h-[260px]"><canvas id="donutCostShare"></canvas></div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-amber-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-amber-300">📊 Target เทียบ Actual (ต้นทุนรวม)</h3>
+                <div class="w-full h-[260px]"><canvas id="colTargetActual"></canvas></div>
+                <div id="savingMoneyNote" class="text-center text-sm mt-3 font-semibold"></div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-emerald-300">🎯 Gauge % Saving</h3>
+                <div class="w-full h-[200px]"><canvas id="gaugeSaving"></canvas></div>
+                <div id="gaugeSavingValue" class="text-center kpi-value mt-1">--</div>
+                <div id="gaugeSavingBaht" class="text-center text-sm mt-1 font-semibold">--</div>
+                <div class="text-[11px] text-slate-400 mt-3 leading-relaxed border-t border-slate-700 pt-2">
+                    <b class="text-slate-300">วิธีคิด:</b><br>
+                    1) ต้นทุนเป้าหมาย (Target Cost) = Target ฿/Output (0.464) × ยอดผลิตรวม (Output)<br>
+                    2) เงินที่ประหยัดได้ (บาท) = ต้นทุนเป้าหมาย − ต้นทุนจริงรวม (ถ้าติดลบ = ใช้เกินเป้า)<br>
+                    3) % Saving = (เงินที่ประหยัดได้ ÷ ต้นทุนเป้าหมาย) × 100
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -1136,9 +1163,15 @@
                 updateTrendYueMixChart(trendData);
                 updateTrendGramSqmSingleChart(trendData);
                 updateTrendGramSqmDoubleChart(trendData);
+
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
             }
+
+            // ===== กราฟใหม่ (แยก try/catch ต่างหาก กันกราฟหนึ่งพังแล้วลากกราฟอื่นดับ) =====
+            try { updateCostShareDonut(kpi); } catch (error) { console.error("Donut error:", error); }
+            try { updateTargetActualColumn(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Target/Actual error:", error); }
+            try { updateSavingGauge(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Gauge error:", error); }
         }
 
         function updateBarChart(canvasId, label, dataObj) {
@@ -1366,6 +1399,180 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
+        }
+
+        // ==========================================
+        // 1) Donut Chart: สัดส่วนต้นทุนแต่ละเครื่อง (%)
+        // ==========================================
+        function updateCostShareDonut(kpi) {
+            const canvas = document.getElementById('donutCostShare');
+            if (!canvas) return;
+            if (charts['donutCostShare']) charts['donutCostShare'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+
+            let labels = []; let data = []; let bg = []; let border = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') { labels.push('ISOWA'); data.push(kpi.iso.cost); bg.push(colors.iso.bg); border.push(colors.iso.border); }
+            if (mcFilter === 'all' || mcFilter === 'bhs') { labels.push('BHS'); data.push(kpi.bhs.cost); bg.push(colors.bhs.bg); border.push(colors.bhs.border); }
+            if (mcFilter === 'all' || mcFilter === 'yue') { labels.push('YUELI'); data.push(kpi.yue.cost); bg.push(colors.yue.bg); border.push(colors.yue.border); }
+
+            const total = data.reduce((a, b) => a + b, 0);
+
+            charts['donutCostShare'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: bg,
+                        borderColor: border,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const val = Number(ctx.raw) || 0;
+                                    const pct = total > 0 ? (val / total * 100) : 0;
+                                    return ` ${ctx.label}: ฿${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pct.toFixed(2)}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: { size: 12, weight: 'bold' },
+                            formatter: (value) => {
+                                const pct = total > 0 ? (value / total * 100) : 0;
+                                return pct > 0 ? pct.toFixed(1) + '%' : '';
+                            },
+                            anchor: 'center',
+                            align: 'center',
+                            offset: 0
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // 2) Column Chart: Target vs Actual ต้นทุนรวม + เงินที่ประหยัดได้
+        // ==========================================
+        const RATIO_TARGET = 0.464; // Target ฿ / Output
+
+        function updateTargetActualColumn(actualCost, totalOutput) {
+            const canvas = document.getElementById('colTargetActual');
+            if (!canvas) return;
+            if (charts['colTargetActual']) charts['colTargetActual'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const targetCost = totalOutput > 0 ? RATIO_TARGET * totalOutput : 0;
+            const savingBaht = targetCost - actualCost; // + = ประหยัด, - = ใช้เกินเป้า
+
+            charts['colTargetActual'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ต้นทุนเป้าหมาย (Target)', 'ต้นทุนจริง (Actual)'],
+                    datasets: [{
+                        label: 'ต้นทุนรวม (บาท)',
+                        data: [targetCost, actualCost],
+                        backgroundColor: ['rgba(245, 158, 11, 0.6)', savingBaht >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(244, 63, 94, 0.6)'],
+                        borderColor: ['#f59e0b', savingBaht >= 0 ? '#10b981' : '#f43f5e'],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => ` ฿${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } }
+                    },
+                    scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+
+            const noteEl = document.getElementById('savingMoneyNote');
+            if (noteEl) {
+                if (targetCost <= 0) {
+                    noteEl.innerHTML = `<span class="text-slate-400"><i class="fa-solid fa-circle-info"></i> ช่วงที่เลือกยังไม่มีข้อมูล Output ในชีต จึงคำนวณเงินประหยัดไม่ได้</span>`;
+                } else if (savingBaht >= 0) {
+                    noteEl.innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-piggy-bank"></i> ประหยัดได้ ฿${savingBaht.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`;
+                } else {
+                    noteEl.innerHTML = `<span class="text-rose-400"><i class="fa-solid fa-triangle-exclamation"></i> ใช้เกินเป้า ฿${Math.abs(savingBaht).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`;
+                }
+            }
+        }
+
+        // ==========================================
+        // 3) Gauge Chart: % Saving
+        // ==========================================
+        function updateSavingGauge(actualCost, totalOutput) {
+            const canvas = document.getElementById('gaugeSaving');
+            if (!canvas) return;
+            if (charts['gaugeSaving']) charts['gaugeSaving'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const targetCost = totalOutput > 0 ? RATIO_TARGET * totalOutput : 0;
+            const savingBaht = targetCost - actualCost;
+            const savingPct = targetCost > 0 ? (savingBaht / targetCost) * 100 : 0;
+
+            // Clamp เข็มเกจไว้ที่ -50% ถึง +50% เพื่อความสวยงามของสเกล
+            const clamped = Math.max(-50, Math.min(50, savingPct));
+            const gaugeFraction = (clamped + 50) / 100; // 0..1
+
+            const needleColor = savingPct >= 0 ? '#10b981' : '#f43f5e';
+
+            charts['gaugeSaving'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ใช้เกินเป้า', 'ประหยัด'],
+                    datasets: [{
+                        data: [gaugeFraction, 1 - gaugeFraction],
+                        backgroundColor: [needleColor, 'rgba(148, 163, 184, 0.15)'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    circumference: 180,
+                    rotation: 270,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        datalabels: { display: false }
+                    }
+                }
+            });
+
+            const valEl = document.getElementById('gaugeSavingValue');
+            const bahtEl = document.getElementById('gaugeSavingBaht');
+
+            if (targetCost <= 0) {
+                if (valEl) { valEl.innerText = "--"; valEl.className = "text-center kpi-value mt-1 text-slate-400"; }
+                if (bahtEl) bahtEl.innerText = "ช่วงที่เลือกยังไม่มีข้อมูล Output ในชีต";
+                return;
+            }
+
+            if (valEl) {
+                valEl.innerText = (savingPct >= 0 ? "+" : "") + savingPct.toFixed(2) + "%";
+                valEl.className = "text-center kpi-value mt-1 " + (savingPct >= 0 ? "text-emerald-400" : "text-rose-400");
+            }
+            if (bahtEl) {
+                bahtEl.innerHTML = savingPct >= 0
+                    ? `คิดเป็น <span class="text-emerald-400">฿${savingBaht.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> ที่ประหยัดได้`
+                    : `คิดเป็น <span class="text-rose-400">฿${Math.abs(savingBaht).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> ที่ใช้เกินเป้า`;
+            }
         }
     </script>
 
