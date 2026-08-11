@@ -296,7 +296,7 @@
         <!-- ===== ส่วนเพิ่มใหม่: ตารางวิเคราะห์ต้นทุนบาท/ตรม. (Single, Double, Total) อิงเรท 4.386 ===== -->
         <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
             <h3 class="text-lg font-semibold mb-4 text-emerald-300 flex items-center gap-2">
-                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร (Baht / Sqm) [เรทราคาผสมอ้างอิง: 4.386 ฿/กก.]
+                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร (Baht / Sqm) [เรทราคาปรับตามเฉลี่ยต้นทุนผสมกาว]
             </h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
@@ -314,21 +314,21 @@
                             <td class="p-3 font-semibold text-orange-300">Single</td>
                             <td id="tblSingleG" class="p-3 text-right">--</td>
                             <td id="tblSingleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblRateSingle" class="p-3 text-center text-slate-400">× --</td>
                             <td id="tblSingleBaht" class="p-3 text-right font-bold text-orange-400">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition">
                             <td class="p-3 font-semibold text-indigo-300">Double</td>
                             <td id="tblDoubleG" class="p-3 text-right">--</td>
                             <td id="tblDoubleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblRateDouble" class="p-3 text-center text-slate-400">× --</td>
                             <td id="tblDoubleBaht" class="p-3 text-right font-bold text-indigo-400">--</td>
                         </tr>
                         <tr class="bg-slate-900/40 font-bold">
                             <td class="p-3 text-emerald-300">รวม (Total)</td>
                             <td id="tblTotalG" class="p-3 text-right text-emerald-400">--</td>
                             <td id="tblTotalKg" class="p-3 text-right text-emerald-400">--</td>
-                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblRateTotal" class="p-3 text-center text-slate-400">× --</td>
                             <td id="tblTotalBaht" class="p-3 text-right text-emerald-400 text-base">--</td>
                         </tr>
                     </tbody>
@@ -354,7 +354,7 @@
         <!-- กราฟใหม่: บาท/ตรม. แยก Single / Double -->
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-teal-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 ต้นทุนบาทต่อตารางเมตร (Baht / Sqm) แยกตามประเภท Single & Double (อิงเรท 4.386)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 ต้นทุนบาทต่อตารางเมตร (Baht / Sqm) แยกตามประเภท Single & Double (เรท = เฉลี่ยต้นทุนผสมกาว)</h3>
                 <div class="w-full h-[280px]"><canvas id="barBahtSqmType"></canvas></div>
             </div>
         </div>
@@ -364,7 +364,8 @@
             <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-cyan-300">💰 ต้นทุนกาวตามพื้นที่ผลิต (บาท) — SF / DF / รวม</h3>
                 <div class="text-sm text-slate-400 mb-3">
-                    คำนวณจาก <b>บาท/ตรม. × พื้นที่ผลิตรวม (Sqm)</b>
+                    <span id="glueCostRateNote" class="text-cyan-300 font-semibold"></span><br>
+                    คำนวณจาก <b>กรัม/ตรม. ÷ 1000 × เฉลี่ยต้นทุนผสมกาว × พื้นที่ผลิตรวม (Sqm)</b>
                 </div>
                 <div class="w-full h-[300px]"><canvas id="barGlueCostBySqm"></canvas></div>
             </div>
@@ -1097,15 +1098,24 @@
             const dispSingleG = parseFloat(avgSingleG.toFixed(3));
             const dispDoubleG = parseFloat(avgDoubleG.toFixed(3));
 
-            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม. (อิงเรท 4.386)
-            const FIXED_RATE = 4.386;
+            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม.
+            // เรทราคา = ค่า "เฉลี่ย ต้นทุนผสมกาว" จาก KPI ด้านบน
+            const MIX_GLUE_RATE = dispMixCost;
             const singleKg = dispSingleG / 1000;
-            const singleBaht = singleKg * FIXED_RATE;
+            const singleBaht = singleKg * MIX_GLUE_RATE;
             const doubleKg = dispDoubleG / 1000;
-            const doubleBaht = doubleKg * FIXED_RATE;
+            const doubleBaht = doubleKg * MIX_GLUE_RATE;
             const totalG = dispSingleG + dispDoubleG;
             const totalKg = totalG / 1000;
-            const totalBaht = totalKg * FIXED_RATE;
+            const totalBaht = totalKg * MIX_GLUE_RATE;
+
+            document.getElementById('tblRateSingle').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
+            document.getElementById('tblRateDouble').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
+            document.getElementById('tblRateTotal').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
+            const glueCostRateNoteEl = document.getElementById('glueCostRateNote');
+            if (glueCostRateNoteEl) {
+                glueCostRateNoteEl.innerText = "เรทปัจจุบัน = ฿" + MIX_GLUE_RATE.toFixed(3) + " / กก. (จาก KPI เฉลี่ยต้นทุนผสมกาว)";
+            }
 
             document.getElementById('tblSingleG').innerText = dispSingleG.toFixed(3);
             document.getElementById('tblSingleKg').innerText = singleKg.toFixed(6);
