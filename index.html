@@ -303,7 +303,7 @@
                     <thead>
                         <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
                             <th class="p-3">รายการ</th>
-                            <th class="p-3 text-right">กรัม / ตรม. (g/Sqm)</th>
+                            <th class="p-3 text-right">กรัม / ตรม. − Target (g/Sqm)</th>
                             <th class="p-3 text-right">คิดเป็น (กก. / ตรม.)</th>
                             <th class="p-3 text-center">× เรทราคา (฿/กก.)</th>
                             <th class="p-3 text-right">= ต้นทุน (บาท / ตรม.)</th>
@@ -1101,12 +1101,22 @@
             // เติมข้อมูลลงในตารางคำนวณบาท/ตรม.
             // เรทราคา = ค่า "เฉลี่ย ต้นทุนผสมกาว" จาก KPI ด้านบน
             const MIX_GLUE_RATE = dispMixCost;
-            const singleKg = dispSingleG / 1000;
+
+            // คำนวณส่วนต่างจาก Target: Actual - Target
+            // ค่าติดลบ = ใช้น้อยกว่า Target (ประหยัด)
+            // ค่าบวก = ใช้เกิน Target
+            const SINGLE_TARGET_G = 14.710;
+            const DOUBLE_TARGET_G = 18.310;
+            const singleDiffG = dispSingleG - SINGLE_TARGET_G;
+            const doubleDiffG = dispDoubleG - DOUBLE_TARGET_G;
+            const totalDiffG = singleDiffG + doubleDiffG;
+
+            // แปลงส่วนต่าง g/Sqm เป็น kg/Sqm และคิดเป็นต้นทุนส่วนต่าง
+            const singleKg = singleDiffG / 1000;
             const singleBaht = singleKg * MIX_GLUE_RATE;
-            const doubleKg = dispDoubleG / 1000;
+            const doubleKg = doubleDiffG / 1000;
             const doubleBaht = doubleKg * MIX_GLUE_RATE;
-            const totalG = dispSingleG + dispDoubleG;
-            const totalKg = totalG / 1000;
+            const totalKg = totalDiffG / 1000;
             const totalBaht = totalKg * MIX_GLUE_RATE;
 
             document.getElementById('tblRateSingle').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
@@ -1117,15 +1127,15 @@
                 glueCostRateNoteEl.innerText = "เรทปัจจุบัน = ฿" + MIX_GLUE_RATE.toFixed(3) + " / กก. (จาก KPI เฉลี่ยต้นทุนผสมกาว)";
             }
 
-            document.getElementById('tblSingleG').innerText = dispSingleG.toFixed(3);
+            document.getElementById('tblSingleG').innerText = singleDiffG.toFixed(3);
             document.getElementById('tblSingleKg').innerText = singleKg.toFixed(6);
             document.getElementById('tblSingleBaht').innerText = "฿" + singleBaht.toFixed(4);
 
-            document.getElementById('tblDoubleG').innerText = dispDoubleG.toFixed(3);
+            document.getElementById('tblDoubleG').innerText = doubleDiffG.toFixed(3);
             document.getElementById('tblDoubleKg').innerText = doubleKg.toFixed(6);
             document.getElementById('tblDoubleBaht').innerText = "฿" + doubleBaht.toFixed(4);
 
-            document.getElementById('tblTotalG').innerText = totalG.toFixed(3);
+            document.getElementById('tblTotalG').innerText = totalDiffG.toFixed(3);
             document.getElementById('tblTotalKg').innerText = totalKg.toFixed(6);
             document.getElementById('tblTotalBaht').innerText = "฿" + totalBaht.toFixed(4);
 
