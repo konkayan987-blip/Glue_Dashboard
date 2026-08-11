@@ -177,7 +177,6 @@
                 <div class="kpi-sub">หน่วย: กิโลกรัม (kg)</div>
             </div>
 
-            <!-- กล่อง KPI ต้นทุนกาว -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50">
                 <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
                         class="fa-solid fa-money-bill-wave text-3xl"></i></div>
@@ -198,7 +197,6 @@
                 <div class="kpi-sub">หน่วย: Output / Kg</div>
             </div>
 
-            <!-- กล่อง KPI ตารางเมตรรวม -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-teal-500/50">
                 <div class="absolute top-4 right-4 text-teal-400 opacity-20"><i
                         class="fa-solid fa-ruler-combined text-3xl"></i></div>
@@ -231,7 +229,6 @@
                 <div class="kpi-sub">g/Sqm Target: 33.020 (น้อย=ดี)</div>
             </div>
 
-            <!-- กล่องใหม่: การสูญเสียน้ำกาว -->
             <div id="cardLostGlue" class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20">
                 <div class="absolute top-4 right-4 opacity-20"><i id="iconLostGlue" class="fa-solid fa-droplet-slash text-3xl text-rose-400"></i></div>
                 <div class="kpi-label">การสูญเสียน้ำกาว</div>
@@ -296,6 +293,49 @@
             </div>
         </div>
 
+        <!-- ===== ส่วนเพิ่มใหม่: ตารางวิเคราะห์ต้นทุนบาท/ตรม. (Single, Double, Total) อิงเรท 4.386 ===== -->
+        <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
+            <h3 class="text-lg font-semibold mb-4 text-emerald-300 flex items-center gap-2">
+                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร (Baht / Sqm) [เรทราคาผสมอ้างอิง: 4.386 ฿/กก.]
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
+                            <th class="p-3">รายการ</th>
+                            <th class="p-3 text-right">กรัม / ตรม. (g/Sqm)</th>
+                            <th class="p-3 text-right">คิดเป็น (กก. / ตรม.)</th>
+                            <th class="p-3 text-center">× เรทราคา (฿/กก.)</th>
+                            <th class="p-3 text-right">= ต้นทุน (บาท / ตรม.)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr class="hover:bg-slate-800/20 transition">
+                            <td class="p-3 font-semibold text-orange-300">Single</td>
+                            <td id="tblSingleG" class="p-3 text-right">--</td>
+                            <td id="tblSingleKg" class="p-3 text-right text-slate-300">--</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblSingleBaht" class="p-3 text-right font-bold text-orange-400">--</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/20 transition">
+                            <td class="p-3 font-semibold text-indigo-300">Double</td>
+                            <td id="tblDoubleG" class="p-3 text-right">--</td>
+                            <td id="tblDoubleKg" class="p-3 text-right text-slate-300">--</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblDoubleBaht" class="p-3 text-right font-bold text-indigo-400">--</td>
+                        </tr>
+                        <tr class="bg-slate-900/40 font-bold">
+                            <td class="p-3 text-emerald-300">รวม (Total)</td>
+                            <td id="tblTotalG" class="p-3 text-right text-emerald-400">--</td>
+                            <td id="tblTotalKg" class="p-3 text-right text-emerald-400">--</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tblTotalBaht" class="p-3 text-right text-emerald-400 text-base">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-emerald-300">📊 ปริมาณกาวที่ใช้ (kg)</h3>
@@ -308,6 +348,25 @@
             <div class="glass-card rounded-2xl p-6 border-t-2 border-purple-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-purple-300">📐 กรัม / ตรม. (g/Sqm)</h3>
                 <div class="w-full h-[250px]"><canvas id="barGramSqm"></canvas></div>
+            </div>
+        </div>
+
+        <!-- กราฟใหม่: บาท/ตรม. แยก Single / Double -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-teal-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 ต้นทุนบาทต่อตารางเมตร (Baht / Sqm) แยกตามประเภท Single & Double (อิงเรท 4.386)</h3>
+                <div class="w-full h-[280px]"><canvas id="barBahtSqmType"></canvas></div>
+            </div>
+        </div>
+
+        <!-- กราฟใหม่: ต้นทุนรวมตามพื้นที่ผลิต -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-cyan-300">💰 ต้นทุนกาวตามพื้นที่ผลิต (บาท) — SF / DF / รวม</h3>
+                <div class="text-sm text-slate-400 mb-3">
+                    คำนวณจาก <b>บาท/ตรม. × พื้นที่ผลิตรวม (Sqm)</b>
+                </div>
+                <div class="w-full h-[300px]"><canvas id="barGlueCostBySqm"></canvas></div>
             </div>
         </div>
 
@@ -348,7 +407,6 @@
             </div>
         </div>
 
-        <!-- ===== ส่วนเพิ่มใหม่: Donut / Target vs Actual / Saving Gauge ===== -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-fuchsia-300">🍩 สัดส่วนต้นทุนแต่ละเครื่อง (%)</h3>
@@ -378,9 +436,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // ฟังก์ชันช่วยเหลือสำหรับจัดกลุ่มเวลา
-        // ==========================================
         function getStartOfWeek(date) {
             const d = new Date(date);
             const day = d.getDay();
@@ -432,9 +487,6 @@
             };
         }
 
-        // ==========================================
-        // ตั้งค่า Plugin DataLabels
-        // ==========================================
         let showLabels = false;
         Chart.register(ChartDataLabels);
 
@@ -472,7 +524,6 @@
             });
         }
 
-        // URL ดึงข้อมูลฝ่ายผลิต
         const sheetUrlProd = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
 
         let allData = [];
@@ -480,9 +531,9 @@
         let charts = {};
 
         const colors = {
-            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   
+            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },    
             bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  
-            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   
+            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }    
         };
 
         const fpStartDate = flatpickr("#startDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
@@ -497,15 +548,10 @@
             return isNaN(parsed) ? 0 : parsed;
         };
 
-        // ==========================================
-        // ฟังก์ชันแปลงวันที่ (ปรับปรุงใหม่ รองรับทุกรูปแบบและทนทานต่อข้อมูลขยะ)
-        // ==========================================
         function parseDateString(dateStr) {
             if (!dateStr) return 0;
-            // ลบอักขระซ่อนเร้นและเว้นวรรค
             let cleanStr = String(dateStr).replace(/[\uFEFF\r\n]/g, '').replace(/"/g, '').trim();
 
-            // ดักจับกรณี Google ส่งมาเป็น YYYY-MM-DD ตรงๆ
             if (/^\d{4}-\d{2}-\d{2}/.test(cleanStr)) {
                 let parts = cleanStr.split('-');
                 let year = parseInt(parts[0], 10);
@@ -535,10 +581,8 @@
                 let p1 = parseInt(parts[1], 10);
                 let day, month, year;
 
-                // หากมีแค่ วัน/เดือน ให้ใช้ปีปัจจุบัน
                 if (parts.length === 2) {
                     year = new Date().getFullYear();
-                    // สลับกรณี MM/DD
                     if (p0 > 12) {
                         day = p0; month = p1 - 1;
                     } else {
@@ -546,24 +590,21 @@
                     }
                 } else {
                     let p2 = parseInt(parts[2].substring(0, 4), 10);
-                    // เช็คตำแหน่งของ ปี/เดือน/วัน
-                    if (p0 > 1000) { // YYYY/MM/DD
+                    if (p0 > 1000) { 
                         year = p0; month = p1 - 1; day = p2;
-                    } else { // DD/MM/YYYY หรือ MM/DD/YYYY
+                    } else { 
                         year = p2;
-                        if (p1 > 12) { // กรณีเป็น MM/DD/YYYY 
+                        if (p1 > 12) { 
                             day = p1; month = p0 - 1;
-                        } else if (p0 > 12) { // กรณีมั่นใจว่าค่าแรกคือวัน
+                        } else if (p0 > 12) { 
                             day = p0; month = p1 - 1;
-                        } else { // กรณีปกติ DD/MM/YYYY
+                        } else { 
                             day = p0; month = p1 - 1;
                         }
                     }
                 }
 
-                // ปรับปี พ.ศ. เป็น ค.ศ.
                 if (year > 2500) year -= 543;
-                // ปรับปี 2 หลักเป็น 4 หลัก
                 if (year < 100) year += 2000;
 
                 return new Date(year, month, day).getTime();
@@ -583,15 +624,11 @@
             }
 
             allData = [];
-
-            // ดึงข้อมูลชีตผลิต (เพิ่ม random param เพื่อป้องกัน Cache แบบเด็ดขาด)
             const noCacheUrl = sheetUrlProd + "&_t=" + new Date().getTime() + "_" + Math.random().toString(36).substring(7);
 
             fetch(noCacheUrl)
             .then(res => res.text())
             .then(csvProd => {
-                
-                // --- ประมวลผล ชีตข้อมูลฝ่ายผลิต (Prod) ---
                 if (csvProd.toLowerCase().includes("<html") || csvProd.toLowerCase().includes("sign in")) {
                     alert("🚨 ระบบถูกบล็อก ไม่สามารถเข้าถึงข้อมูลได้!\n\nกรุณาตรวจสอบการแชร์ Google Sheets");
                     resetBtnState();
@@ -637,7 +674,7 @@
                         quality: -1,
                         
                         iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
-                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'df(i)']),
+                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'sf(i)']),
                         
                         bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
                         bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
@@ -657,7 +694,6 @@
                         const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
                         if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total') || c[0] === '') return;
 
-                        // โค้ดจะดึงข้อมูลวันที่จากคอลัมน์ A (c[0]) เสมอ
                         const ts = parseDateString(c[0]);
                         if (!ts) return;
 
@@ -1036,8 +1072,8 @@
             let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
 
             const avgGramSqm = (avgSingleG > 0 || avgDoubleG > 0) 
-                                ? (avgSingleG + avgDoubleG) 
-                                : (totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0);
+                                    ? (avgSingleG + avgDoubleG) 
+                                    : (totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0);
 
             const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
             
@@ -1061,7 +1097,29 @@
             const dispSingleG = parseFloat(avgSingleG.toFixed(3));
             const dispDoubleG = parseFloat(avgDoubleG.toFixed(3));
 
-            // แสดงผลขึ้นหน้าจอ
+            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม. (อิงเรท 4.386)
+            const FIXED_RATE = 4.386;
+            const singleKg = dispSingleG / 1000;
+            const singleBaht = singleKg * FIXED_RATE;
+            const doubleKg = dispDoubleG / 1000;
+            const doubleBaht = doubleKg * FIXED_RATE;
+            const totalG = dispSingleG + dispDoubleG;
+            const totalKg = totalG / 1000;
+            const totalBaht = totalKg * FIXED_RATE;
+
+            document.getElementById('tblSingleG').innerText = dispSingleG.toFixed(3);
+            document.getElementById('tblSingleKg').innerText = singleKg.toFixed(6);
+            document.getElementById('tblSingleBaht').innerText = "฿" + singleBaht.toFixed(4);
+
+            document.getElementById('tblDoubleG').innerText = dispDoubleG.toFixed(3);
+            document.getElementById('tblDoubleKg').innerText = doubleKg.toFixed(6);
+            document.getElementById('tblDoubleBaht').innerText = "฿" + doubleBaht.toFixed(4);
+
+            document.getElementById('tblTotalG').innerText = totalG.toFixed(3);
+            document.getElementById('tblTotalKg').innerText = totalKg.toFixed(6);
+            document.getElementById('tblTotalBaht').innerText = "฿" + totalBaht.toFixed(4);
+
+            // แสดงผลขึ้นหน้าจอ KPI Cards ปกติ
             document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
@@ -1078,11 +1136,9 @@
             if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 33.020, true);
             else document.getElementById('kpiGramSqmPct').innerHTML = "";
 
-            // การคำนวณและการแสดงผล การสูญเสียน้ำกาว (Lost Glue)
             const targetGSqm = 33.020;
             let lostGlueKg = 0;
             if (totalSqm > 0) {
-                // (ปริมาณกรัม/ตรม - เป้าหมาย) * ตารางเมตรทั้งหมด / 1000
                 lostGlueKg = ((avgGramSqm - targetGSqm) * totalSqm) / 1000;
             }
 
@@ -1091,19 +1147,16 @@
             const iconLostGlueEl = document.getElementById('iconLostGlue');
 
             if (lostGlueKg > 0) {
-                // ขาดทุน (Loss) -> สีแดง
                 kpiLostGlueEl.innerText = "+" + lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
                 kpiLostGlueEl.className = "kpi-value text-rose-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20";
                 iconLostGlueEl.className = "fa-solid fa-arrow-trend-up text-3xl text-rose-400";
             } else if (lostGlueKg < 0) {
-                // ประหยัดได้ (Savings) -> สีเขียว (แสดงผลลบตามธรรมชาติ)
                 kpiLostGlueEl.innerText = lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
                 kpiLostGlueEl.className = "kpi-value text-emerald-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50 bg-emerald-950/20";
                 iconLostGlueEl.className = "fa-solid fa-arrow-trend-down text-3xl text-emerald-400";
             } else {
-                // ตามเป้าหมายพอดี
                 kpiLostGlueEl.innerText = "0.000";
                 kpiLostGlueEl.className = "kpi-value text-slate-400";
                 cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
@@ -1156,6 +1209,11 @@
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
+                // กราฟแท่งใหม่ บาท/ตรม. Single vs Double
+                updateBahtSqmTypeChart(singleBaht, doubleBaht);
+                updateGlueCostBySqmChart(singleBaht, doubleBaht, totalSqm);
+
+
                 updateTrendRatioChart(trendData);
                 updateTrendGramSqmChart(trendData);
                 updateTrendKgOutputChart(trendData);
@@ -1168,18 +1226,114 @@
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
             }
 
-            // ===== กราฟใหม่ (แยก try/catch ต่างหาก กันกราฟหนึ่งพังแล้วลากกราฟอื่นดับ) =====
             try { updateCostShareDonut(kpi); } catch (error) { console.error("Donut error:", error); }
             try { updateTargetActualColumn(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Target/Actual error:", error); }
             try { updateSavingGauge(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Gauge error:", error); }
         }
 
+        // ฟังก์ชันวาดกราฟต้นทุนรวมตามพื้นที่ผลิต
+        // SF = บาท/ตรม. × Sqm, DF = บาท/ตรม. × Sqm
+        function updateGlueCostBySqmChart(singleBahtPerSqm, doubleBahtPerSqm, totalSqm) {
+            const canvas = document.getElementById('barGlueCostBySqm');
+            if (!canvas) return;
+            if (charts['barGlueCostBySqm']) charts['barGlueCostBySqm'].destroy();
+
+            const sfCost = (Number(singleBahtPerSqm) || 0) * (Number(totalSqm) || 0);
+            const dfCost = (Number(doubleBahtPerSqm) || 0) * (Number(totalSqm) || 0);
+            const totalCost = sfCost + dfCost;
+
+            charts['barGlueCostBySqm'] = new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['SF', 'DF', 'รวม'],
+                    datasets: [{
+                        label: 'ต้นทุนรวม (บาท)',
+                        data: [sfCost, dfCost, totalCost],
+                        backgroundColor: [
+                            'rgba(249, 115, 22, 0.65)',
+                            'rgba(99, 102, 241, 0.65)',
+                            'rgba(16, 185, 129, 0.65)'
+                        ],
+                        borderColor: ['#f97316', '#6366f1', '#10b981'],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const value = Number(ctx.raw) || 0;
+                                    const rate = ctx.dataIndex === 0 ? singleBahtPerSqm
+                                               : ctx.dataIndex === 1 ? doubleBahtPerSqm
+                                               : (Number(singleBahtPerSqm) || 0) + (Number(doubleBahtPerSqm) || 0);
+                                    return [
+                                        ` ฿${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
+                                        ` ${Number(rate).toFixed(4)} ฿/ตรม. × ${Number(totalSqm).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Sqm`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: {
+                                callback: (value) => '฿' + Number(value).toLocaleString('en-US')
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // ฟังก์ชันวาดกราฟบาท/ตรม. แยก Single / Double
+        function updateBahtSqmTypeChart(singleVal, doubleVal) {
+            const canvas = document.getElementById('barBahtSqmType');
+            if (!canvas) return;
+            if (charts['barBahtSqmType']) charts['barBahtSqmType'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            charts['barBahtSqmType'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Single', 'Double', 'รวม (Total)'],
+                    datasets: [{
+                        label: 'บาท / ตรม.',
+                        data: [singleVal, doubleVal, singleVal + doubleVal],
+                        backgroundColor: ['rgba(249, 115, 22, 0.6)', 'rgba(99, 102, 241, 0.6)', 'rgba(16, 185, 129, 0.6)'],
+                        borderColor: ['#f97316', '#6366f1', '#10b981'],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: { 
+                            callbacks: { 
+                                label: (ctx) => ` ฿${(Number(ctx.raw) || 0).toFixed(4)} บาท/ตรม.` 
+                            } 
+                        } 
+                    },
+                    scales: { 
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, 
+                        x: { grid: { display: false } } 
+                    }
+                }
+            });
+        }
+
         function updateBarChart(canvasId, label, dataObj) {
             const canvas = document.getElementById(canvasId);
-            if (!canvas) {
-                console.warn(`ไม่พบ Element Graph: ${canvasId}`);
-                return;
-            }
+            if (!canvas) return;
             if (charts[canvasId]) charts[canvasId].destroy();
             const ctx = canvas.getContext('2d');
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
@@ -1225,10 +1379,7 @@
 
             charts['trendRatio'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
+                data: { labels: labels, datasets: datasets },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1240,7 +1391,6 @@
             const ctx = canvas.getContext('2d');
             
             const labels = trendData.map(d => d.label);
-            
             const calcGramSqm = (g, mc) => {
                 let sf_avg = g[`${mc}_sf_count`] > 0 ? g[`${mc}_sf_sum`] / g[`${mc}_sf_count`] : 0;
                 let df_avg = g[`${mc}_df_count`] > 0 ? g[`${mc}_df_sum`] / g[`${mc}_df_count`] : 0;
@@ -1256,10 +1406,7 @@
 
             charts['trendGramSqm'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
+                data: { labels: labels, datasets: datasets },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1281,10 +1428,7 @@
 
             charts['trendKgOutput'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
+                data: { labels: labels, datasets: datasets },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1300,10 +1444,7 @@
 
             charts['trendQuality'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{ label: '% คุณภาพกาวเฉลี่ย', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
-                },
+                data: { labels: labels, datasets: [{ label: '% คุณภาพกาวเฉลี่ย', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1315,10 +1456,7 @@
             const ctx = canvas.getContext('2d');
 
             const labels = trendData.map(d => d.label);
-            
-            const calcMixCost = (g) => {
-                return g.mix_count > 0 ? (g.mix_sum / g.mix_count) : null;
-            };
+            const calcMixCost = (g) => g.mix_count > 0 ? (g.mix_sum / g.mix_count) : null;
 
             const actualData = trendData.map(d => calcMixCost(d));
             const targetData = trendData.map(() => 5.090); 
@@ -1328,38 +1466,11 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'ต้นทุนผสมจริง',
-                            data: actualData,
-                            borderColor: '#06b6d4', 
-                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                            fill: true,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            spanGaps: true
-                        },
-                        {
-                            label: 'Target (5.090)',
-                            data: targetData,
-                            borderColor: '#f43f5e', 
-                            borderDash: [5, 5], 
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            fill: false,
-                            datalabels: { display: false }
-                        }
+                        { label: 'ต้นทุนผสมจริง', data: actualData, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Target (5.090)', data: targetData, borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } },
-                    scales: {
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false },
-                        x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
@@ -1374,10 +1485,7 @@
 
             charts['trendGramSqmSingle'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{ label: 'กรัม/ตรม. Single', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
-                },
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. Single', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1393,17 +1501,11 @@
 
             charts['trendGramSqmDouble'] = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{ label: 'กรัม/ตรม. Double', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }]
-                },
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. Double', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
 
-        // ==========================================
-        // 1) Donut Chart: สัดส่วนต้นทุนแต่ละเครื่อง (%)
-        // ==========================================
         function updateCostShareDonut(kpi) {
             const canvas = document.getElementById('donutCostShare');
             if (!canvas) return;
@@ -1421,19 +1523,9 @@
 
             charts['donutCostShare'] = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: bg,
-                        borderColor: border,
-                        borderWidth: 2
-                    }]
-                },
+                data: { labels: labels, datasets: [{ data: data, backgroundColor: bg, borderColor: border, borderWidth: 2 }] },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '62%',
+                    responsive: true, maintainAspectRatio: false, cutout: '62%',
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
                         tooltip: {
@@ -1446,26 +1538,19 @@
                             }
                         },
                         datalabels: {
-                            display: true,
-                            color: '#fff',
-                            font: { size: 12, weight: 'bold' },
+                            display: true, color: '#fff', font: { size: 12, weight: 'bold' },
                             formatter: (value) => {
                                 const pct = total > 0 ? (value / total * 100) : 0;
                                 return pct > 0 ? pct.toFixed(1) + '%' : '';
                             },
-                            anchor: 'center',
-                            align: 'center',
-                            offset: 0
+                            anchor: 'center', align: 'center', offset: 0
                         }
                     }
                 }
             });
         }
 
-        // ==========================================
-        // 2) Column Chart: Target vs Actual ต้นทุนรวม + เงินที่ประหยัดได้
-        // ==========================================
-        const RATIO_TARGET = 0.464; // Target ฿ / Output
+        const RATIO_TARGET = 0.464;
 
         function updateTargetActualColumn(actualCost, totalOutput) {
             const canvas = document.getElementById('colTargetActual');
@@ -1474,7 +1559,7 @@
             const ctx = canvas.getContext('2d');
 
             const targetCost = totalOutput > 0 ? RATIO_TARGET * totalOutput : 0;
-            const savingBaht = targetCost - actualCost; // + = ประหยัด, - = ใช้เกินเป้า
+            const savingBaht = targetCost - actualCost;
 
             charts['colTargetActual'] = new Chart(ctx, {
                 type: 'bar',
@@ -1485,17 +1570,12 @@
                         data: [targetCost, actualCost],
                         backgroundColor: ['rgba(245, 158, 11, 0.6)', savingBaht >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(244, 63, 94, 0.6)'],
                         borderColor: ['#f59e0b', savingBaht >= 0 ? '#10b981' : '#f43f5e'],
-                        borderWidth: 2,
-                        borderRadius: 8
+                        borderWidth: 2, borderRadius: 8
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (ctx) => ` ฿${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } }
-                    },
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ฿${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } } },
                     scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
                 }
             });
@@ -1512,9 +1592,6 @@
             }
         }
 
-        // ==========================================
-        // 3) Gauge Chart: % Saving
-        // ==========================================
         function updateSavingGauge(actualCost, totalOutput) {
             const canvas = document.getElementById('gaugeSaving');
             if (!canvas) return;
@@ -1525,34 +1602,14 @@
             const savingBaht = targetCost - actualCost;
             const savingPct = targetCost > 0 ? (savingBaht / targetCost) * 100 : 0;
 
-            // Clamp เข็มเกจไว้ที่ -50% ถึง +50% เพื่อความสวยงามของสเกล
             const clamped = Math.max(-50, Math.min(50, savingPct));
-            const gaugeFraction = (clamped + 50) / 100; // 0..1
-
+            const gaugeFraction = (clamped + 50) / 100;
             const needleColor = savingPct >= 0 ? '#10b981' : '#f43f5e';
 
             charts['gaugeSaving'] = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: ['ใช้เกินเป้า', 'ประหยัด'],
-                    datasets: [{
-                        data: [gaugeFraction, 1 - gaugeFraction],
-                        backgroundColor: [needleColor, 'rgba(148, 163, 184, 0.15)'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    circumference: 180,
-                    rotation: 270,
-                    cutout: '75%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false },
-                        datalabels: { display: false }
-                    }
-                }
+                data: { labels: ['ใช้เกินเป้า', 'ประหยัด'], datasets: [{ data: [gaugeFraction, 1 - gaugeFraction], backgroundColor: [needleColor, 'rgba(148, 163, 184, 0.15)'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, circumference: 180, rotation: 270, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false }, datalabels: { display: false } } }
             });
 
             const valEl = document.getElementById('gaugeSavingValue');
