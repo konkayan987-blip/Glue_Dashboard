@@ -597,145 +597,495 @@
             return 0;
         }
 
-        function loadData() {
+        async function loadData() {
             const refreshBtn = document.getElementById('refreshBtn');
+
             if (refreshBtn) {
                 refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> กำลังโหลด...';
                 refreshBtn.disabled = true;
             }
 
             allData = [];
-            const noCacheSheetUrl = sheetUrlProd + "&_t=" + new Date().getTime() + "_" + Math.random().toString(36).substring(7);
-            
-            // 🚨 แก้ปัญหา Failed to fetch (CORS Error) 
-            // โดยการใช้ CORS Proxy ผ่าน allorigins เพื่อให้ดึงข้อมูลจาก Google Sheets ผ่าน file:/// ได้
-            const fetchUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(noCacheSheetUrl);
 
-            fetch(fetchUrl)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("เกิดข้อผิดพลาดเครือข่าย หรือ Google Sheets ไม่เปิดเป็นสาธารณะ (CORS/Proxy Error)");
-                }
-                return res.text();
-            })
-            .then(csvProd => {
-                if (csvProd.toLowerCase().includes("<html") || csvProd.toLowerCase().includes("sign in")) {
-                    alert("🚨 ระบบถูกบล็อก ไม่สามารถเข้าถึงข้อมูลได้!\n\nกรุณาตรวจสอบการแชร์ Google Sheets");
-                    resetBtnState();
-                    return;
-                }
+            // ============================================================
+            // GOOGLE SHEETS DATA SOURCE
+            // ============================================================
+            // ใช้ URL ตรงก่อน ไม่ใช้ CORS Proxy เป็นตัวหลัก
+            // เพราะ Proxy ภายนอกอาจล่ม / ถูกบล็อก / ทำให้เกิด "Failed to fetch"
+            const sheetId = "1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ";
+            const sheetGid = "483689587";
 
-                const rows = csvProd.trim().split("\n");
-                if (rows.length > 1) {
-                    let header = rows[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim().toLowerCase());
+            const dataUrls = [
+                `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${sheetGid}`,
+                `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${sheetGid}`
+            ];
 
-                    let getIdx = (k1, k2, defaultIdx) => {
-                        let idx = header.findIndex(x => x.includes(k1) && x.includes(k2));
-                        return idx !== -1 ? idx : defaultIdx;
-                    };
+            // Proxy เป็น fallback เท่านั้น
+            const proxyBuilders = [
+                url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                url => `https://corsproxy.io/?${encodeURIComponent(url)}`
+            ];
 
-                    let findCol = (keywords) => {
-                        return header.findIndex(h => {
-                            let match = true;
-                            for (let k of keywords) {
-                                if (!h.includes(k.toLowerCase())) match = false;
-                            }
-                            return match;
-                        });
-                    };
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-                    let mix_col = header.findIndex(x => x.includes('ต้นทุน') && (x.includes('ผสม') || x.includes('รวม') || x.includes('total')));
-                    if (mix_col === -1) mix_col = header.findIndex(x => x.includes('ต้นทุน'));
-                    
-                    let qAll = header.findIndex(x => x.includes('คุณภาพ') && (x.includes('all') || x.includes('รวม')));
-                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') && !x.includes('-'));
-                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') || x.includes('solid'));
+            async function fetchText(url, timeoutMs = 15000) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-                    let col = {
-                        yue_u: getIdx('ปริมาณ', 'yue', 4), yue_o: getIdx('output', 'yue', 6), yue_sqm: getIdx('sqm', 'yue', -1), 
-                        bhs_u: getIdx('ปริมาณ', 'bhs', 10), bhs_o: getIdx('output', 'bhs', 12), bhs_sqm: getIdx('sqm', 'bhs', -1),
-                        iso_u: getIdx('ปริมาณ', 'iso', 15), iso_o: getIdx('output', 'iso', 17), iso_sqm: getIdx('sqm', 'iso', -1),
-                        mix: mix_col,
-                        quality: qAll,
-                        
-                        // Original Single / Double (อ่านโดยตรง)
-                        iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
-                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'sf(i)']),
-                        bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
-                        bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
-                        yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1 ? findCol(['g/sqm', 'sf(y)']) : findCol(['g/sqm', 'sfy']),
-                        yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1 ? findCol(['g/sqm', 'df(y)']) : findCol(['g/sqm', 'dfy']),
-
-                        // ข้อมูลใหม่ 3 ชั้น / 5 ชั้น
-                        pct_3ply: findCol(['% 3 ชั้นtotal']) !== -1 ? findCol(['% 3 ชั้นtotal']) : (findCol(['% 3 ชั้น']) !== -1 ? findCol(['% 3 ชั้น']) : -1),
-                        pct_5ply: findCol(['% 5 ชั้นtotal']) !== -1 ? findCol(['% 5 ชั้นtotal']) : (findCol(['% 5 ชั้น']) !== -1 ? findCol(['% 5 ชั้น']) : -1),
-                        sf_glue_kg: findCol(['ปริมาณ', 'sf']) !== -1 ? findCol(['ปริมาณ', 'sf']) : (findCol(['กาว', 'sf', 'kg']) !== -1 ? findCol(['กาว', 'sf', 'kg']) : findCol(['sf', 'kg'])),
-                        df_glue_kg: findCol(['ปริมาณ', 'df']) !== -1 ? findCol(['ปริมาณ', 'df']) : (findCol(['กาว', 'df', 'kg']) !== -1 ? findCol(['กาว', 'df', 'kg']) : findCol(['df', 'kg']))
-                    };
-
-                    rows.forEach((r, idx) => {
-                        if (idx === 0) return;
-                        const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
-                        if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total') || c[0] === '') return;
-
-                        const ts = parseDateString(c[0]);
-                        if (!ts) return;
-
-                        const dObj = new Date(ts);
-                        const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
-
-                        allData.push({
-                            dateStr: formattedDate, timestamp: ts,
-                            yue_usage: parseNum(c[col.yue_u]), yue_out: parseNum(c[col.yue_o]), yue_sqm: col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0, 
-                            bhs_usage: parseNum(c[col.bhs_u]), bhs_out: parseNum(c[col.bhs_o]), bhs_sqm: col.bhs_sqm !== -1 ? parseNum(c[col.bhs_sqm]) : 0,
-                            iso_usage: parseNum(c[col.iso_u]), iso_out: parseNum(c[col.iso_o]), iso_sqm: col.iso_sqm !== -1 ? parseNum(c[col.iso_sqm]) : 0,
-                            mix_cost: col.mix !== -1 ? parseNum(c[col.mix]) : 0,
-                            quality: col.quality !== -1 ? parseNum(c[col.quality]) : 0,
-                            
-                            // เก็บข้อมูล Single/Double เดิม
-                            iso_sf: col.iso_sf_g !== -1 ? parseNum(c[col.iso_sf_g]) : 0, iso_df: col.iso_df_g !== -1 ? parseNum(c[col.iso_df_g]) : 0,
-                            bhs_sf: col.bhs_sf_g !== -1 ? parseNum(c[col.bhs_sf_g]) : 0, bhs_df: col.bhs_df_g !== -1 ? parseNum(c[col.bhs_df_g]) : 0,
-                            yue_sf: col.yue_sf_g !== -1 ? parseNum(c[col.yue_sf_g]) : 0, yue_df: col.yue_df_g !== -1 ? parseNum(c[col.yue_df_g]) : 0,
-
-                            // เก็บข้อมูลใหม่ 3 ชั้น/5 ชั้น
-                            sf_glue: col.sf_glue_kg !== -1 ? parseNum(c[col.sf_glue_kg]) : 0,
-                            df_glue: col.df_glue_kg !== -1 ? parseNum(c[col.df_glue_kg]) : 0,
-                            pct_3ply: col.pct_3ply !== -1 ? parseFloat(String(c[col.pct_3ply]).replace('%', '')) : 0,
-                            pct_5ply: col.pct_5ply !== -1 ? parseFloat(String(c[col.pct_5ply]).replace('%', '')) : 0
-                        });
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        cache: 'no-store',
+                        signal: controller.signal,
+                        headers: {
+                            'Accept': 'text/csv,text/plain,*/*'
+                        }
                     });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const text = await response.text();
+
+                    if (!text || text.trim().length < 10) {
+                        throw new Error('ได้รับข้อมูลว่างเปล่า');
+                    }
+
+                    return text;
+                } finally {
+                    clearTimeout(timer);
                 }
+            }
+
+            function looksLikeCsv(text) {
+                if (!text) return false;
+
+                const sample = text.slice(0, 2000).toLowerCase();
+
+                // หน้า Login / Permission ของ Google
+                if (
+                    sample.includes('<html') ||
+                    sample.includes('<!doctype') ||
+                    sample.includes('sign in') ||
+                    sample.includes('accounts.google.com') ||
+                    sample.includes('request access')
+                ) {
+                    return false;
+                }
+
+                // CSV ต้องมีอย่างน้อย newline + comma
+                return text.includes('\n') && text.includes(',');
+            }
+
+            async function getCsvData() {
+                const errors = [];
+
+                // 1) ลอง Google Sheets โดยตรงก่อน
+                for (const url of dataUrls) {
+                    try {
+                        const cacheBust = `${url}${url.includes('?') ? '&' : '?'}_t=${Date.now()}`;
+                        const csv = await fetchText(cacheBust);
+
+                        if (looksLikeCsv(csv)) {
+                            console.info('Google Sheets โหลดโดยตรงสำเร็จ:', url);
+                            return csv;
+                        }
+
+                        errors.push(`Google Sheets ตอบกลับไม่ใช่ CSV: ${url}`);
+                    } catch (err) {
+                        console.warn('Direct fetch failed:', url, err);
+                        errors.push(`Direct: ${err.message}`);
+                    }
+                }
+
+                // 2) ถ้าตรงไม่ได้ ให้ใช้ Proxy เป็น fallback
+                for (const url of dataUrls) {
+                    for (const buildProxy of proxyBuilders) {
+                        try {
+                            const target = `${url}${url.includes('?') ? '&' : '?'}_t=${Date.now()}`;
+                            const proxyUrl = buildProxy(target);
+                            const csv = await fetchText(proxyUrl);
+
+                            if (looksLikeCsv(csv)) {
+                                console.info('Google Sheets โหลดผ่าน fallback proxy สำเร็จ:', proxyUrl);
+                                return csv;
+                            }
+
+                            errors.push(`Proxy ตอบกลับไม่ใช่ CSV`);
+                        } catch (err) {
+                            console.warn('Proxy fetch failed:', err);
+                            errors.push(`Proxy: ${err.message}`);
+                        }
+
+                        // ลดโอกาสยิง Proxy ถี่เกินไป
+                        await sleep(250);
+                    }
+                }
+
+                throw new Error(
+                    'ไม่สามารถเชื่อมต่อ Google Sheets ได้\\n' +
+                    errors.slice(-4).join(' | ')
+                );
+            }
+
+            // ============================================================
+            // CSV PARSER
+            // ============================================================
+            // Parser นี้รองรับ comma และ comma ที่อยู่ใน "..."
+            function parseCSV(text) {
+                const rows = [];
+                let row = [];
+                let cell = '';
+                let inQuotes = false;
+
+                text = String(text || '').replace(/^\uFEFF/, '');
+
+                for (let i = 0; i < text.length; i++) {
+                    const ch = text[i];
+                    const next = text[i + 1];
+
+                    if (ch === '"') {
+                        if (inQuotes && next === '"') {
+                            cell += '"';
+                            i++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (ch === ',' && !inQuotes) {
+                        row.push(cell.trim());
+                        cell = '';
+                    } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+                        if (ch === '\r' && next === '\n') i++;
+
+                        row.push(cell.trim());
+
+                        // ไม่เก็บบรรทัดว่าง
+                        if (row.some(v => v !== '')) {
+                            rows.push(row);
+                        }
+
+                        row = [];
+                        cell = '';
+                    } else {
+                        cell += ch;
+                    }
+                }
+
+                if (cell !== '' || row.length > 0) {
+                    row.push(cell.trim());
+                    if (row.some(v => v !== '')) rows.push(row);
+                }
+
+                return rows;
+            }
+
+            try {
+                const csvProd = await getCsvData();
+                const rows = parseCSV(csvProd);
+
+                if (rows.length < 2) {
+                    throw new Error('Google Sheets มีข้อมูลน้อยเกินไป หรือไม่มีข้อมูล');
+                }
+
+                // ========================================================
+                // HEADER
+                // ========================================================
+                let header = rows[0].map(s =>
+                    String(s || '')
+                        .replace(/"/g, '')
+                        .trim()
+                        .toLowerCase()
+                );
+
+                console.log('Google Sheets headers:', header);
+
+                const getIdx = (k1, k2, defaultIdx) => {
+                    const idx = header.findIndex(x =>
+                        x.includes(k1.toLowerCase()) &&
+                        x.includes(k2.toLowerCase())
+                    );
+                    return idx !== -1 ? idx : defaultIdx;
+                };
+
+                const findCol = (keywords) => {
+                    return header.findIndex(h =>
+                        keywords.every(k => h.includes(k.toLowerCase()))
+                    );
+                };
+
+                let mix_col = header.findIndex(x =>
+                    x.includes('ต้นทุน') &&
+                    (
+                        x.includes('ผสม') ||
+                        x.includes('รวม') ||
+                        x.includes('total')
+                    )
+                );
+
+                if (mix_col === -1) {
+                    mix_col = header.findIndex(x => x.includes('ต้นทุน'));
+                }
+
+                let qAll = header.findIndex(x =>
+                    x.includes('คุณภาพ') &&
+                    (x.includes('all') || x.includes('รวม'))
+                );
+
+                if (qAll === -1) {
+                    qAll = header.findIndex(x =>
+                        x.includes('คุณภาพ') && !x.includes('-')
+                    );
+                }
+
+                if (qAll === -1) {
+                    qAll = header.findIndex(x =>
+                        x.includes('คุณภาพ') || x.includes('solid')
+                    );
+                }
+
+                let col = {
+                    yue_u: getIdx('ปริมาณ', 'yue', 4),
+                    yue_o: getIdx('output', 'yue', 6),
+                    yue_sqm: getIdx('sqm', 'yue', -1),
+
+                    bhs_u: getIdx('ปริมาณ', 'bhs', 10),
+                    bhs_o: getIdx('output', 'bhs', 12),
+                    bhs_sqm: getIdx('sqm', 'bhs', -1),
+
+                    iso_u: getIdx('ปริมาณ', 'iso', 15),
+                    iso_o: getIdx('output', 'iso', 17),
+                    iso_sqm: getIdx('sqm', 'iso', -1),
+
+                    mix: mix_col,
+                    quality: qAll,
+
+                    // Original Single / Double
+                    iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1
+                        ? findCol(['g/sqm', 'sf(i)'])
+                        : findCol(['sqm', 'sf(i)']),
+
+                    iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1
+                        ? findCol(['g/sqm', 'df(i)'])
+                        : findCol(['sqm', 'df(i)']),
+
+                    bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1
+                        ? findCol(['g/sqm', 'sf(b)'])
+                        : findCol(['g/sqm', 'sfb']),
+
+                    bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1
+                        ? findCol(['g/sqm', 'df(b)'])
+                        : findCol(['g/sqm', 'dfb']),
+
+                    yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1
+                        ? findCol(['g/sqm', 'sf(y)'])
+                        : findCol(['g/sqm', 'sfy']),
+
+                    yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1
+                        ? findCol(['g/sqm', 'df(y)'])
+                        : findCol(['g/sqm', 'dfy']),
+
+                    // 3 Ply / 5 Ply
+                    pct_3ply: findCol(['% 3 ชั้นtotal']) !== -1
+                        ? findCol(['% 3 ชั้นtotal'])
+                        : (
+                            findCol(['% 3 ชั้น']) !== -1
+                                ? findCol(['% 3 ชั้น'])
+                                : -1
+                        ),
+
+                    pct_5ply: findCol(['% 5 ชั้นtotal']) !== -1
+                        ? findCol(['% 5 ชั้นtotal'])
+                        : (
+                            findCol(['% 5 ชั้น']) !== -1
+                                ? findCol(['% 5 ชั้น'])
+                                : -1
+                        ),
+
+                    sf_glue_kg: findCol(['ปริมาณ', 'sf']) !== -1
+                        ? findCol(['ปริมาณ', 'sf'])
+                        : (
+                            findCol(['กาว', 'sf', 'kg']) !== -1
+                                ? findCol(['กาว', 'sf', 'kg'])
+                                : findCol(['sf', 'kg'])
+                        ),
+
+                    df_glue_kg: findCol(['ปริมาณ', 'df']) !== -1
+                        ? findCol(['ปริมาณ', 'df'])
+                        : (
+                            findCol(['กาว', 'df', 'kg']) !== -1
+                                ? findCol(['กาว', 'df', 'kg'])
+                                : findCol(['df', 'kg'])
+                        )
+                };
+
+                // ========================================================
+                // ตรวจสอบ column สำคัญก่อนอ่านข้อมูล
+                // ========================================================
+                const requiredColumns = [
+                    ['YUE ปริมาณ', col.yue_u],
+                    ['YUE Output', col.yue_o],
+                    ['BHS ปริมาณ', col.bhs_u],
+                    ['BHS Output', col.bhs_o],
+                    ['ISO ปริมาณ', col.iso_u],
+                    ['ISO Output', col.iso_o]
+                ];
+
+                const missingColumns = requiredColumns
+                    .filter(([, idx]) => idx < 0 || idx >= header.length)
+                    .map(([name]) => name);
+
+                if (missingColumns.length > 0) {
+                    console.warn('Missing columns:', missingColumns);
+                }
+
+                // ========================================================
+                // READ ROWS
+                // ========================================================
+                rows.slice(1).forEach((c) => {
+                    if (!c || c.length < 5) return;
+
+                    const firstCell = String(c[0] || '').trim();
+
+                    if (
+                        !firstCell ||
+                        firstCell.toLowerCase().includes('total')
+                    ) return;
+
+                    const ts = parseDateString(firstCell);
+                    if (!ts) return;
+
+                    const dObj = new Date(ts);
+
+                    if (isNaN(dObj.getTime())) return;
+
+                    const formattedDate =
+                        `${String(dObj.getDate()).padStart(2, '0')}/` +
+                        `${String(dObj.getMonth() + 1).padStart(2, '0')}/` +
+                        `${dObj.getFullYear()}`;
+
+                    const safeCell = (idx) =>
+                        idx >= 0 && idx < c.length ? c[idx] : '';
+
+                    allData.push({
+                        dateStr: formattedDate,
+                        timestamp: ts,
+
+                        yue_usage: parseNum(safeCell(col.yue_u)),
+                        yue_out: parseNum(safeCell(col.yue_o)),
+                        yue_sqm: col.yue_sqm !== -1
+                            ? parseNum(safeCell(col.yue_sqm))
+                            : 0,
+
+                        bhs_usage: parseNum(safeCell(col.bhs_u)),
+                        bhs_out: parseNum(safeCell(col.bhs_o)),
+                        bhs_sqm: col.bhs_sqm !== -1
+                            ? parseNum(safeCell(col.bhs_sqm))
+                            : 0,
+
+                        iso_usage: parseNum(safeCell(col.iso_u)),
+                        iso_out: parseNum(safeCell(col.iso_o)),
+                        iso_sqm: col.iso_sqm !== -1
+                            ? parseNum(safeCell(col.iso_sqm))
+                            : 0,
+
+                        mix_cost: col.mix !== -1
+                            ? parseNum(safeCell(col.mix))
+                            : 0,
+
+                        quality: col.quality !== -1
+                            ? parseNum(safeCell(col.quality))
+                            : 0,
+
+                        iso_sf: col.iso_sf_g !== -1
+                            ? parseNum(safeCell(col.iso_sf_g))
+                            : 0,
+
+                        iso_df: col.iso_df_g !== -1
+                            ? parseNum(safeCell(col.iso_df_g))
+                            : 0,
+
+                        bhs_sf: col.bhs_sf_g !== -1
+                            ? parseNum(safeCell(col.bhs_sf_g))
+                            : 0,
+
+                        bhs_df: col.bhs_df_g !== -1
+                            ? parseNum(safeCell(col.bhs_df_g))
+                            : 0,
+
+                        yue_sf: col.yue_sf_g !== -1
+                            ? parseNum(safeCell(col.yue_sf_g))
+                            : 0,
+
+                        yue_df: col.yue_df_g !== -1
+                            ? parseNum(safeCell(col.yue_df_g))
+                            : 0,
+
+                        sf_glue: col.sf_glue_kg !== -1
+                            ? parseNum(safeCell(col.sf_glue_kg))
+                            : 0,
+
+                        df_glue: col.df_glue_kg !== -1
+                            ? parseNum(safeCell(col.df_glue_kg))
+                            : 0,
+
+                        pct_3ply: col.pct_3ply !== -1
+                            ? parseFloat(String(safeCell(col.pct_3ply)).replace('%', '')) || 0
+                            : 0,
+
+                        pct_5ply: col.pct_5ply !== -1
+                            ? parseFloat(String(safeCell(col.pct_5ply)).replace('%', '')) || 0
+                            : 0
+                    });
+                });
 
                 if (allData.length === 0) {
-                    alert("⚠️ อ่านไฟล์ได้สำเร็จ แต่หาข้อมูลกาวไม่เจอเลยครับ! (ตรวจสอบรูปแบบวันที่ใน Sheet)");
-                    document.getElementById('dataStatus').innerText = "❌ ไม่พบข้อมูล (รูปแบบวันที่อาจไม่ถูกต้อง)";
-                    resetBtnState();
-                    return;
+                    throw new Error(
+                        'เชื่อมต่อ Google Sheets ได้แล้ว แต่ไม่พบข้อมูลกาว\\n' +
+                        'กรุณาตรวจสอบรูปแบบวันที่และชื่อคอลัมน์ใน Sheet'
+                    );
                 }
 
                 allData.sort((a, b) => a.timestamp - b.timestamp);
-                document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
+
+                document.getElementById('dataStatus').innerText =
+                    `✅ โหลดสำเร็จ: ${allData.length} วัน ` +
+                    `(ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
 
                 if (allData.length > 0) {
                     const minDate = new Date(allData[0].timestamp);
                     const maxDate = new Date(allData[allData.length - 1].timestamp);
-                    if (fpStartDate.selectedDates.length === 0) fpStartDate.setDate(minDate);
+
+                    if (fpStartDate.selectedDates.length === 0) {
+                        fpStartDate.setDate(minDate);
+                    }
+
                     fpEndDate.setDate(maxDate);
                 }
 
                 applyFilterLogic();
-                resetBtnState();
 
-            }).catch(err => {
-                console.error(err);
-                alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + err.message);
-                document.getElementById('dataStatus').innerText = "❌ ไม่สามารถโหลดข้อมูลได้";
-                resetBtnState();
-            });
+            } catch (err) {
+                console.error('LOAD DATA ERROR:', err);
 
-            function resetBtnState() {
+                const message = err && err.message
+                    ? err.message
+                    : 'Unknown error';
+
+                alert(
+                    '❌ โหลดข้อมูลไม่สำเร็จ\\n\\n' +
+                    message +
+                    '\\n\\n' +
+                    'กรุณาตรวจสอบว่า Google Sheets เปิดสิทธิ์เป็น "ทุกคนที่มีลิงก์ดูได้"'
+                );
+
+                document.getElementById('dataStatus').innerText =
+                    '❌ ไม่สามารถโหลดข้อมูลจาก Google Sheets ได้';
+
+            } finally {
                 if (refreshBtn) {
-                    refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล';
+                    refreshBtn.innerHTML =
+                        '<i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล';
                     refreshBtn.disabled = false;
                 }
             }
