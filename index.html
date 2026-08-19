@@ -76,13 +76,11 @@
 
 <body class="min-h-screen p-4 md:p-8">
 
-    <div id="main-dashboard" class="max-w-[1400px] mx-auto space-y-6">
+    <div id="main-dashboard" class="max-w-[1500px] mx-auto space-y-6">
 
-        <header
-            class="glass-card rounded-2xl p-6 flex flex-col xl:flex-row justify-between items-center gap-4 border-l-4 border-l-emerald-500">
+        <header class="glass-card rounded-2xl p-6 flex flex-col xl:flex-row justify-between items-center gap-4 border-l-4 border-l-emerald-500">
             <div>
-                <h1
-                    class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
                     🛢️ Glue Usage Analytics
                 </h1>
                 <p class="text-slate-400 text-sm mt-1" id="dataStatus">กำลังโหลดและตรวจสอบข้อมูล...</p>
@@ -165,11 +163,10 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-4">
 
-            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
-                <div class="absolute top-4 right-4 text-emerald-400 opacity-20"><i
-                        class="fa-solid fa-flask text-3xl"></i></div>
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50">
+                <div class="absolute top-4 right-4 text-emerald-400 opacity-20"><i class="fa-solid fa-flask text-3xl"></i></div>
                 <div class="kpi-label">ปริมาณกาวที่ใช้รวม</div>
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalUsage" class="kpi-value text-emerald-400">--</div>
@@ -178,8 +175,7 @@
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50">
-                <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i
-                        class="fa-solid fa-money-bill-wave text-3xl"></i></div>
+                <div class="absolute top-4 right-4 text-rose-400 opacity-20"><i class="fa-solid fa-money-bill-wave text-3xl"></i></div>
                 <div class="kpi-label">ต้นทุนค่ากาวรวม</div>
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalCost" class="kpi-value text-rose-400">--</div>
@@ -187,9 +183,8 @@
                 <div class="kpi-sub text-rose-300/80 text-xs mt-1 font-semibold" id="costNote">กำลังดึงข้อมูล...</div>
             </div>
 
-            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
-                <div class="absolute top-4 right-4 text-blue-400 opacity-20"><i
-                        class="fa-solid fa-box-open text-3xl"></i></div>
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-blue-500/50">
+                <div class="absolute top-4 right-4 text-blue-400 opacity-20"><i class="fa-solid fa-box-open text-3xl"></i></div>
                 <div class="kpi-label">ยอดผลิตรวม (Output)</div>
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalOutput" class="kpi-value text-blue-400">--</div>
@@ -198,8 +193,7 @@
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-teal-500/50">
-                <div class="absolute top-4 right-4 text-teal-400 opacity-20"><i
-                        class="fa-solid fa-ruler-combined text-3xl"></i></div>
+                <div class="absolute top-4 right-4 text-teal-400 opacity-20"><i class="fa-solid fa-ruler-combined text-3xl"></i></div>
                 <div class="kpi-label">พื้นที่ผลิตรวม (Sqm)</div>
                 <div class="flex items-center mt-2">
                     <div id="kpiTotalSqm" class="kpi-value text-teal-400">--</div>
@@ -207,9 +201,8 @@
                 <div class="kpi-sub">หน่วย: ตารางเมตร (Sqm)</div>
             </div>
 
-            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
-                <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i
-                        class="fa-solid fa-chart-pie text-3xl"></i></div>
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-amber-500/50">
+                <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i class="fa-solid fa-chart-pie text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย ต้นทุน ฿ / Output</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiAvgRatio" class="kpi-value text-amber-400">--</div>
@@ -219,9 +212,8 @@
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-purple-500/50">
-                <div class="absolute top-4 right-4 text-purple-400 opacity-20"><i
-                        class="fa-solid fa-layer-group text-3xl"></i></div>
-                <div class="kpi-label">เฉลี่ย กรัม / ตรม.</div>
+                <div class="absolute top-4 right-4 text-purple-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม / ตรม. (Total)</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiGramSqm" class="kpi-value text-purple-400">--</div>
                     <div id="kpiGramSqmPct"></div>
@@ -235,12 +227,11 @@
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiLostGlue" class="kpi-value text-rose-400">--</div>
                 </div>
-                <div class="kpi-sub mt-1 text-xs">หน่วย: kg <br><span class="text-[10px] text-slate-400">(g/Sqm - 33.020) * Sqm / 1000</span></div>
+                <div class="kpi-sub mt-1 text-[10px] text-slate-400 leading-tight">หน่วย: kg <br>(g/Sqm - 33.020) * Sqm / 1000</div>
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-pink-500/50">
-                <div class="absolute top-4 right-4 text-pink-400 opacity-20"><i
-                        class="fa-solid fa-weight-scale text-3xl"></i></div>
+                <div class="absolute top-4 right-4 text-pink-400 opacity-20"><i class="fa-solid fa-weight-scale text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย kg / Output</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiKgOutput" class="kpi-value text-pink-400">--</div>
@@ -250,8 +241,7 @@
             </div>
 
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-violet-500/50">
-                <div class="absolute top-4 right-4 text-violet-400 opacity-20"><i
-                        class="fa-solid fa-percent text-3xl"></i></div>
+                <div class="absolute top-4 right-4 text-violet-400 opacity-20"><i class="fa-solid fa-percent text-3xl"></i></div>
                 <div class="kpi-label">เปอร์เซ็นต์คุณภาพกาว</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiQuality" class="kpi-value text-violet-400">--</div>
@@ -260,10 +250,8 @@
                 <div class="kpi-sub">%คุณภาพกาว Target: 90%</div>
             </div>
 
-            <div id="cardYueMix"
-                class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-cyan-500/50">
-                <div class="absolute top-4 right-4 opacity-20"><i id="iconYueMix"
-                        class="fa-solid fa-bullseye text-3xl text-cyan-400"></i></div>
+            <div id="cardYueMix" class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-cyan-500/50">
+                <div class="absolute top-4 right-4 opacity-20"><i id="iconYueMix" class="fa-solid fa-bullseye text-3xl text-cyan-400"></i></div>
                 <div class="kpi-label">เฉลี่ย ต้นทุนผสมกาว</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiYueMix" class="kpi-value text-cyan-400">--</div>
@@ -272,6 +260,7 @@
                 <div class="kpi-sub">Target: 5.090 ฿ (น้อย=ดี)</div>
             </div>
 
+            <!-- แบบดั้งเดิม Single -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-orange-500/50">
                 <div class="absolute top-4 right-4 text-orange-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Single)</div>
@@ -282,6 +271,7 @@
                 <div class="kpi-sub">g/Sqm Target: 14.710</div>
             </div>
 
+            <!-- แบบดั้งเดิม Double -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
                 <div class="absolute top-4 right-4 text-indigo-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Double)</div>
@@ -291,19 +281,38 @@
                 </div>
                 <div class="kpi-sub">g/Sqm Target: 18.310</div>
             </div>
+
+            <!-- เพิ่มใหม่ 3 ชั้น -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
+                <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม/ตรม. (3 ชั้น)</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiGramSqm3Ply" class="kpi-value text-lime-400">--</div>
+                </div>
+                <div class="kpi-sub text-[10px]">คิดจากกาว SF & พื้นที่ 3 ชั้น</div>
+            </div>
+
+            <!-- เพิ่มใหม่ 5 ชั้น -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
+                <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
+                <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
+                <div class="flex items-center gap-2 mt-2">
+                    <div id="kpiGramSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
+                </div>
+                <div class="kpi-sub text-[10px]">คิดจากกาว DF & พื้นที่ 5 ชั้น</div>
+            </div>
         </div>
 
-        <!-- ===== ส่วนเพิ่มใหม่: ตารางวิเคราะห์ต้นทุนบาท/ตรม. (Single, Double, Total) อิงเรท 4.386 ===== -->
         <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
             <h3 class="text-lg font-semibold mb-4 text-emerald-300 flex items-center gap-2">
-                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร (Baht / Sqm) [เรทราคาปรับตามเฉลี่ยต้นทุนผสมกาว]
+                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร (Baht / Sqm) [เรทราคาผสมอ้างอิง: 4.386 ฿/กก.]
             </h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
                     <thead>
                         <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
                             <th class="p-3">รายการ</th>
-                            <th class="p-3 text-right">กรัม / ตรม. − Target (g/Sqm)</th>
+                            <th class="p-3 text-right">กรัม / ตรม. (g/Sqm)</th>
                             <th class="p-3 text-right">คิดเป็น (กก. / ตรม.)</th>
                             <th class="p-3 text-center">× เรทราคา (฿/กก.)</th>
                             <th class="p-3 text-right">= ต้นทุน (บาท / ตรม.)</th>
@@ -314,22 +323,29 @@
                             <td class="p-3 font-semibold text-orange-300">Single</td>
                             <td id="tblSingleG" class="p-3 text-right">--</td>
                             <td id="tblSingleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td id="tblRateSingle" class="p-3 text-center text-slate-400">× --</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tblSingleBaht" class="p-3 text-right font-bold text-orange-400">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition">
                             <td class="p-3 font-semibold text-indigo-300">Double</td>
                             <td id="tblDoubleG" class="p-3 text-right">--</td>
                             <td id="tblDoubleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td id="tblRateDouble" class="p-3 text-center text-slate-400">× --</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tblDoubleBaht" class="p-3 text-right font-bold text-indigo-400">--</td>
                         </tr>
-                        <tr class="bg-slate-900/40 font-bold">
-                            <td class="p-3 text-emerald-300">รวม (Total)</td>
-                            <td id="tblTotalG" class="p-3 text-right text-emerald-400">--</td>
-                            <td id="tblTotalKg" class="p-3 text-right text-emerald-400">--</td>
-                            <td id="tblRateTotal" class="p-3 text-center text-slate-400">× --</td>
-                            <td id="tblTotalBaht" class="p-3 text-right text-emerald-400 text-base">--</td>
+                        <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
+                            <td class="p-3 font-semibold text-lime-300">3 ชั้น (3 Ply)</td>
+                            <td id="tbl3PlyG" class="p-3 text-right">--</td>
+                            <td id="tbl3PlyKg" class="p-3 text-right text-slate-300">--</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tbl3PlyBaht" class="p-3 text-right font-bold text-lime-400">--</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
+                            <td class="p-3 font-semibold text-fuchsia-300">5 ชั้น (5 Ply)</td>
+                            <td id="tbl5PlyG" class="p-3 text-right">--</td>
+                            <td id="tbl5PlyKg" class="p-3 text-right text-slate-300">--</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
+                            <td id="tbl5PlyBaht" class="p-3 text-right font-bold text-fuchsia-400">--</td>
                         </tr>
                     </tbody>
                 </table>
@@ -346,28 +362,15 @@
                 <div class="w-full h-[250px]"><canvas id="barCost"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6 border-t-2 border-purple-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-purple-300">📐 กรัม / ตรม. (g/Sqm)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-purple-300">📐 กรัม / ตรม. (Total)</h3>
                 <div class="w-full h-[250px]"><canvas id="barGramSqm"></canvas></div>
             </div>
         </div>
 
-        <!-- กราฟใหม่: บาท/ตรม. แยก Single / Double -->
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-teal-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 ต้นทุนบาทต่อตารางเมตร (Baht / Sqm) แยกตามประเภท Single & Double (เรท = เฉลี่ยต้นทุนผสมกาว)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 เปรียบเทียบต้นทุน บาท/ตรม. (อิงเรท 4.386)</h3>
                 <div class="w-full h-[280px]"><canvas id="barBahtSqmType"></canvas></div>
-            </div>
-        </div>
-
-        <!-- กราฟใหม่: ต้นทุนรวมตามพื้นที่ผลิต -->
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
-            <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-cyan-300">💰 ต้นทุนกาวตามพื้นที่ผลิต (บาท) — SF / DF / รวม</h3>
-                <div class="text-sm text-slate-400 mb-3">
-                    <span id="glueCostRateNote" class="text-cyan-300 font-semibold"></span><br>
-                    คำนวณจาก <b>กรัม/ตรม. ÷ 1000 × เฉลี่ยต้นทุนผสมกาว × พื้นที่ผลิตรวม (Sqm)</b>
-                </div>
-                <div class="w-full h-[300px]"><canvas id="barGlueCostBySqm"></canvas></div>
             </div>
         </div>
 
@@ -377,12 +380,35 @@
                 <div class="w-full h-[250px]"><canvas id="trendRatio"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6">
-                <h3 class="text-lg font-semibold mb-4 text-purple-300">📉 แนวโน้ม กรัม / ตรม. (g/Sqm)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-purple-300">📉 แนวโน้ม กรัม / ตรม. (Total)</h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6">
                 <h3 class="text-lg font-semibold mb-4 text-pink-300">📉 แนวโน้ม kg / Output</h3>
                 <div class="w-full h-[250px]"><canvas id="trendKgOutput"></canvas></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-orange-300">📉 แนวโน้ม กรัม/ตรม. (Single)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqmSingle"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-indigo-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-indigo-300">📉 แนวโน้ม กรัม/ตรม. (Double)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqmDouble"></canvas></div>
+            </div>
+        </div>
+
+        <!-- กราฟแนวโน้มใหม่ 3 ชั้น และ 5 ชั้น -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 bg-lime-950/10">
+                <h3 class="text-lg font-semibold mb-4 text-lime-300">📉 แนวโน้ม กรัม/ตรม. (3 ชั้น)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqm3Ply"></canvas></div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50 bg-fuchsia-950/10">
+                <h3 class="text-lg font-semibold mb-4 text-fuchsia-300">📉 แนวโน้ม กรัม/ตรม. (5 ชั้น)</h3>
+                <div class="w-full h-[250px]"><canvas id="trendGramSqm5Ply"></canvas></div>
             </div>
         </div>
 
@@ -397,18 +423,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-orange-300">📉 แนวโน้ม กรัม/ตรม. (Single)</h3>
-                <div class="w-full h-[250px]"><canvas id="trendGramSqmSingle"></canvas></div>
-            </div>
-            <div class="glass-card rounded-2xl p-6 border-t-2 border-indigo-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-indigo-300">📉 แนวโน้ม กรัม/ตรม. (Double)</h3>
-                <div class="w-full h-[250px]"><canvas id="trendGramSqmDouble"></canvas></div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-fuchsia-300">🍩 สัดส่วนต้นทุนแต่ละเครื่อง (%)</h3>
                 <div class="w-full h-[260px]"><canvas id="donutCostShare"></canvas></div>
@@ -427,8 +442,8 @@
                 <div id="gaugeSavingBaht" class="text-center text-sm mt-1 font-semibold">--</div>
                 <div class="text-[11px] text-slate-400 mt-3 leading-relaxed border-t border-slate-700 pt-2">
                     <b class="text-slate-300">วิธีคิด:</b><br>
-                    1) ต้นทุนเป้าหมาย (Target Cost) = Target ฿/Output (0.464) × ยอดผลิตรวม (Output)<br>
-                    2) เงินที่ประหยัดได้ (บาท) = ต้นทุนเป้าหมาย − ต้นทุนจริงรวม (ถ้าติดลบ = ใช้เกินเป้า)<br>
+                    1) ต้นทุนเป้าหมาย = Target ฿/Output (0.464) × ยอดผลิตรวม<br>
+                    2) เงินที่ประหยัดได้ = ต้นทุนเป้าหมาย − ต้นทุนจริงรวม<br>
                     3) % Saving = (เงินที่ประหยัดได้ ÷ ต้นทุนเป้าหมาย) × 100
                 </div>
             </div>
@@ -465,22 +480,13 @@
             if (mode === 'weekly') {
                 const sow = new Date(getStartOfWeek(timestamp));
                 const weekNo = getWeekNumber(timestamp);
-                return {
-                    key: `${sow.getFullYear()}-W${String(weekNo).padStart(2,'0')}`,
-                    label: `Week ${weekNo}`
-                };
+                return { key: `${sow.getFullYear()}-W${String(weekNo).padStart(2,'0')}`, label: `Week ${weekNo}` };
             }
             if (mode === 'monthly') {
-                return {
-                    key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,
-                    label: `${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`
-                };
+                return { key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`, label: `${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}` };
             }
             if (mode === 'yearly') {
-                return {
-                    key: `${d.getFullYear()}`,
-                    label: `${d.getFullYear()}`
-                };
+                return { key: `${d.getFullYear()}`, label: `${d.getFullYear()}` };
             }
             return {
                 key: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,
@@ -511,7 +517,6 @@
         function toggleLabels() {
             showLabels = !showLabels;
             const btn = document.getElementById('toggleLabelsBtn');
-            
             if (showLabels) {
                 btn.classList.replace('bg-fuchsia-600', 'bg-fuchsia-500');
                 btn.innerHTML = '<i class="fa-solid fa-hashtag"></i> ซ่อนตัวเลข';
@@ -519,10 +524,7 @@
                 btn.classList.replace('bg-fuchsia-500', 'bg-fuchsia-600');
                 btn.innerHTML = '<i class="fa-solid fa-hashtag"></i> แสดงตัวเลข';
             }
-            
-            Object.values(charts).forEach(chart => {
-                if (chart) chart.update();
-            });
+            Object.values(charts).forEach(chart => { if (chart) chart.update(); });
         }
 
         const sheetUrlProd = "https://docs.google.com/spreadsheets/d/1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ/export?format=csv&gid=483689587";
@@ -532,9 +534,9 @@
         let charts = {};
 
         const colors = {
-            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },    
+            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   
             bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  
-            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }    
+            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   
         };
 
         const fpStartDate = flatpickr("#startDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
@@ -552,7 +554,6 @@
         function parseDateString(dateStr) {
             if (!dateStr) return 0;
             let cleanStr = String(dateStr).replace(/[\uFEFF\r\n]/g, '').replace(/"/g, '').trim();
-
             if (/^\d{4}-\d{2}-\d{2}/.test(cleanStr)) {
                 let parts = cleanStr.split('-');
                 let year = parseInt(parts[0], 10);
@@ -560,60 +561,39 @@
                 let day = parseInt(parts[2].substring(0, 2), 10);
                 return new Date(year, month, day).getTime();
             }
-
             const thaiMonths = {
                 "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4, "พ.ค.": 5, "มิ.ย.": 6,
                 "ก.ค.": 7, "ส.ค.": 8, "ก.ย.": 9, "ต.ค.": 10, "พ.ย.": 11, "ธ.ค.": 12,
                 "มกราคม": 1, "กุมภาพันธ์": 2, "มีนาคม": 3, "เมษายน": 4, "พฤษภาคม": 5, "มิถุนายน": 6,
                 "กรกฎาคม": 7, "สิงหาคม": 8, "กันยายน": 9, "ตุลาคม": 10, "พฤศจิกายน": 11, "ธันวาคม": 12
             };
-
             for (let m in thaiMonths) {
                 if (cleanStr.includes(m)) {
                     cleanStr = cleanStr.replace(m, "/" + thaiMonths[m] + "/");
                 }
             }
-
             cleanStr = cleanStr.replace(/\s+/g, '/').replace(/-+/g, '/').replace(/\/+/g, '/');
             const parts = cleanStr.split('/');
-            
             if (parts.length >= 2) {
                 let p0 = parseInt(parts[0], 10);
                 let p1 = parseInt(parts[1], 10);
                 let day, month, year;
-
                 if (parts.length === 2) {
                     year = new Date().getFullYear();
-                    if (p0 > 12) {
-                        day = p0; month = p1 - 1;
-                    } else {
-                        day = p0; month = p1 - 1; 
-                    }
+                    if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p0; month = p1 - 1; }
                 } else {
                     let p2 = parseInt(parts[2].substring(0, 4), 10);
-                    if (p0 > 1000) { 
-                        year = p0; month = p1 - 1; day = p2;
-                    } else { 
+                    if (p0 > 1000) { year = p0; month = p1 - 1; day = p2; } else { 
                         year = p2;
-                        if (p1 > 12) { 
-                            day = p1; month = p0 - 1;
-                        } else if (p0 > 12) { 
-                            day = p0; month = p1 - 1;
-                        } else { 
-                            day = p0; month = p1 - 1;
-                        }
+                        if (p1 > 12) { day = p1; month = p0 - 1; } else if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p0; month = p1 - 1; }
                     }
                 }
-
                 if (year > 2500) year -= 543;
                 if (year < 100) year += 2000;
-
                 return new Date(year, month, day).getTime();
             }
-
             let d = new Date(dateStr);
             if (!isNaN(d.getTime())) return d.getTime();
-
             return 0;
         }
 
@@ -625,10 +605,19 @@
             }
 
             allData = [];
-            const noCacheUrl = sheetUrlProd + "&_t=" + new Date().getTime() + "_" + Math.random().toString(36).substring(7);
+            const noCacheSheetUrl = sheetUrlProd + "&_t=" + new Date().getTime() + "_" + Math.random().toString(36).substring(7);
+            
+            // 🚨 แก้ปัญหา Failed to fetch (CORS Error) 
+            // โดยการใช้ CORS Proxy ผ่าน allorigins เพื่อให้ดึงข้อมูลจาก Google Sheets ผ่าน file:/// ได้
+            const fetchUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(noCacheSheetUrl);
 
-            fetch(noCacheUrl)
-            .then(res => res.text())
+            fetch(fetchUrl)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("เกิดข้อผิดพลาดเครือข่าย หรือ Google Sheets ไม่เปิดเป็นสาธารณะ (CORS/Proxy Error)");
+                }
+                return res.text();
+            })
             .then(csvProd => {
                 if (csvProd.toLowerCase().includes("<html") || csvProd.toLowerCase().includes("sign in")) {
                     alert("🚨 ระบบถูกบล็อก ไม่สามารถเข้าถึงข้อมูลได้!\n\nกรุณาตรวจสอบการแชร์ Google Sheets");
@@ -657,41 +646,35 @@
 
                     let mix_col = header.findIndex(x => x.includes('ต้นทุน') && (x.includes('ผสม') || x.includes('รวม') || x.includes('total')));
                     if (mix_col === -1) mix_col = header.findIndex(x => x.includes('ต้นทุน'));
-
-                    let col = {
-                        yue_u: getIdx('ปริมาณ', 'yue', 4),
-                        yue_o: getIdx('output', 'yue', 6),
-                        yue_sqm: getIdx('sqm', 'yue', -1),
-                        
-                        bhs_u: getIdx('ปริมาณ', 'bhs', 10),
-                        bhs_o: getIdx('output', 'bhs', 12),
-                        bhs_sqm: getIdx('sqm', 'bhs', -1),
-
-                        iso_u: getIdx('ปริมาณ', 'iso', 15),
-                        iso_o: getIdx('output', 'iso', 17),
-                        iso_sqm: getIdx('sqm', 'iso', -1),
-
-                        mix: mix_col,
-                        quality: -1,
-                        
-                        iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
-                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'sf(i)']),
-                        
-                        bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
-                        bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
-                        
-                        yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1 ? findCol(['g/sqm', 'sf(y)']) : findCol(['g/sqm', 'sfy']),
-                        yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1 ? findCol(['g/sqm', 'df(y)']) : findCol(['g/sqm', 'dfy'])
-                    };
-
+                    
                     let qAll = header.findIndex(x => x.includes('คุณภาพ') && (x.includes('all') || x.includes('รวม')));
                     if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') && !x.includes('-'));
                     if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') || x.includes('solid'));
-                    col.quality = qAll;
+
+                    let col = {
+                        yue_u: getIdx('ปริมาณ', 'yue', 4), yue_o: getIdx('output', 'yue', 6), yue_sqm: getIdx('sqm', 'yue', -1), 
+                        bhs_u: getIdx('ปริมาณ', 'bhs', 10), bhs_o: getIdx('output', 'bhs', 12), bhs_sqm: getIdx('sqm', 'bhs', -1),
+                        iso_u: getIdx('ปริมาณ', 'iso', 15), iso_o: getIdx('output', 'iso', 17), iso_sqm: getIdx('sqm', 'iso', -1),
+                        mix: mix_col,
+                        quality: qAll,
+                        
+                        // Original Single / Double (อ่านโดยตรง)
+                        iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
+                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'sf(i)']),
+                        bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
+                        bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
+                        yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1 ? findCol(['g/sqm', 'sf(y)']) : findCol(['g/sqm', 'sfy']),
+                        yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1 ? findCol(['g/sqm', 'df(y)']) : findCol(['g/sqm', 'dfy']),
+
+                        // ข้อมูลใหม่ 3 ชั้น / 5 ชั้น
+                        pct_3ply: findCol(['% 3 ชั้นtotal']) !== -1 ? findCol(['% 3 ชั้นtotal']) : (findCol(['% 3 ชั้น']) !== -1 ? findCol(['% 3 ชั้น']) : -1),
+                        pct_5ply: findCol(['% 5 ชั้นtotal']) !== -1 ? findCol(['% 5 ชั้นtotal']) : (findCol(['% 5 ชั้น']) !== -1 ? findCol(['% 5 ชั้น']) : -1),
+                        sf_glue_kg: findCol(['ปริมาณ', 'sf']) !== -1 ? findCol(['ปริมาณ', 'sf']) : (findCol(['กาว', 'sf', 'kg']) !== -1 ? findCol(['กาว', 'sf', 'kg']) : findCol(['sf', 'kg'])),
+                        df_glue_kg: findCol(['ปริมาณ', 'df']) !== -1 ? findCol(['ปริมาณ', 'df']) : (findCol(['กาว', 'df', 'kg']) !== -1 ? findCol(['กาว', 'df', 'kg']) : findCol(['df', 'kg']))
+                    };
 
                     rows.forEach((r, idx) => {
                         if (idx === 0) return;
-
                         const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
                         if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total') || c[0] === '') return;
 
@@ -708,9 +691,17 @@
                             iso_usage: parseNum(c[col.iso_u]), iso_out: parseNum(c[col.iso_o]), iso_sqm: col.iso_sqm !== -1 ? parseNum(c[col.iso_sqm]) : 0,
                             mix_cost: col.mix !== -1 ? parseNum(c[col.mix]) : 0,
                             quality: col.quality !== -1 ? parseNum(c[col.quality]) : 0,
+                            
+                            // เก็บข้อมูล Single/Double เดิม
                             iso_sf: col.iso_sf_g !== -1 ? parseNum(c[col.iso_sf_g]) : 0, iso_df: col.iso_df_g !== -1 ? parseNum(c[col.iso_df_g]) : 0,
                             bhs_sf: col.bhs_sf_g !== -1 ? parseNum(c[col.bhs_sf_g]) : 0, bhs_df: col.bhs_df_g !== -1 ? parseNum(c[col.bhs_df_g]) : 0,
-                            yue_sf: col.yue_sf_g !== -1 ? parseNum(c[col.yue_sf_g]) : 0, yue_df: col.yue_df_g !== -1 ? parseNum(c[col.yue_df_g]) : 0
+                            yue_sf: col.yue_sf_g !== -1 ? parseNum(c[col.yue_sf_g]) : 0, yue_df: col.yue_df_g !== -1 ? parseNum(c[col.yue_df_g]) : 0,
+
+                            // เก็บข้อมูลใหม่ 3 ชั้น/5 ชั้น
+                            sf_glue: col.sf_glue_kg !== -1 ? parseNum(c[col.sf_glue_kg]) : 0,
+                            df_glue: col.df_glue_kg !== -1 ? parseNum(c[col.df_glue_kg]) : 0,
+                            pct_3ply: col.pct_3ply !== -1 ? parseFloat(String(c[col.pct_3ply]).replace('%', '')) : 0,
+                            pct_5ply: col.pct_5ply !== -1 ? parseFloat(String(c[col.pct_5ply]).replace('%', '')) : 0
                         });
                     });
                 }
@@ -723,13 +714,11 @@
                 }
 
                 allData.sort((a, b) => a.timestamp - b.timestamp);
-                
                 document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
 
                 if (allData.length > 0) {
                     const minDate = new Date(allData[0].timestamp);
                     const maxDate = new Date(allData[allData.length - 1].timestamp);
-
                     if (fpStartDate.selectedDates.length === 0) fpStartDate.setDate(minDate);
                     fpEndDate.setDate(maxDate);
                 }
@@ -740,6 +729,7 @@
             }).catch(err => {
                 console.error(err);
                 alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + err.message);
+                document.getElementById('dataStatus').innerText = "❌ ไม่สามารถโหลดข้อมูลได้";
                 resetBtnState();
             });
 
@@ -751,9 +741,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-        });
+        document.addEventListener('DOMContentLoaded', () => { loadData(); });
 
         function applyFilterLogic() {
             let startTimestamp = 0;
@@ -778,68 +766,43 @@
         function applyMonthFilter() {
             const monthVal = document.getElementById('monthFilter').value;
             if (!monthVal) return;
-
             const [year, month] = monthVal.split('-');
             const firstDay = new Date(year, parseInt(month) - 1, 1);
             const lastDay = new Date(year, parseInt(month), 0);
-
             fpStartDate.setDate(firstDay);
             fpEndDate.setDate(lastDay);
-
             if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
             if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
             if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
-
             applyFilterLogic();
         }
 
         function applyWeekFilter() {
             let startWStr = document.getElementById('startWeekNum').value;
             let endWStr = document.getElementById('endWeekNum').value;
-            
             let startW = parseInt(startWStr);
             let endW = parseInt(endWStr);
 
             if (!startW && !endW) return;
-            
-            if (startW && !endW) {
-                endW = startW;
-                document.getElementById('endWeekNum').value = startW;
-            }
-            if (!startW && endW) {
-                startW = endW;
-                document.getElementById('startWeekNum').value = endW;
-            }
-
-            if (startW > endW) {
-                let temp = startW;
-                startW = endW;
-                endW = temp;
-            }
+            if (startW && !endW) { endW = startW; document.getElementById('endWeekNum').value = startW; }
+            if (!startW && endW) { startW = endW; document.getElementById('startWeekNum').value = endW; }
+            if (startW > endW) { let temp = startW; startW = endW; endW = temp; }
 
             let yearVal = parseInt(document.getElementById('weekYear').value);
             let year = yearVal;
-            
             if (!year || isNaN(year)) {
                 year = new Date().getFullYear();
-                if (fpEndDate.selectedDates.length > 0) {
-                    year = fpEndDate.selectedDates[0].getFullYear();
-                }
-                if (document.getElementById('weekYear')) {
-                    document.getElementById('weekYear').value = year;
-                }
+                if (fpEndDate.selectedDates.length > 0) { year = fpEndDate.selectedDates[0].getFullYear(); }
+                if (document.getElementById('weekYear')) { document.getElementById('weekYear').value = year; }
             }
 
             const startDate = getDateOfWeek(startW, year);
             const endDate = getDateOfWeek(endW, year);
             endDate.setDate(endDate.getDate() + 6); 
-
             fpStartDate.setDate(startDate);
             fpEndDate.setDate(endDate);
-            
             if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'weekly';
             if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
-
             applyFilterLogic();
         }
 
@@ -850,7 +813,6 @@
             if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
             if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
             if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
-            
             if (allData.length > 0) {
                 fpStartDate.setDate(new Date(allData[0].timestamp));
                 fpEndDate.setDate(new Date(allData[allData.length - 1].timestamp));
@@ -890,7 +852,6 @@
                         link.download = `Glue_Dashboard_Full_${dateStr}.png`;
                         link.href = canvas.toDataURL('image/png');
                         link.click();
-
                         document.body.removeChild(wrapper);
                         btn.innerHTML = originalContent;
                         btn.disabled = false;
@@ -907,10 +868,7 @@
         function renderTargetPct(elementId, actual, target, isLessBetter, isPercentageMetric = false) {
             const el = document.getElementById(elementId);
             if (!el) return;
-            if (actual === 0 || isNaN(actual)) {
-                el.innerHTML = "";
-                return;
-            }
+            if (actual === 0 || isNaN(actual)) { el.innerHTML = ""; return; }
             
             const diff = actual - target;
             let displayVal = "";
@@ -943,13 +901,19 @@
                 mix_sum: 0, mix_count: 0 
             };
 
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            
+            // ตัวแปรสะสมสำหรับ Single / Double เดิม
+            let sf_total = 0, sf_count = 0;
+            let df_total = 0, df_count = 0;
             let mc_sf_sum = { iso: 0, bhs: 0, yue: 0 }, mc_sf_count = { iso: 0, bhs: 0, yue: 0 };
             let mc_df_sum = { iso: 0, bhs: 0, yue: 0 }, mc_df_count = { iso: 0, bhs: 0, yue: 0 };
 
-            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
-            
-            let sf_total = 0, sf_count = 0;
-            let df_total = 0, df_count = 0;
+            // ตัวแปรสะสมสำหรับ 3 ชั้น และ 5 ชั้น ใหม่
+            let sum_sqm_3ply = 0;
+            let sum_sqm_5ply = 0;
+            let sum_glue_sf = 0;
+            let sum_glue_df = 0;
 
             filteredData.forEach(d => {
                 let daily_iso_cost = d.iso_usage * d.mix_cost;
@@ -963,6 +927,7 @@
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
                 if (d.mix_cost > 0) { sum.mix_sum += d.mix_cost; sum.mix_count++; } 
                 
+                // --- ส่วนการคำนวณแบบเดิม (Single/Double) ---
                 let d_sf = 0;
                 let d_df = 0;
 
@@ -998,11 +963,27 @@
                 if (d.bhs_df > 0) { mc_df_sum.bhs += d.bhs_df; mc_df_count.bhs++; }
                 if (d.yue_sf > 0) { mc_sf_sum.yue += d.yue_sf; mc_sf_count.yue++; }
                 if (d.yue_df > 0) { mc_df_sum.yue += d.yue_df; mc_df_count.yue++; }
+
+                // --- ส่วนการคำนวณแบบใหม่ (3 ชั้น/5 ชั้น) ---
+                let daily_sqm_calc = 0;
+                if (mcFilter === 'all') daily_sqm_calc = d.iso_sqm + d.bhs_sqm + d.yue_sqm;
+                else if (mcFilter === 'iso') daily_sqm_calc = d.iso_sqm;
+                else if (mcFilter === 'bhs') daily_sqm_calc = d.bhs_sqm;
+                else if (mcFilter === 'yue') daily_sqm_calc = d.yue_sqm;
+
+                let daily_sqm_3ply = daily_sqm_calc * (d.pct_3ply / 100);
+                let daily_sqm_5ply = daily_sqm_calc * (d.pct_5ply / 100);
+
+                sum_sqm_3ply += daily_sqm_3ply;
+                sum_sqm_5ply += daily_sqm_5ply;
+                sum_glue_sf += d.sf_glue;
+                sum_glue_df += d.df_glue;
             });
 
             const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
             const groups = {};
 
+            // สำหรับวาดกราฟ Trend (แนวโน้ม) 
             filteredData.forEach(d => {
                 const groupInfo = getGroupKeyAndLabel(d.timestamp, timeMode);
                 const key = groupInfo.key;
@@ -1015,9 +996,13 @@
                         bhs_cost: 0, bhs_out: 0, bhs_usage: 0, bhs_sqm: 0,
                         yue_cost: 0, yue_out: 0, yue_usage: 0, yue_sqm: 0,
                         quality_sum: 0, quality_count: 0,
-                        sf_sum: 0, sf_count: 0,
-                        df_sum: 0, df_count: 0,
-                        mix_sum: 0, mix_count: 0 
+                        mix_sum: 0, mix_count: 0,
+                        
+                        sf_sum: 0, sf_count: 0, // สำหรับ Single เดิม
+                        df_sum: 0, df_count: 0, // สำหรับ Double เดิม
+                        
+                        sqm_3ply: 0, sqm_5ply: 0, // สำหรับ 3ชั้น/5ชั้น ใหม่
+                        glue_sf: 0, glue_df: 0
                     };
                 }
 
@@ -1031,13 +1016,25 @@
                 g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm; g.yue_cost += d_yue_cost;
 
                 if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
+                if (d.mix_cost > 0) { g.mix_sum += d.mix_cost; g.mix_count++; } 
+
                 if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
                 if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
-                if (d.mix_cost > 0) { g.mix_sum += d.mix_cost; g.mix_count++; } 
+
+                // คำนวณแบบรายแกน X กราฟ สำหรับ 3ชั้น / 5ชั้น
+                let d_sqm_group = 0;
+                if (mcFilter === 'all') d_sqm_group = d.iso_sqm + d.bhs_sqm + d.yue_sqm;
+                else if (mcFilter === 'iso') d_sqm_group = d.iso_sqm;
+                else if (mcFilter === 'bhs') d_sqm_group = d.bhs_sqm;
+                else if (mcFilter === 'yue') d_sqm_group = d.yue_sqm;
+
+                g.sqm_3ply += d_sqm_group * (d.pct_3ply / 100);
+                g.sqm_5ply += d_sqm_group * (d.pct_5ply / 100);
+                g.glue_sf += d.sf_glue;
+                g.glue_df += d.df_glue;
             });
 
             let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
-
             let rawTotalUsage = 0, rawTotalOutput = 0, rawTotalCost = 0, totalSqm = 0;
 
             if (mcFilter === 'all') {
@@ -1055,7 +1052,6 @@
 
             let dispTotalCost = rawTotalCost;
             const costNoteEl = document.getElementById('costNote');
-            
             costNoteEl.innerText = "คำนวณจาก: ปริมาณการใช้ × ต้นทุนผสมกาว";
             costNoteEl.className = "kpi-sub text-emerald-400/80 font-semibold mt-1";
 
@@ -1065,81 +1061,62 @@
             const dispMixCost = parseFloat(trueMixCost.toFixed(3)); 
 
             const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
-            
             const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
             const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
             
+            // การคำนวณ Single/Double แบบเดิม
             let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
             let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
+
+            // การคำนวณ 3ชั้น/5ชั้น แบบใหม่ (นำ กาว SF/DF คูณ 1000 หาร พื้นที่)
+            let avgGramSqm3Ply = sum_sqm_3ply > 0 ? (sum_glue_sf * 1000) / sum_sqm_3ply : 0;
+            let avgGramSqm5Ply = sum_sqm_5ply > 0 ? (sum_glue_df * 1000) / sum_sqm_5ply : 0;
 
             const avgGramSqm = (avgSingleG > 0 || avgDoubleG > 0) 
                                     ? (avgSingleG + avgDoubleG) 
                                     : (totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0);
 
             const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
-            
-            const getMcGSqm = (mc) => {
-                let sf_avg = mc_sf_count[mc] > 0 ? mc_sf_sum[mc] / mc_sf_count[mc] : 0;
-                let df_avg = mc_df_count[mc] > 0 ? mc_df_sum[mc] / mc_df_count[mc] : 0;
-                let total = sf_avg + df_avg;
-                return total > 0 ? total : safeDiv(sum[`${mc}_usage`], sum[`${mc}_sqm`]) * 1000;
-            };
-
             const kpi = {
-                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: getMcGSqm('iso') },
-                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: getMcGSqm('bhs') },
-                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: getMcGSqm('yue') }
+                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: safeDiv(sum.iso_usage, sum.iso_sqm) * 1000 },
+                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: safeDiv(sum.bhs_usage, sum.bhs_sqm) * 1000 },
+                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: safeDiv(sum.yue_usage, sum.yue_sqm) * 1000 }
             };
 
             const dispRatio = parseFloat(avgRatio.toFixed(3));
             const dispGramSqm = parseFloat(avgGramSqm.toFixed(3));
             const dispKgOutput = parseFloat(avgKgOutput.toFixed(3));
             const dispQuality = parseFloat(avgQuality.toFixed(3));
+            
             const dispSingleG = parseFloat(avgSingleG.toFixed(3));
             const dispDoubleG = parseFloat(avgDoubleG.toFixed(3));
+            const disp3PlyG = parseFloat(avgGramSqm3Ply.toFixed(3));
+            const disp5PlyG = parseFloat(avgGramSqm5Ply.toFixed(3));
 
-            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม.
-            // เรทราคา = ค่า "เฉลี่ย ต้นทุนผสมกาว" จาก KPI ด้านบน
-            const MIX_GLUE_RATE = dispMixCost;
+            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม. (อิงเรท 4.386)
+            const FIXED_RATE = 4.386;
+            const singleBaht = (dispSingleG / 1000) * FIXED_RATE;
+            const doubleBaht = (dispDoubleG / 1000) * FIXED_RATE;
+            const ply3Baht = (disp3PlyG / 1000) * FIXED_RATE;
+            const ply5Baht = (disp5PlyG / 1000) * FIXED_RATE;
 
-            // คำนวณส่วนต่างจาก Target: Actual - Target
-            // ค่าติดลบ = ใช้น้อยกว่า Target (ประหยัด)
-            // ค่าบวก = ใช้เกิน Target
-            const SINGLE_TARGET_G = 14.710;
-            const DOUBLE_TARGET_G = 18.310;
-            const singleDiffG = dispSingleG - SINGLE_TARGET_G;
-            const doubleDiffG = dispDoubleG - DOUBLE_TARGET_G;
-            const totalDiffG = singleDiffG + doubleDiffG;
-
-            // แปลงส่วนต่าง g/Sqm เป็น kg/Sqm และคิดเป็นต้นทุนส่วนต่าง
-            const singleKg = singleDiffG / 1000;
-            const singleBaht = singleKg * MIX_GLUE_RATE;
-            const doubleKg = doubleDiffG / 1000;
-            const doubleBaht = doubleKg * MIX_GLUE_RATE;
-            const totalKg = totalDiffG / 1000;
-            const totalBaht = totalKg * MIX_GLUE_RATE;
-
-            document.getElementById('tblRateSingle').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
-            document.getElementById('tblRateDouble').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
-            document.getElementById('tblRateTotal').innerText = "× " + MIX_GLUE_RATE.toFixed(3);
-            const glueCostRateNoteEl = document.getElementById('glueCostRateNote');
-            if (glueCostRateNoteEl) {
-                glueCostRateNoteEl.innerText = "เรทปัจจุบัน = ฿" + MIX_GLUE_RATE.toFixed(3) + " / กก. (จาก KPI เฉลี่ยต้นทุนผสมกาว)";
-            }
-
-            document.getElementById('tblSingleG').innerText = singleDiffG.toFixed(3);
-            document.getElementById('tblSingleKg').innerText = singleKg.toFixed(6);
+            document.getElementById('tblSingleG').innerText = dispSingleG.toFixed(3);
+            document.getElementById('tblSingleKg').innerText = (dispSingleG / 1000).toFixed(6);
             document.getElementById('tblSingleBaht').innerText = "฿" + singleBaht.toFixed(4);
 
-            document.getElementById('tblDoubleG').innerText = doubleDiffG.toFixed(3);
-            document.getElementById('tblDoubleKg').innerText = doubleKg.toFixed(6);
+            document.getElementById('tblDoubleG').innerText = dispDoubleG.toFixed(3);
+            document.getElementById('tblDoubleKg').innerText = (dispDoubleG / 1000).toFixed(6);
             document.getElementById('tblDoubleBaht').innerText = "฿" + doubleBaht.toFixed(4);
 
-            document.getElementById('tblTotalG').innerText = totalDiffG.toFixed(3);
-            document.getElementById('tblTotalKg').innerText = totalKg.toFixed(6);
-            document.getElementById('tblTotalBaht').innerText = "฿" + totalBaht.toFixed(4);
+            document.getElementById('tbl3PlyG').innerText = disp3PlyG.toFixed(3);
+            document.getElementById('tbl3PlyKg').innerText = (disp3PlyG / 1000).toFixed(6);
+            document.getElementById('tbl3PlyBaht').innerText = "฿" + ply3Baht.toFixed(4);
 
-            // แสดงผลขึ้นหน้าจอ KPI Cards ปกติ
+            document.getElementById('tbl5PlyG').innerText = disp5PlyG.toFixed(3);
+            document.getElementById('tbl5PlyKg').innerText = (disp5PlyG / 1000).toFixed(6);
+            document.getElementById('tbl5PlyBaht').innerText = "฿" + ply5Baht.toFixed(4);
+
+            // แสดงผลขึ้นหน้าจอ KPI Cards
             document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
@@ -1199,6 +1176,10 @@
             if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.310, true);
             else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
 
+            // กล่อง KPI 3 ชั้น 5 ชั้น
+            document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
+            document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
+
             const kpiYueMixEl = document.getElementById('kpiYueMix');
             const cardYueMixEl = document.getElementById('cardYueMix');
             const iconYueMixEl = document.getElementById('iconYueMix');
@@ -1229,18 +1210,21 @@
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
-                // กราฟแท่งใหม่ บาท/ตรม. Single vs Double
-                updateBahtSqmTypeChart(singleBaht, doubleBaht);
-                updateGlueCostBySqmChart(singleBaht, doubleBaht, totalSqm);
-
+                // กราฟแท่งใหม่ บาท/ตรม. (แสดงครบทั้ง 4 แบบ)
+                updateBahtSqmTypeChart(singleBaht, doubleBaht, ply3Baht, ply5Baht);
 
                 updateTrendRatioChart(trendData);
                 updateTrendGramSqmChart(trendData);
                 updateTrendKgOutputChart(trendData);
                 updateTrendQualityChart(trendData);
                 updateTrendYueMixChart(trendData);
+                
+                // กราฟแนวโน้มเดิม
                 updateTrendGramSqmSingleChart(trendData);
                 updateTrendGramSqmDoubleChart(trendData);
+                // กราฟแนวโน้มใหม่
+                updateTrendGramSqm3PlyChart(trendData);
+                updateTrendGramSqm5PlyChart(trendData);
 
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
@@ -1251,70 +1235,7 @@
             try { updateSavingGauge(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Gauge error:", error); }
         }
 
-        // ฟังก์ชันวาดกราฟต้นทุนรวมตามพื้นที่ผลิต
-        // SF = บาท/ตรม. × Sqm, DF = บาท/ตรม. × Sqm
-        function updateGlueCostBySqmChart(singleBahtPerSqm, doubleBahtPerSqm, totalSqm) {
-            const canvas = document.getElementById('barGlueCostBySqm');
-            if (!canvas) return;
-            if (charts['barGlueCostBySqm']) charts['barGlueCostBySqm'].destroy();
-
-            const sfCost = (Number(singleBahtPerSqm) || 0) * (Number(totalSqm) || 0);
-            const dfCost = (Number(doubleBahtPerSqm) || 0) * (Number(totalSqm) || 0);
-            const totalCost = sfCost + dfCost;
-
-            charts['barGlueCostBySqm'] = new Chart(canvas.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['SF', 'DF', 'รวม'],
-                    datasets: [{
-                        label: 'ต้นทุนรวม (บาท)',
-                        data: [sfCost, dfCost, totalCost],
-                        backgroundColor: [
-                            'rgba(249, 115, 22, 0.65)',
-                            'rgba(99, 102, 241, 0.65)',
-                            'rgba(16, 185, 129, 0.65)'
-                        ],
-                        borderColor: ['#f97316', '#6366f1', '#10b981'],
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => {
-                                    const value = Number(ctx.raw) || 0;
-                                    const rate = ctx.dataIndex === 0 ? singleBahtPerSqm
-                                               : ctx.dataIndex === 1 ? doubleBahtPerSqm
-                                               : (Number(singleBahtPerSqm) || 0) + (Number(doubleBahtPerSqm) || 0);
-                                    return [
-                                        ` ฿${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`,
-                                        ` ${Number(rate).toFixed(4)} ฿/ตรม. × ${Number(totalSqm).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Sqm`
-                                    ];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: {
-                                callback: (value) => '฿' + Number(value).toLocaleString('en-US')
-                            }
-                        },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-        }
-
-        // ฟังก์ชันวาดกราฟบาท/ตรม. แยก Single / Double
-        function updateBahtSqmTypeChart(singleVal, doubleVal) {
+        function updateBahtSqmTypeChart(singleVal, doubleVal, ply3Val, ply5Val) {
             const canvas = document.getElementById('barBahtSqmType');
             if (!canvas) return;
             if (charts['barBahtSqmType']) charts['barBahtSqmType'].destroy();
@@ -1323,12 +1244,12 @@
             charts['barBahtSqmType'] = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Single', 'Double', 'รวม (Total)'],
+                    labels: ['Single', 'Double', '3 ชั้น (3 Ply)', '5 ชั้น (5 Ply)'],
                     datasets: [{
                         label: 'บาท / ตรม.',
-                        data: [singleVal, doubleVal, singleVal + doubleVal],
-                        backgroundColor: ['rgba(249, 115, 22, 0.6)', 'rgba(99, 102, 241, 0.6)', 'rgba(16, 185, 129, 0.6)'],
-                        borderColor: ['#f97316', '#6366f1', '#10b981'],
+                        data: [singleVal, doubleVal, ply3Val, ply5Val],
+                        backgroundColor: ['rgba(249, 115, 22, 0.6)', 'rgba(99, 102, 241, 0.6)', 'rgba(132, 204, 22, 0.6)', 'rgba(217, 70, 239, 0.6)'],
+                        borderColor: ['#f97316', '#6366f1', '#84cc16', '#d946ef'],
                         borderWidth: 2,
                         borderRadius: 8
                     }]
@@ -1412,10 +1333,7 @@
             
             const labels = trendData.map(d => d.label);
             const calcGramSqm = (g, mc) => {
-                let sf_avg = g[`${mc}_sf_count`] > 0 ? g[`${mc}_sf_sum`] / g[`${mc}_sf_count`] : 0;
-                let df_avg = g[`${mc}_df_count`] > 0 ? g[`${mc}_df_sum`] / g[`${mc}_df_count`] : 0;
-                let total = sf_avg + df_avg;
-                return total > 0 ? total : (g[`${mc}_sqm`] > 0 ? ((g[`${mc}_usage`] / g[`${mc}_sqm`]) * 1000) : null);
+                return (g[`${mc}_sqm`] > 0) ? ((g[`${mc}_usage`] / g[`${mc}_sqm`]) * 1000) : null;
             };
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
@@ -1494,6 +1412,7 @@
             });
         }
 
+        // กราฟแนวโน้มเดิม (Single/Double)
         function updateTrendGramSqmSingleChart(trendData) {
             const canvas = document.getElementById('trendGramSqmSingle');
             if (!canvas) return;
@@ -1505,7 +1424,7 @@
 
             charts['trendGramSqmSingle'] = new Chart(ctx, {
                 type: 'line',
-                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. Single', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. (Single)', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1521,7 +1440,40 @@
 
             charts['trendGramSqmDouble'] = new Chart(ctx, {
                 type: 'line',
-                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. Double', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. (Double)', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        // กราฟแนวโน้มใหม่ (3 ชั้น / 5 ชั้น)
+        function updateTrendGramSqm3PlyChart(trendData) {
+            const canvas = document.getElementById('trendGramSqm3Ply');
+            if (!canvas) return;
+            if (charts['trendGramSqm3Ply']) charts['trendGramSqm3Ply'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.sqm_3ply > 0 ? ((d.glue_sf * 1000) / d.sqm_3ply) : null);
+
+            charts['trendGramSqm3Ply'] = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. (3 ชั้น)', data: data, borderColor: '#84cc16', backgroundColor: 'rgba(132, 204, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqm5PlyChart(trendData) {
+            const canvas = document.getElementById('trendGramSqm5Ply');
+            if (!canvas) return;
+            if (charts['trendGramSqm5Ply']) charts['trendGramSqm5Ply'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.sqm_5ply > 0 ? ((d.glue_df * 1000) / d.sqm_5ply) : null);
+
+            charts['trendGramSqm5Ply'] = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: [{ label: 'กรัม/ตรม. (5 ชั้น)', data: data, borderColor: '#d946ef', backgroundColor: 'rgba(217, 70, 239, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true }] },
                 options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
             });
         }
@@ -1656,3 +1608,4 @@
 </body>
 
 </html>
+```eof
