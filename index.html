@@ -260,7 +260,7 @@
                 <div class="kpi-sub">Target: 5.090 ฿ (น้อย=ดี)</div>
             </div>
 
-            <!-- แบบดั้งเดิม Single -->
+            <!-- แบบ Single -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-orange-500/50">
                 <div class="absolute top-4 right-4 text-orange-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Single)</div>
@@ -271,7 +271,7 @@
                 <div class="kpi-sub">g/Sqm Target: 14.710</div>
             </div>
 
-            <!-- แบบดั้งเดิม Double -->
+            <!-- แบบ Double -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-indigo-500/50">
                 <div class="absolute top-4 right-4 text-indigo-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (Double)</div>
@@ -282,24 +282,24 @@
                 <div class="kpi-sub">g/Sqm Target: 18.310</div>
             </div>
 
-            <!-- แบบใหม่ 3 ชั้น (ดึงจากชีตตรงๆ) -->
+            <!-- แบบ 3 ชั้น (3 Ply) -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
                 <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (3 ชั้น)</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiGramSqm3Ply" class="kpi-value text-lime-400">--</div>
                 </div>
-                <div class="kpi-sub text-[10px]">ดึงข้อมูลจากชีต (g/Sqm 3 Ply)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">คิดจากกาว SF & พื้นที่ 3 ชั้น</div>
             </div>
 
-            <!-- แบบใหม่ 5 ชั้น (ดึงจากชีตตรงๆ) -->
+            <!-- แบบ 5 ชั้น (5 Ply) -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-layer-group text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
                 <div class="flex items-center gap-2 mt-2">
                     <div id="kpiGramSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
                 </div>
-                <div class="kpi-sub text-[10px]">ดึงข้อมูลจากชีต (g/Sqm 5 Ply)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">คิดจากกาว DF & พื้นที่ 5 ชั้น</div>
             </div>
         </div>
 
@@ -400,7 +400,6 @@
             </div>
         </div>
 
-        <!-- กราฟแนวโน้มใหม่ 3 ชั้น และ 5 ชั้น -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 bg-lime-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-lime-300">📉 แนวโน้ม กรัม/ตรม. (3 ชั้น)</h3>
@@ -549,7 +548,7 @@
 
         const parseNum = (val) => {
             if (!val) return 0;
-            const parsed = parseFloat(String(val).replace(/,/g, ""));
+            const parsed = parseFloat(String(val).replace(/,/g, "").trim());
             return isNaN(parsed) ? 0 : parsed;
         };
 
@@ -582,7 +581,7 @@
                 let day, month, year;
                 if (parts.length === 2) {
                     year = new Date().getFullYear();
-                    if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p0; month = p1 - 1; }
+                    if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p1; month = p0 - 1; }
                 } else {
                     let p2 = parseInt(parts[2].substring(0, 4), 10);
                     if (p0 > 1000) { year = p0; month = p1 - 1; day = p2; } else { 
@@ -624,59 +623,74 @@
                 const rows = csvProd.trim().split("\n");
                 if (rows.length > 1) {
                     let header = rows[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim().toLowerCase());
+                    let headerClean = header.map(s => s.replace(/[^a-z0-9]/g, ''));
                     
                     console.log("📌 Header Sheet:", header);
 
-                    let getIdx = (k1, k2, defaultIdx) => {
-                        let idx = header.findIndex(x => x.includes(k1) && x.includes(k2));
+                    let findColByName = (keywords, defaultIdx) => {
+                        let idx = header.findIndex(h => keywords.every(k => h.includes(k.toLowerCase())));
+                        if (idx === -1) {
+                            idx = headerClean.findIndex(hc => keywords.every(k => hc.includes(k.toLowerCase().replace(/[^a-z0-9]/g, ''))));
+                        }
                         return idx !== -1 ? idx : defaultIdx;
                     };
 
-                    let findCol = (keywords) => {
-                        return header.findIndex(h => {
-                            let match = true;
-                            for (let k of keywords) {
-                                if (!h.includes(k.toLowerCase())) match = false;
-                            }
-                            return match;
-                        });
-                    };
-
-                    // ค้นหาคอลัมน์ 3 Ply / 5 Ply ให้ตรงตามภาพ
-                    // ตัวอย่างภาพ: "g/SQM ©3 Ply-B" -> ค้นหาคำว่า 'sqm', '3 ply-b' (หรือ 3ply-b เผื่อเว้นวรรคผิด)
-                    let getPlyColIdx = (ply, mcChar) => {
-                        return header.findIndex(h => h.includes('sqm') && (h.includes(`${ply} ply-${mcChar}`) || h.includes(`${ply}ply-${mcChar}`)));
-                    };
-
-                    let mix_col = header.findIndex(x => x.includes('ต้นทุน') && (x.includes('ผสม') || x.includes('รวม') || x.includes('total')));
-                    if (mix_col === -1) mix_col = header.findIndex(x => x.includes('ต้นทุน'));
-                    
-                    let qAll = header.findIndex(x => x.includes('คุณภาพ') && (x.includes('all') || x.includes('รวม')));
-                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') && !x.includes('-'));
-                    if (qAll === -1) qAll = header.findIndex(x => x.includes('คุณภาพ') || x.includes('solid'));
-
                     let col = {
-                        yue_u: getIdx('ปริมาณ', 'yue', 4), yue_o: getIdx('output', 'yue', 6), yue_sqm: getIdx('sqm', 'yue', -1), 
-                        bhs_u: getIdx('ปริมาณ', 'bhs', 10), bhs_o: getIdx('output', 'bhs', 12), bhs_sqm: getIdx('sqm', 'bhs', -1),
-                        iso_u: getIdx('ปริมาณ', 'iso', 15), iso_o: getIdx('output', 'iso', 17), iso_sqm: getIdx('sqm', 'iso', -1),
-                        mix: mix_col,
-                        quality: qAll,
-                        
-                        // Original Single / Double (อ่านโดยตรง)
-                        iso_sf_g: findCol(['g/sqm', 'sf(i)']) !== -1 ? findCol(['g/sqm', 'sf(i)']) : findCol(['sqm', 'sf(i)']),
-                        iso_df_g: findCol(['g/sqm', 'df(i)']) !== -1 ? findCol(['g/sqm', 'df(i)']) : findCol(['sqm', 'sf(i)']),
-                        bhs_sf_g: findCol(['g/sqm', 'sf(b)']) !== -1 ? findCol(['g/sqm', 'sf(b)']) : findCol(['g/sqm', 'sfb']),
-                        bhs_df_g: findCol(['g/sqm', 'df(b)']) !== -1 ? findCol(['g/sqm', 'df(b)']) : findCol(['g/sqm', 'dfb']),
-                        yue_sf_g: findCol(['g/sqm', 'sf(y)']) !== -1 ? findCol(['g/sqm', 'sf(y)']) : findCol(['g/sqm', 'sfy']),
-                        yue_df_g: findCol(['g/sqm', 'df(y)']) !== -1 ? findCol(['g/sqm', 'df(y)']) : findCol(['g/sqm', 'dfy']),
+                        // Machine basic cols
+                        yue_u: findColByName(['ปริมาณ', 'yue'], 4),
+                        yue_o: findColByName(['output', 'yue'], 6),
+                        yue_sqm: findColByName(['sqm', 'yue'], 27),
 
-                        // คอลัมน์ 3 Ply / 5 Ply ของแต่ละเครื่องตามที่เห็นในภาพเป๊ะๆ
-                        bhs_3p_g: getPlyColIdx(3, 'b'),
-                        bhs_5p_g: getPlyColIdx(5, 'b'),
-                        yue_3p_g: getPlyColIdx(3, 'y'),
-                        yue_5p_g: getPlyColIdx(5, 'y'),
-                        iso_3p_g: getPlyColIdx(3, 'i'),
-                        iso_5p_g: getPlyColIdx(5, 'i')
+                        bhs_u: findColByName(['ปริมาณ', 'bhs'], 10),
+                        bhs_o: findColByName(['output', 'bhs'], 12),
+                        bhs_sqm: findColByName(['sqm', 'bhs'], 26),
+
+                        iso_u: findColByName(['ปริมาณ', 'iso'], 16),
+                        iso_o: findColByName(['output', 'iso'], 18),
+                        iso_sqm: findColByName(['sqm', 'iso'], 25),
+
+                        mix: findColByName(['ต้นทุน', 'total'], 20),
+                        quality: findColByName(['คุณภาพ', 'all'], 33),
+                        
+                        // Original Single / Double (g/Sqm)
+                        iso_sf_g: findColByName(['sf(i)'], 39),
+                        iso_df_g: findColByName(['df(i)'], 41),
+                        bhs_sf_g: findColByName(['sf(b)'], 44),
+                        bhs_df_g: findColByName(['df(b)'], 46),
+                        yue_sf_g: findColByName(['sf(y)'], 49),
+                        yue_df_g: findColByName(['df(y)'], 51),
+
+                        // Usage SF / DF
+                        iso_sf_u: 38,
+                        iso_df_u: 40,
+                        bhs_sf_u: 43,
+                        bhs_df_u: 45,
+                        yue_sf_u: 48,
+                        yue_df_u: 50,
+
+                        // 3 Ply / 5 Ply Sqm
+                        bhs_3p_sqm: findColByName(['3 ply-b'], 53),
+                        bhs_5p_sqm: findColByName(['5 ply-b'], 55),
+                        yue_3p_sqm: findColByName(['3 ply-y'], 57),
+                        yue_5p_sqm: findColByName(['5 ply-y'], 59),
+                        iso_3p_sqm: findColByName(['3 ply-i'], 61),
+                        iso_5p_sqm: findColByName(['5 ply-i'], 63),
+
+                        // 3 Ply / 5 Ply g/Sqm
+                        bhs_3p_g: findColByName(['3', 'ply-b'], 54),
+                        bhs_5p_g: findColByName(['5', 'ply-b'], 56),
+                        yue_3p_g: findColByName(['3', 'ply-y'], 58),
+                        yue_5p_g: findColByName(['5', 'ply-y'], 60),
+                        iso_3p_g: findColByName(['3', 'ply-i'], 62),
+                        iso_5p_g: 64, // ISOWA 5-Ply g/Sqm
+
+                        // Totals 3 Ply / 5 Ply
+                        tot_3p_sqm: 65,
+                        tot_3p_glue: 66,
+                        tot_3p_g: findColByName(['total', '3', 'ply'], 67),
+                        tot_5p_sqm: 68,
+                        tot_5p_glue: 69,
+                        tot_5p_g: findColByName(['total', '5', 'ply'], 70)
                     };
 
                     rows.forEach((r, idx) => {
@@ -690,6 +704,46 @@
                         const dObj = new Date(ts);
                         const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
 
+                        // Extract 3 Ply / 5 Ply values with dynamic computation fallback
+                        let bhs_3p = parseNum(c[col.bhs_3p_g]);
+                        let bhs_5p = parseNum(c[col.bhs_5p_g]);
+                        let yue_3p = parseNum(c[col.yue_3p_g]);
+                        let yue_5p = parseNum(c[col.yue_5p_g]);
+                        let iso_3p = parseNum(c[col.iso_3p_g]);
+                        let iso_5p = parseNum(c[col.iso_5p_g]);
+                        let tot_3p = parseNum(c[col.tot_3p_g]);
+                        let tot_5p = parseNum(c[col.tot_5p_g]);
+
+                        // Fallback computation from usage and Sqm if direct g/Sqm was blank
+                        let b_3p_sqm = parseNum(c[col.bhs_3p_sqm]);
+                        let b_5p_sqm = parseNum(c[col.bhs_5p_sqm]);
+                        let y_3p_sqm = parseNum(c[col.yue_3p_sqm]);
+                        let y_5p_sqm = parseNum(c[col.yue_5p_sqm]);
+                        let i_3p_sqm = parseNum(c[col.iso_3p_sqm]);
+                        let i_5p_sqm = parseNum(c[col.iso_5p_sqm]);
+
+                        let b_sf_u = parseNum(c[col.bhs_sf_u]);
+                        let b_df_u = parseNum(c[col.bhs_df_u]);
+                        let y_sf_u = parseNum(c[col.yue_sf_u]);
+                        let y_df_u = parseNum(c[col.yue_df_u]);
+                        let i_sf_u = parseNum(c[col.iso_sf_u]);
+                        let i_df_u = parseNum(c[col.iso_df_u]);
+
+                        if (bhs_3p === 0 && b_3p_sqm > 0 && b_sf_u > 0) bhs_3p = (b_sf_u / b_3p_sqm) * 1000;
+                        if (bhs_5p === 0 && b_5p_sqm > 0 && b_df_u > 0) bhs_5p = (b_df_u / b_5p_sqm) * 1000;
+                        if (yue_3p === 0 && y_3p_sqm > 0 && y_sf_u > 0) yue_3p = (y_sf_u / y_3p_sqm) * 1000;
+                        if (yue_5p === 0 && y_5p_sqm > 0 && y_df_u > 0) yue_5p = (y_df_u / y_5p_sqm) * 1000;
+                        if (iso_3p === 0 && i_3p_sqm > 0 && i_sf_u > 0) iso_3p = (i_sf_u / i_3p_sqm) * 1000;
+                        if (iso_5p === 0 && i_5p_sqm > 0 && i_df_u > 0) iso_5p = (i_df_u / i_5p_sqm) * 1000;
+
+                        let t_3p_sqm = parseNum(c[col.tot_3p_sqm]);
+                        let t_3p_glue = parseNum(c[col.tot_3p_glue]);
+                        let t_5p_sqm = parseNum(c[col.tot_5p_sqm]);
+                        let t_5p_glue = parseNum(c[col.tot_5p_glue]);
+
+                        if (tot_3p === 0 && t_3p_sqm > 0 && t_3p_glue > 0) tot_3p = (t_3p_glue / t_3p_sqm) * 1000;
+                        if (tot_5p === 0 && t_5p_sqm > 0 && t_5p_glue > 0) tot_5p = (t_5p_glue / t_5p_sqm) * 1000;
+
                         allData.push({
                             dateStr: formattedDate, timestamp: ts,
                             yue_usage: parseNum(c[col.yue_u]), yue_out: parseNum(c[col.yue_o]), yue_sqm: col.yue_sqm !== -1 ? parseNum(c[col.yue_sqm]) : 0, 
@@ -698,18 +752,20 @@
                             mix_cost: col.mix !== -1 ? parseNum(c[col.mix]) : 0,
                             quality: col.quality !== -1 ? parseNum(c[col.quality]) : 0,
                             
-                            // เก็บข้อมูล Single/Double
+                            // Single / Double
                             iso_sf: col.iso_sf_g !== -1 ? parseNum(c[col.iso_sf_g]) : 0, iso_df: col.iso_df_g !== -1 ? parseNum(c[col.iso_df_g]) : 0,
                             bhs_sf: col.bhs_sf_g !== -1 ? parseNum(c[col.bhs_sf_g]) : 0, bhs_df: col.bhs_df_g !== -1 ? parseNum(c[col.bhs_df_g]) : 0,
                             yue_sf: col.yue_sf_g !== -1 ? parseNum(c[col.yue_sf_g]) : 0, yue_df: col.yue_df_g !== -1 ? parseNum(c[col.yue_df_g]) : 0,
 
-                            // เก็บข้อมูล 3 ชั้น / 5 ชั้น (อ่านจากชีตตรงๆ)
-                            iso_3p: col.iso_3p_g !== -1 ? parseNum(c[col.iso_3p_g]) : 0,
-                            iso_5p: col.iso_5p_g !== -1 ? parseNum(c[col.iso_5p_g]) : 0,
-                            bhs_3p: col.bhs_3p_g !== -1 ? parseNum(c[col.bhs_3p_g]) : 0,
-                            bhs_5p: col.bhs_5p_g !== -1 ? parseNum(c[col.bhs_5p_g]) : 0,
-                            yue_3p: col.yue_3p_g !== -1 ? parseNum(c[col.yue_3p_g]) : 0,
-                            yue_5p: col.yue_5p_g !== -1 ? parseNum(c[col.yue_5p_g]) : 0
+                            // 3 Ply / 5 Ply
+                            iso_3p: iso_3p,
+                            iso_5p: iso_5p,
+                            bhs_3p: bhs_3p,
+                            bhs_5p: bhs_5p,
+                            yue_3p: yue_3p,
+                            yue_5p: yue_5p,
+                            tot_3p: tot_3p,
+                            tot_5p: tot_5p
                         });
                     });
                 }
@@ -911,11 +967,9 @@
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             
-            // ตัวแปรสะสมสำหรับ Single / Double
             let sf_total = 0, sf_count = 0;
             let df_total = 0, df_count = 0;
             
-            // ตัวแปรสะสมสำหรับ 3 ชั้น / 5 ชั้น (ใหม่)
             let ply3_total = 0, ply3_count = 0;
             let ply5_total = 0, ply5_count = 0;
 
@@ -931,11 +985,10 @@
                 if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
                 if (d.mix_cost > 0) { sum.mix_sum += d.mix_cost; sum.mix_count++; } 
                 
-                // หาค่าเฉลี่ย Single / Double รายวัน
                 let d_sf = 0;
                 let d_df = 0;
-                let d_3p = 0; // 3 ชั้น
-                let d_5p = 0; // 5 ชั้น
+                let d_3p = 0;
+                let d_5p = 0;
 
                 if (mcFilter === 'all') {
                     let sf_s = 0, sf_c = 0;
@@ -950,18 +1003,27 @@
                     if (d.yue_df > 0) { df_s += d.yue_df; df_c++; }
                     d_df = df_c > 0 ? df_s / df_c : 0;
                     
-                    // คำนวณ 3ชั้น 5ชั้น แบบเดียวกัน
-                    let p3_s = 0, p3_c = 0;
-                    if (d.iso_3p > 0) { p3_s += d.iso_3p; p3_c++; }
-                    if (d.bhs_3p > 0) { p3_s += d.bhs_3p; p3_c++; }
-                    if (d.yue_3p > 0) { p3_s += d.yue_3p; p3_c++; }
-                    d_3p = p3_c > 0 ? p3_s / p3_c : 0;
+                    // 3 Ply for 'All'
+                    if (d.tot_3p > 0) {
+                        d_3p = d.tot_3p;
+                    } else {
+                        let p3_s = 0, p3_c = 0;
+                        if (d.iso_3p > 0) { p3_s += d.iso_3p; p3_c++; }
+                        if (d.bhs_3p > 0) { p3_s += d.bhs_3p; p3_c++; }
+                        if (d.yue_3p > 0) { p3_s += d.yue_3p; p3_c++; }
+                        d_3p = p3_c > 0 ? p3_s / p3_c : 0;
+                    }
 
-                    let p5_s = 0, p5_c = 0;
-                    if (d.iso_5p > 0) { p5_s += d.iso_5p; p5_c++; }
-                    if (d.bhs_5p > 0) { p5_s += d.bhs_5p; p5_c++; }
-                    if (d.yue_5p > 0) { p5_s += d.yue_5p; p5_c++; }
-                    d_5p = p5_c > 0 ? p5_s / p5_c : 0;
+                    // 5 Ply for 'All'
+                    if (d.tot_5p > 0) {
+                        d_5p = d.tot_5p;
+                    } else {
+                        let p5_s = 0, p5_c = 0;
+                        if (d.iso_5p > 0) { p5_s += d.iso_5p; p5_c++; }
+                        if (d.bhs_5p > 0) { p5_s += d.bhs_5p; p5_c++; }
+                        if (d.yue_5p > 0) { p5_s += d.yue_5p; p5_c++; }
+                        d_5p = p5_c > 0 ? p5_s / p5_c : 0;
+                    }
 
                 } else if (mcFilter === 'iso') {
                     d_sf = d.iso_sf; d_df = d.iso_df;
@@ -988,7 +1050,6 @@
             const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
             const groups = {};
 
-            // สำหรับวาดกราฟ Trend (แนวโน้ม) 
             filteredData.forEach(d => {
                 const groupInfo = getGroupKeyAndLabel(d.timestamp, timeMode);
                 const key = groupInfo.key;
@@ -1059,7 +1120,6 @@
             const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
             const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
             
-            // หาค่าเฉลี่ย
             let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
             let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
             let avgGramSqm3Ply = ply3_count > 0 ? (ply3_total / ply3_count) : 0;
@@ -1086,30 +1146,30 @@
             const disp3PlyG = parseFloat(avgGramSqm3Ply.toFixed(3));
             const disp5PlyG = parseFloat(avgGramSqm5Ply.toFixed(3));
 
-            // เติมข้อมูลลงในตารางคำนวณบาท/ตรม. (อิงเรท 4.386)
             const FIXED_RATE = 4.386;
             const singleBaht = (dispSingleG / 1000) * FIXED_RATE;
             const doubleBaht = (dispDoubleG / 1000) * FIXED_RATE;
             const ply3Baht = (disp3PlyG / 1000) * FIXED_RATE;
             const ply5Baht = (disp5PlyG / 1000) * FIXED_RATE;
 
-            document.getElementById('tblSingleG').innerText = dispSingleG.toFixed(3);
-            document.getElementById('tblSingleKg').innerText = (dispSingleG / 1000).toFixed(6);
-            document.getElementById('tblSingleBaht').innerText = "฿" + singleBaht.toFixed(4);
+            // ตารางเปรียบเทียบ
+            document.getElementById('tblSingleG').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
+            document.getElementById('tblSingleKg').innerText = dispSingleG > 0 ? (dispSingleG / 1000).toFixed(6) : "--";
+            document.getElementById('tblSingleBaht').innerText = dispSingleG > 0 ? "฿" + singleBaht.toFixed(4) : "--";
 
-            document.getElementById('tblDoubleG').innerText = dispDoubleG.toFixed(3);
-            document.getElementById('tblDoubleKg').innerText = (dispDoubleG / 1000).toFixed(6);
-            document.getElementById('tblDoubleBaht').innerText = "฿" + doubleBaht.toFixed(4);
+            document.getElementById('tblDoubleG').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
+            document.getElementById('tblDoubleKg').innerText = dispDoubleG > 0 ? (dispDoubleG / 1000).toFixed(6) : "--";
+            document.getElementById('tblDoubleBaht').innerText = dispDoubleG > 0 ? "฿" + doubleBaht.toFixed(4) : "--";
 
-            document.getElementById('tbl3PlyG').innerText = disp3PlyG.toFixed(3);
-            document.getElementById('tbl3PlyKg').innerText = (disp3PlyG / 1000).toFixed(6);
-            document.getElementById('tbl3PlyBaht').innerText = "฿" + ply3Baht.toFixed(4);
+            document.getElementById('tbl3PlyG').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
+            document.getElementById('tbl3PlyKg').innerText = disp3PlyG > 0 ? (disp3PlyG / 1000).toFixed(6) : "--";
+            document.getElementById('tbl3PlyBaht').innerText = disp3PlyG > 0 ? "฿" + ply3Baht.toFixed(4) : "--";
 
-            document.getElementById('tbl5PlyG').innerText = disp5PlyG.toFixed(3);
-            document.getElementById('tbl5PlyKg').innerText = (disp5PlyG / 1000).toFixed(6);
-            document.getElementById('tbl5PlyBaht').innerText = "฿" + ply5Baht.toFixed(4);
+            document.getElementById('tbl5PlyG').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
+            document.getElementById('tbl5PlyKg').innerText = disp5PlyG > 0 ? (disp5PlyG / 1000).toFixed(6) : "--";
+            document.getElementById('tbl5PlyBaht').innerText = disp5PlyG > 0 ? "฿" + ply5Baht.toFixed(4) : "--";
 
-            // แสดงผลขึ้นหน้าจอ KPI Cards
+            // KPI Cards
             document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
@@ -1169,9 +1229,25 @@
             if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.310, true);
             else document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
 
-            // กล่อง KPI 3 ชั้น 5 ชั้น
-            document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
-            document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
+            // 3 Ply / 5 Ply KPI Cards
+            const kpi3pSub = document.getElementById('kpiGramSqm3PlySub');
+            const kpi5pSub = document.getElementById('kpiGramSqm5PlySub');
+
+            if (disp3PlyG > 0) {
+                document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
+                if (kpi3pSub) kpi3pSub.innerText = `คิดจากกาว SF & พื้นที่ 3 ชั้น (${ply3_count} วัน)`;
+            } else {
+                document.getElementById('kpiGramSqm3Ply').innerText = "--";
+                if (kpi3pSub) kpi3pSub.innerText = `ไม่มีข้อมูลในช่วงวันที่เลือก`;
+            }
+
+            if (disp5PlyG > 0) {
+                document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
+                if (kpi5pSub) kpi5pSub.innerText = `คิดจากกาว DF & พื้นที่ 5 ชั้น (${ply5_count} วัน)`;
+            } else {
+                document.getElementById('kpiGramSqm5Ply').innerText = "--";
+                if (kpi5pSub) kpi5pSub.innerText = `ไม่มีข้อมูลในช่วงวันที่เลือก`;
+            }
 
             const kpiYueMixEl = document.getElementById('kpiYueMix');
             const cardYueMixEl = document.getElementById('cardYueMix');
@@ -1203,7 +1279,6 @@
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
-                // กราฟแท่งใหม่ บาท/ตรม. (แสดงครบทั้ง 4 แบบ)
                 updateBahtSqmTypeChart(singleBaht, doubleBaht, ply3Baht, ply5Baht);
 
                 updateTrendRatioChart(trendData);
@@ -1212,10 +1287,8 @@
                 updateTrendQualityChart(trendData);
                 updateTrendYueMixChart(trendData);
                 
-                // กราฟแนวโน้มเดิม
                 updateTrendGramSqmSingleChart(trendData);
                 updateTrendGramSqmDoubleChart(trendData);
-                // กราฟแนวโน้มใหม่
                 updateTrendGramSqm3PlyChart(trendData);
                 updateTrendGramSqm5PlyChart(trendData);
 
@@ -1405,7 +1478,6 @@
             });
         }
 
-        // กราฟแนวโน้มเดิม (Single/Double)
         function updateTrendGramSqmSingleChart(trendData) {
             const canvas = document.getElementById('trendGramSqmSingle');
             if (!canvas) return;
@@ -1438,7 +1510,6 @@
             });
         }
 
-        // กราฟแนวโน้มใหม่ (3 ชั้น / 5 ชั้น) ดึงข้อมูลมาตรงๆ
         function updateTrendGramSqm3PlyChart(trendData) {
             const canvas = document.getElementById('trendGramSqm3Ply');
             if (!canvas) return;
@@ -1601,4 +1672,3 @@
 </body>
 
 </html>
-```eof
