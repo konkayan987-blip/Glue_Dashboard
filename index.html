@@ -244,6 +244,24 @@
                 <div class="kpi-sub">หน่วย: ตารางเมตร (Sqm)</div>
             </div>
 
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
+                <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-ruler-combined text-3xl"></i></div>
+                <div class="kpi-label">พื้นที่ผลิต 3 ชั้น (Sqm)</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalSqm3Ply" class="kpi-value text-lime-400">--</div>
+                </div>
+                <div class="kpi-sub">หน่วย: ตารางเมตร (Sqm)</div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
+                <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-ruler-combined text-3xl"></i></div>
+                <div class="kpi-label">พื้นที่ผลิต 5 ชั้น (Sqm)</div>
+                <div class="flex items-center mt-2">
+                    <div id="kpiTotalSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
+                </div>
+                <div class="kpi-sub">หน่วย: ตารางเมตร (Sqm)</div>
+            </div>
+
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-amber-500/50">
                 <div class="absolute top-4 right-4 text-amber-400 opacity-20"><i class="fa-solid fa-chart-pie text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย ต้นทุน ฿ / Output</div>
@@ -336,7 +354,7 @@
                 <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 14.710 g/Sqm (น้อย=ดี)</div>
             </div>
 
-            <!-- 5 ชั้น (5 Ply) with Target 29.250 -->
+            <!-- 5 ชั้น (5 Ply) with Target 18.310 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
@@ -344,7 +362,7 @@
                     <div id="kpiGramSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
                     <div id="kpiGramSqm5PlyPct"></div>
                 </div>
-                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 29.250 g/Sqm (น้อย=ดี)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 18.310 g/Sqm (น้อย=ดี)</div>
             </div>
         </div>
 
@@ -367,7 +385,10 @@
                         <i class="fa-solid fa-wheat-awn text-amber-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-amber-400 mt-2" id="kpiPriceFlour">--</div>
-                    <div class="text-[10px] text-slate-400 mt-1">เฉลี่ย (฿/กก.)</div>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="text-[10px] text-slate-400">เฉลี่ย (฿/กก.) · Target: ฿20.00</div>
+                        <span id="kpiPriceFlourPct"></span>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900/60 p-4 rounded-xl border border-sky-500/30">
@@ -376,7 +397,10 @@
                         <i class="fa-solid fa-vial text-sky-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-sky-400 mt-2" id="kpiPriceSoda">--</div>
-                    <div class="text-[10px] text-slate-400 mt-1">เฉลี่ย (฿/กก.)</div>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="text-[10px] text-slate-400">เฉลี่ย (฿/กก.) · Target: ฿14.00</div>
+                        <span id="kpiPriceSodaPct"></span>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900/60 p-4 rounded-xl border border-emerald-500/30">
@@ -385,7 +409,10 @@
                         <i class="fa-solid fa-mortar-pestle text-emerald-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-emerald-400 mt-2" id="kpiPriceBorax">--</div>
-                    <div class="text-[10px] text-slate-400 mt-1">เฉลี่ย (฿/กก.)</div>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="text-[10px] text-slate-400">เฉลี่ย (฿/กก.) · Target: ฿24.00</div>
+                        <span id="kpiPriceBoraxPct"></span>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900/60 p-4 rounded-xl border border-purple-500/30">
@@ -394,7 +421,10 @@
                         <i class="fa-solid fa-dna text-purple-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-purple-400 mt-2" id="kpiPriceSynthFlour">--</div>
-                    <div class="text-[10px] text-slate-400 mt-1">เฉลี่ย (฿/กก.)</div>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="text-[10px] text-slate-400">เฉลี่ย (฿/กก.) · Target: ฿33.00</div>
+                        <span id="kpiPriceSynthFlourPct"></span>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900/60 p-4 rounded-xl border border-rose-500/30">
@@ -403,7 +433,10 @@
                         <i class="fa-solid fa-bolt text-rose-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-rose-400 mt-2" id="kpiPriceX2">--</div>
-                    <div class="text-[10px] text-slate-400 mt-1">เฉลี่ย (฿/กก.)</div>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="text-[10px] text-slate-400">เฉลี่ย (฿/กก.) · Target: ฿50.00</div>
+                        <span id="kpiPriceX2Pct"></span>
+                    </div>
                 </div>
             </div>
 
@@ -448,21 +481,21 @@
                         <tr class="hover:bg-slate-800/20 transition">
                             <td class="p-3 font-semibold text-orange-300">Single</td>
                             <td id="tblSingleG" class="p-3 text-right font-bold text-orange-400">--</td>
-                            <td class="p-3 text-right text-slate-400">14.710</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">14.710</td>
                             <td id="tblSingleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tblSingleBaht" class="p-3 text-right font-bold text-orange-400">--</td>
-                            <td class="p-3 text-right text-slate-400">฿0.0645</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0645</td>
                             <td id="tblSingleStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition">
                             <td class="p-3 font-semibold text-indigo-300">Double</td>
                             <td id="tblDoubleG" class="p-3 text-right font-bold text-indigo-400">--</td>
-                            <td class="p-3 text-right text-slate-400">18.310</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">18.310</td>
                             <td id="tblDoubleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tblDoubleBaht" class="p-3 text-right font-bold text-indigo-400">--</td>
-                            <td class="p-3 text-right text-slate-400">฿0.0803</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0803</td>
                             <td id="tblDoubleStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
@@ -470,19 +503,19 @@
                             <td id="tbl3PlyG" class="p-3 text-right font-bold text-lime-400">--</td>
                             <td class="p-3 text-right text-slate-400 font-semibold">14.710</td>
                             <td id="tbl3PlyKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tbl3PlyBaht" class="p-3 text-right font-bold text-lime-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0592</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0645</td>
                             <td id="tbl3PlyStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
                             <td class="p-3 font-semibold text-fuchsia-300">5 ชั้น (5 Ply)</td>
                             <td id="tbl5PlyG" class="p-3 text-right font-bold text-fuchsia-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">29.250</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">18.310</td>
                             <td id="tbl5PlyKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td class="p-3 text-center text-slate-400">× 4.386</td>
                             <td id="tbl5PlyBaht" class="p-3 text-right font-bold text-fuchsia-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.1283</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0803</td>
                             <td id="tbl5PlyStatus" class="p-3 text-center">--</td>
                         </tr>
                     </tbody>
@@ -508,7 +541,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-teal-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 เปรียบเทียบต้นทุน บาท/ตรม. (อิงเรท 5.090)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 เปรียบเทียบต้นทุน บาท/ตรม. (อิงเรท 4.386)</h3>
                 <div class="w-full h-[280px]"><canvas id="barBahtSqmType"></canvas></div>
             </div>
         </div>
@@ -546,14 +579,14 @@
             <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 bg-lime-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-lime-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (3 ชั้น)</span>
-                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 13.500 g/Sqm</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 14.710 g/Sqm</span>
                 </h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm3Ply"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50 bg-fuchsia-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-fuchsia-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (5 ชั้น)</span>
-                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 29.250 g/Sqm</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 18.310 g/Sqm</span>
                 </h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm5Ply"></canvas></div>
             </div>
@@ -681,4 +714,1498 @@
 
         const SHEET_ID = "1B9zHhiB0lknlC94yd7r6hV_Wzn7xlnqvT1cx6aidoSQ";
         const GID = "483689587";
-        const baseQueryUrl = `https://docs.google.com/spread
+        const baseQueryUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+
+        let allData = [];
+        let filteredData = [];
+        let charts = {};
+        let dataLoaded = false;
+
+        const colors = {
+            iso: { border: '#f43f5e', bg: 'rgba(244, 63, 94, 0.6)' },   
+            bhs: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.6)' },  
+            yue: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.6)' }   
+        };
+
+        const fpStartDate = flatpickr("#startDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
+        const fpEndDate = flatpickr("#endDate", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y" });
+
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', 'Sarabun', sans-serif";
+
+        const parseNum = (val) => {
+            if (val === null || val === undefined || val === '') return 0;
+            if (typeof val === 'number') return isNaN(val) ? 0 : val;
+            const parsed = parseFloat(String(val).replace(/,/g, "").replace(/%/g, "").trim());
+            return isNaN(parsed) ? 0 : parsed;
+        };
+
+        function parseDateString(dateStr) {
+            if (!dateStr) return 0;
+            let cleanStr = String(dateStr).replace(/[\uFEFF\r\n]/g, '').replace(/"/g, '').trim();
+            if (/^\d{4}-\d{2}-\d{2}/.test(cleanStr)) {
+                let parts = cleanStr.split('-');
+                let year = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let day = parseInt(parts[2].substring(0, 2), 10);
+                return new Date(year, month, day).getTime();
+            }
+            const thaiMonths = {
+                "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4, "พ.ค.": 5, "มิ.ย.": 6,
+                "ก.ค.": 7, "ส.ค.": 8, "ก.ย.": 9, "ต.ค.": 10, "พ.ย.": 11, "ธ.ค.": 12,
+                "มกราคม": 1, "กุมภาพันธ์": 2, "มีนาคม": 3, "เมษายน": 4, "พฤษภาคม": 5, "มิถุนายน": 6,
+                "กรกฎาคม": 7, "สิงหาคม": 8, "กันยายน": 9, "ตุลาคม": 10, "พฤศจิกายน": 11, "ธันวาคม": 12
+            };
+            for (let m in thaiMonths) {
+                if (cleanStr.includes(m)) {
+                    cleanStr = cleanStr.replace(m, "/" + thaiMonths[m] + "/");
+                }
+            }
+            cleanStr = cleanStr.replace(/\s+/g, '/').replace(/-+/g, '/').replace(/\/+/g, '/');
+            const parts = cleanStr.split('/');
+            if (parts.length >= 2) {
+                let p0 = parseInt(parts[0], 10);
+                let p1 = parseInt(parts[1], 10);
+                let day, month, year;
+                if (parts.length === 2) {
+                    year = new Date().getFullYear();
+                    if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p1; month = p0 - 1; }
+                } else {
+                    let p2 = parseInt(parts[2].substring(0, 4), 10);
+                    if (p0 > 1000) { year = p0; month = p1 - 1; day = p2; } else { 
+                        year = p2;
+                        if (p1 > 12) { day = p1; month = p0 - 1; } else if (p0 > 12) { day = p0; month = p1 - 1; } else { day = p0; month = p1 - 1; }
+                    }
+                }
+                if (year > 2500) year -= 543;
+                if (year < 100) year += 2000;
+                return new Date(year, month, day).getTime();
+            }
+            let d = new Date(dateStr);
+            if (!isNaN(d.getTime())) return d.getTime();
+            return 0;
+        }
+
+        function parseGvizDate(cell) {
+            if (!cell) return 0;
+            if (cell.f) {
+                let ts = parseDateString(cell.f);
+                if (ts > 0) return ts;
+            }
+            if (typeof cell.v === 'string' && cell.v.startsWith('Date(')) {
+                let parts = cell.v.replace('Date(', '').replace(')', '').split(',');
+                let y = parseInt(parts[0], 10);
+                let m = parseInt(parts[1], 10);
+                let d = parseInt(parts[2], 10);
+                return new Date(y, m, d).getTime();
+            }
+            if (cell.v) {
+                let ts = parseDateString(cell.v);
+                if (ts > 0) return ts;
+            }
+            return 0;
+        }
+
+        // PRIMARY DATA LOADER: GVIZ JSONP (Works 100% in local file:// and web)
+        window.handleGvizData = function(json) {
+            try {
+                if (!json || !json.table || !json.table.rows) throw new Error("รูปแบบข้อมูลจาก Google Sheets ไม่ถูกต้อง");
+                
+                const rows = json.table.rows;
+                const col = {
+                    yue_mix: 3, yue_u: 4, yue_cost: 5, yue_o: 6, yue_ratio: 7,
+                    bhs_mix: 9, bhs_u: 10, bhs_cost: 11, bhs_o: 12, bhs_ratio: 13,
+                    iso_mix: 15, iso_u: 16, iso_cost: 17, iso_o: 18, iso_ratio: 19,
+                    mix: 20, tot_u: 21, tot_cost: 22, tot_o: 23, tot_ratio: 24,
+                    iso_sqm: 25, bhs_sqm: 26, yue_sqm: 27, tot_sqm: 28,
+                    all_g_sqm: 29,
+                    iso_quality: 30, bhs_quality: 31, yue_quality: 32, quality: 33,
+                    target_sf: 34, target_df: 35, target_tot: 36, target_glue: 37,
+                    iso_sf_u: 38, iso_sf_g: 39, iso_df_u: 40, iso_df_g: 41, iso_tot_g: 42,
+                    bhs_sf_u: 43, bhs_sf_g: 44, bhs_df_u: 45, bhs_df_g: 46, bhs_tot_g: 47,
+                    yue_sf_u: 48, yue_sf_g: 49, yue_df_u: 50, yue_df_g: 51, yue_tot_g: 52,
+                    bhs_3p_sqm: 53, bhs_3p_g: 54, bhs_5p_sqm: 55, bhs_5p_g: 56,
+                    yue_3p_sqm: 57, yue_3p_g: 58, yue_5p_sqm: 59, yue_5p_g: 60,
+                    iso_3p_sqm: 61, iso_3p_g: 62, iso_5p_sqm: 63, iso_5p_g: 64,
+                    tot_3p_sqm: 65, tot_3p_glue: 66, tot_3p_g: 67,
+                    tot_5p_sqm: 68, tot_5p_glue: 69, tot_5p_g: 70,
+                    price_flour: 71, price_soda: 72, price_borax: 73, price_synth_flour: 74, price_x2: 75
+                };
+
+                const getVal = (cell) => {
+                    if (!cell || cell.v === null || cell.v === undefined) return 0;
+                    if (typeof cell.v === 'number') return cell.v;
+                    return parseNum(cell.v || cell.f);
+                };
+
+                allData = [];
+
+                rows.forEach(r => {
+                    if (!r || !r.c || !r.c[0]) return;
+                    const ts = parseGvizDate(r.c[0]);
+                    if (!ts) return;
+
+                    const dObj = new Date(ts);
+                    const formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
+
+                    let c = r.c;
+                    let bhs_3p = getVal(c[col.bhs_3p_g]);
+                    let bhs_5p = getVal(c[col.bhs_5p_g]);
+                    let yue_3p = getVal(c[col.yue_3p_g]);
+                    let yue_5p = getVal(c[col.yue_5p_g]);
+                    let iso_3p = getVal(c[col.iso_3p_g]);
+                    let iso_5p = getVal(c[col.iso_5p_g]);
+                    let tot_3p = getVal(c[col.tot_3p_g]);
+                    let tot_5p = getVal(c[col.tot_5p_g]);
+
+                    let b_3p_sqm = getVal(c[col.bhs_3p_sqm]);
+                    let b_5p_sqm = getVal(c[col.bhs_5p_sqm]);
+                    let y_3p_sqm = getVal(c[col.yue_3p_sqm]);
+                    let y_5p_sqm = getVal(c[col.yue_5p_sqm]);
+                    let i_3p_sqm = getVal(c[col.iso_3p_sqm]);
+                    let i_5p_sqm = getVal(c[col.iso_5p_sqm]);
+
+                    let b_sf_u = getVal(c[col.bhs_sf_u]);
+                    let b_df_u = getVal(c[col.bhs_df_u]);
+                    let y_sf_u = getVal(c[col.yue_sf_u]);
+                    let y_df_u = getVal(c[col.yue_df_u]);
+                    let i_sf_u = getVal(c[col.iso_sf_u]);
+                    let i_df_u = getVal(c[col.iso_df_u]);
+
+                    if (bhs_3p === 0 && b_3p_sqm > 0 && b_sf_u > 0) bhs_3p = (b_sf_u / b_3p_sqm) * 1000;
+                    if (bhs_5p === 0 && b_5p_sqm > 0 && b_df_u > 0) bhs_5p = (b_df_u / b_5p_sqm) * 1000;
+                    if (yue_3p === 0 && y_3p_sqm > 0 && y_sf_u > 0) yue_3p = (y_sf_u / y_3p_sqm) * 1000;
+                    if (yue_5p === 0 && y_5p_sqm > 0 && y_df_u > 0) yue_5p = (y_df_u / y_5p_sqm) * 1000;
+                    if (iso_3p === 0 && i_3p_sqm > 0 && i_sf_u > 0) iso_3p = (i_sf_u / i_3p_sqm) * 1000;
+                    if (iso_5p === 0 && i_5p_sqm > 0 && i_df_u > 0) iso_5p = (i_df_u / i_5p_sqm) * 1000;
+
+                    let t_3p_sqm = getVal(c[col.tot_3p_sqm]);
+                    let t_3p_glue = getVal(c[col.tot_3p_glue]);
+                    let t_5p_sqm = getVal(c[col.tot_5p_sqm]);
+                    let t_5p_glue = getVal(c[col.tot_5p_glue]);
+
+                    if (tot_3p === 0 && t_3p_sqm > 0 && t_3p_glue > 0) tot_3p = (t_3p_glue / t_3p_sqm) * 1000;
+                    if (tot_5p === 0 && t_5p_sqm > 0 && t_5p_glue > 0) tot_5p = (t_5p_glue / t_5p_sqm) * 1000;
+
+                    allData.push({
+                        dateStr: formattedDate, timestamp: ts,
+                        yue_usage: getVal(c[col.yue_u]), yue_out: getVal(c[col.yue_o]), yue_sqm: getVal(c[col.yue_sqm]), 
+                        bhs_usage: getVal(c[col.bhs_u]), bhs_out: getVal(c[col.bhs_o]), bhs_sqm: getVal(c[col.bhs_sqm]),
+                        iso_usage: getVal(c[col.iso_u]), iso_out: getVal(c[col.iso_o]), iso_sqm: getVal(c[col.iso_sqm]),
+                        mix_cost: getVal(c[col.mix]),
+                        quality: getVal(c[col.quality]),
+                        
+                        // Single / Double (g/Sqm)
+                        iso_sf: getVal(c[col.iso_sf_g]), iso_df: getVal(c[col.iso_df_g]),
+                        bhs_sf: getVal(c[col.bhs_sf_g]), bhs_df: getVal(c[col.bhs_df_g]),
+                        yue_sf: getVal(c[col.yue_sf_g]), yue_df: getVal(c[col.yue_df_g]),
+
+                        // 3 Ply / 5 Ply (g/Sqm)
+                        iso_3p: iso_3p, iso_5p: iso_5p,
+                        bhs_3p: bhs_3p, bhs_5p: bhs_5p,
+                        yue_3p: yue_3p, yue_5p: yue_5p,
+                        tot_3p: tot_3p, tot_5p: tot_5p,
+
+                        // 3 Ply / 5 Ply พื้นที่ (Sqm)
+                        iso_3p_sqm: i_3p_sqm, iso_5p_sqm: i_5p_sqm,
+                        bhs_3p_sqm: b_3p_sqm, bhs_5p_sqm: b_5p_sqm,
+                        yue_3p_sqm: y_3p_sqm, yue_5p_sqm: y_5p_sqm,
+                        tot_3p_sqm: t_3p_sqm, tot_5p_sqm: t_5p_sqm,
+
+                        // Raw Material Prices
+                        price_flour: getVal(c[col.price_flour]),
+                        price_soda: getVal(c[col.price_soda]),
+                        price_borax: getVal(c[col.price_borax]),
+                        price_synth_flour: getVal(c[col.price_synth_flour]),
+                        price_x2: getVal(c[col.price_x2])
+                    });
+                });
+
+                if (allData.length > 0) {
+                    dataLoaded = true;
+                    allData.sort((a, b) => a.timestamp - b.timestamp);
+                    document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
+
+                    const minDate = new Date(allData[0].timestamp);
+                    const maxDate = new Date(allData[allData.length - 1].timestamp);
+                    if (fpStartDate.selectedDates.length === 0) fpStartDate.setDate(minDate);
+                    fpEndDate.setDate(maxDate);
+
+                    applyFilterLogic();
+                    resetBtnState();
+                }
+            } catch (err) {
+                console.error("Error processing GViz data:", err);
+            }
+        };
+
+        function loadData() {
+            dataLoaded = false;
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> กำลังโหลด...';
+                refreshBtn.disabled = true;
+            }
+            document.getElementById('dataStatus').innerText = "⏳ กำลังดึงข้อมูลจาก Google Sheets...";
+
+            // Method 1: JSONP script injection (immune to local CORS issues)
+            const oldScript = document.getElementById('gvizJsonpScript');
+            if (oldScript) oldScript.remove();
+
+            const script = document.createElement('script');
+            script.id = 'gvizJsonpScript';
+            script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleGvizData&gid=${GID}&_t=${new Date().getTime()}`;
+            script.onerror = function() {
+                console.warn("JSONP failed, attempting fetch CSV fallback...");
+                loadCsvFallback();
+            };
+            document.head.appendChild(script);
+
+            // Timeout fallback
+            setTimeout(() => {
+                if (!dataLoaded) {
+                    loadCsvFallback();
+                }
+            }, 3000);
+        }
+
+        function loadCsvFallback() {
+            if (dataLoaded) return;
+            const fetchUrl = baseQueryUrl + "&_t=" + new Date().getTime();
+
+            fetch(fetchUrl)
+            .then(res => res.text())
+            .then(csvText => {
+                if (dataLoaded) return;
+                const rows = csvText.trim().split(/\r?\n/);
+                if (rows.length > 1) {
+                    allData = [];
+                    for (let i = 1; i < rows.length; i++) {
+                        let c = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/"/g, '').trim());
+                        if (c.length < 5 || !c[0] || c[0].toLowerCase().includes('total')) continue;
+                        let ts = parseDateString(c[0]);
+                        if (!ts) continue;
+
+                        let dObj = new Date(ts);
+                        let formattedDate = `${String(dObj.getDate()).padStart(2, '0')}/${String(dObj.getMonth() + 1).padStart(2, '0')}/${dObj.getFullYear()}`;
+
+                        allData.push({
+                            dateStr: formattedDate, timestamp: ts,
+                            yue_usage: parseNum(c[4]), yue_out: parseNum(c[6]), yue_sqm: parseNum(c[27]), 
+                            bhs_usage: parseNum(c[10]), bhs_out: parseNum(c[12]), bhs_sqm: parseNum(c[26]),
+                            iso_usage: parseNum(c[16]), iso_out: parseNum(c[18]), iso_sqm: parseNum(c[25]),
+                            mix_cost: parseNum(c[20]), quality: parseNum(c[33]),
+                            iso_sf: parseNum(c[39]), iso_df: parseNum(c[41]),
+                            bhs_sf: parseNum(c[44]), bhs_df: parseNum(c[46]),
+                            yue_sf: parseNum(c[49]), yue_df: parseNum(c[51]),
+                            iso_3p: parseNum(c[62]), iso_5p: parseNum(c[64]),
+                            bhs_3p: parseNum(c[54]), bhs_5p: parseNum(c[56]),
+                            yue_3p: parseNum(c[58]), yue_5p: parseNum(c[60]),
+                            tot_3p: parseNum(c[67]), tot_5p: parseNum(c[70]),
+                            iso_3p_sqm: parseNum(c[61]), iso_5p_sqm: parseNum(c[63]),
+                            bhs_3p_sqm: parseNum(c[53]), bhs_5p_sqm: parseNum(c[55]),
+                            yue_3p_sqm: parseNum(c[57]), yue_5p_sqm: parseNum(c[59]),
+                            tot_3p_sqm: parseNum(c[65]), tot_5p_sqm: parseNum(c[68]),
+                            price_flour: parseNum(c[71]), price_soda: parseNum(c[72]), price_borax: parseNum(c[73]),
+                            price_synth_flour: parseNum(c[74]), price_x2: parseNum(c[75])
+                        });
+                    }
+
+                    if (allData.length > 0) {
+                        dataLoaded = true;
+                        allData.sort((a, b) => a.timestamp - b.timestamp);
+                        document.getElementById('dataStatus').innerText = `✅ โหลดสำเร็จ: ${allData.length} วัน (ข้อมูลล่าสุดถึง ${allData[allData.length - 1].dateStr})`;
+                        const minDate = new Date(allData[0].timestamp);
+                        const maxDate = new Date(allData[allData.length - 1].timestamp);
+                        if (fpStartDate.selectedDates.length === 0) fpStartDate.setDate(minDate);
+                        fpEndDate.setDate(maxDate);
+                        applyFilterLogic();
+                        resetBtnState();
+                    }
+                }
+            }).catch(err => {
+                console.error("CSV fallback error:", err);
+                resetBtnState();
+            });
+        }
+
+        function resetBtnState() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> อัปเดตข้อมูล';
+                refreshBtn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { loadData(); });
+
+        function applyFilterLogic() {
+            let startTimestamp = 0;
+            let endTimestamp = Infinity;
+
+            if (fpStartDate.selectedDates.length > 0) {
+                const sDate = fpStartDate.selectedDates[0];
+                startTimestamp = new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate()).getTime();
+            }
+
+            if (fpEndDate.selectedDates.length > 0) {
+                const eDate = fpEndDate.selectedDates[0];
+                endTimestamp = new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate(), 23, 59, 59, 999).getTime();
+            }
+
+            filteredData = allData.filter(d => d.timestamp >= startTimestamp && d.timestamp <= endTimestamp);
+            processDashboard(startTimestamp, endTimestamp);
+        }
+
+        function applyFilter() { applyFilterLogic(); }
+
+        function applyMonthFilter() {
+            const monthVal = document.getElementById('monthFilter').value;
+            if (!monthVal) return;
+            const [year, month] = monthVal.split('-');
+            const firstDay = new Date(year, parseInt(month) - 1, 1);
+            const lastDay = new Date(year, parseInt(month), 0);
+            fpStartDate.setDate(firstDay);
+            fpEndDate.setDate(lastDay);
+            if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
+            if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
+            if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
+            applyFilterLogic();
+        }
+
+        function applyWeekFilter() {
+            let startWStr = document.getElementById('startWeekNum').value;
+            let endWStr = document.getElementById('endWeekNum').value;
+            let startW = parseInt(startWStr);
+            let endW = parseInt(endWStr);
+
+            if (!startW && !endW) return;
+            if (startW && !endW) { endW = startW; document.getElementById('endWeekNum').value = startW; }
+            if (!startW && endW) { startW = endW; document.getElementById('startWeekNum').value = endW; }
+            if (startW > endW) { let temp = startW; startW = endW; endW = temp; }
+
+            let yearVal = parseInt(document.getElementById('weekYear').value);
+            let year = yearVal;
+            if (!year || isNaN(year)) {
+                year = new Date().getFullYear();
+                if (fpEndDate.selectedDates.length > 0) { year = fpEndDate.selectedDates[0].getFullYear(); }
+                if (document.getElementById('weekYear')) { document.getElementById('weekYear').value = year; }
+            }
+
+            const startDate = getDateOfWeek(startW, year);
+            const endDate = getDateOfWeek(endW, year);
+            endDate.setDate(endDate.getDate() + 6); 
+            fpStartDate.setDate(startDate);
+            fpEndDate.setDate(endDate);
+            if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'weekly';
+            if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
+            applyFilterLogic();
+        }
+
+        function resetFilter() {
+            if (document.getElementById('machineFilter')) document.getElementById('machineFilter').value = 'all';
+            if (document.getElementById('timeGroupFilter')) document.getElementById('timeGroupFilter').value = 'daily';
+            if (document.getElementById('monthFilter')) document.getElementById('monthFilter').value = '';
+            if (document.getElementById('startWeekNum')) document.getElementById('startWeekNum').value = '';
+            if (document.getElementById('endWeekNum')) document.getElementById('endWeekNum').value = '';
+            if (document.getElementById('weekYear')) document.getElementById('weekYear').value = '';
+            if (allData.length > 0) {
+                fpStartDate.setDate(new Date(allData[0].timestamp));
+                fpEndDate.setDate(new Date(allData[allData.length - 1].timestamp));
+            }
+            applyFilterLogic();
+        }
+
+        function downloadDashboard(event) {
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> กำลังบันทึก...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const dashboardElement = document.getElementById('main-dashboard');
+                const wrapper = document.createElement('div');
+                wrapper.style.padding = '20px';
+                wrapper.style.backgroundColor = '#0f172a';
+                wrapper.style.position = 'absolute';
+                wrapper.style.left = '-9999px';
+
+                const clone = dashboardElement.cloneNode(true);
+                clone.style.width = dashboardElement.offsetWidth + 'px';
+                wrapper.appendChild(clone);
+                document.body.appendChild(wrapper);
+
+                const originalCanvases = dashboardElement.getElementsByTagName('canvas');
+                const clonedCanvases = clone.getElementsByTagName('canvas');
+                for (let i = 0; i < originalCanvases.length; i++) {
+                    clonedCanvases[i].getContext('2d').drawImage(originalCanvases[i], 0, 0);
+                }
+
+                html2canvas(wrapper, { backgroundColor: '#0f172a', scale: 2, useCORS: true, logging: false })
+                    .then(canvas => {
+                        const link = document.createElement('a');
+                        const dateStr = new Date().toISOString().slice(0, 10);
+                        link.download = `Glue_Dashboard_Full_${dateStr}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        document.body.removeChild(wrapper);
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    }).catch(err => {
+                        console.error('Error capturing:', err);
+                        alert('เกิดข้อผิดพลาดในการแคปหน้าจอ');
+                        document.body.removeChild(wrapper);
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    });
+            }, 100);
+        }
+
+        function renderTargetPct(elementId, actual, target, isLessBetter, isPercentageMetric = false) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (actual === 0 || isNaN(actual)) { el.innerHTML = ""; return; }
+            
+            const diff = actual - target;
+            let displayVal = "";
+            
+            if (isPercentageMetric) {
+                displayVal = Math.abs(diff).toFixed(3) + "%";
+            } else {
+                const pct = (diff / target) * 100;
+                displayVal = Math.abs(pct).toFixed(3) + "%";
+            }
+            
+            let isGood = isLessBetter ? diff <= 0 : diff >= 0;
+            let icon = diff > 0 ? "fa-arrow-up" : (diff < 0 ? "fa-arrow-down" : "fa-minus");
+            
+            if (diff === 0) {
+                 el.innerHTML = `<span class="text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded-md text-xs font-semibold border border-slate-600/50"><i class="fa-solid ${icon}"></i> 0.000%</span>`;
+                 return;
+            }
+
+            let colorClass = isGood ? "text-emerald-400 bg-emerald-900/30 border border-emerald-500/30" : "text-rose-400 bg-rose-900/30 border border-rose-500/30";
+            el.innerHTML = `<span class="${colorClass} px-2 py-0.5 rounded-md text-xs font-semibold shadow-sm"><i class="fa-solid ${icon}"></i> ${displayVal}</span>`;
+        }
+
+        // CONSTANT TARGET VALUES
+        const RATIO_TARGET = 0.464;     // Target ฿ / Output
+        const TARGET_3PLY_G = 14.710;   // Target g/Sqm for 3 Ply
+        const TARGET_5PLY_G = 18.310;   // Target g/Sqm for 5 Ply
+        const TARGET_MIX_COST = 5.090;  // Target Mix Cost ฿
+        const FIXED_RATE = 4.386;       // Rate ฿/kg for Glue Sqm table
+
+        // TARGET RAW MATERIAL PRICES (฿/กก.)
+        const TARGET_PRICE_FLOUR = 20;   // Target แป้งมัน ฿/กก.
+        const TARGET_PRICE_SODA = 14;    // Target โซดาไฟ ฿/กก.
+        const TARGET_PRICE_BORAX = 24;   // Target Borax ฿/กก.
+        const TARGET_PRICE_SYNTH = 33;   // Target แป้งสังเคราะห์ ฿/กก.
+        const TARGET_PRICE_X2 = 50;      // Target X-2 ฿/กก.
+
+        function processDashboard(startTimestamp, endTimestamp) {
+            let sum = {
+                iso_usage: 0, iso_cost: 0, iso_out: 0, iso_sqm: 0,
+                bhs_usage: 0, bhs_cost: 0, bhs_out: 0, bhs_sqm: 0,
+                yue_usage: 0, yue_cost: 0, yue_out: 0, yue_sqm: 0,
+                quality: 0, q_count: 0,
+                mix_sum: 0, mix_count: 0,
+                iso_3p_sqm: 0, bhs_3p_sqm: 0, yue_3p_sqm: 0,
+                iso_5p_sqm: 0, bhs_5p_sqm: 0, yue_5p_sqm: 0
+            };
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            
+            let sf_total = 0, sf_count = 0;
+            let df_total = 0, df_count = 0;
+            
+            let ply3_total = 0, ply3_count = 0;
+            let ply5_total = 0, ply5_count = 0;
+
+            // Raw material accumulators
+            let rm = {
+                flour_sum: 0, flour_cnt: 0,
+                soda_sum: 0, soda_cnt: 0,
+                borax_sum: 0, borax_cnt: 0,
+                synth_sum: 0, synth_cnt: 0,
+                x2_sum: 0, x2_cnt: 0
+            };
+
+            filteredData.forEach(d => {
+                let daily_iso_cost = d.iso_usage * d.mix_cost;
+                let daily_bhs_cost = d.bhs_usage * d.mix_cost;
+                let daily_yue_cost = d.yue_usage * d.mix_cost;
+
+                sum.iso_usage += d.iso_usage; sum.iso_cost += daily_iso_cost; sum.iso_out += d.iso_out; sum.iso_sqm += d.iso_sqm;
+                sum.bhs_usage += d.bhs_usage; sum.bhs_cost += daily_bhs_cost; sum.bhs_out += d.bhs_out; sum.bhs_sqm += d.bhs_sqm;
+                sum.yue_usage += d.yue_usage; sum.yue_cost += daily_yue_cost; sum.yue_out += d.yue_out; sum.yue_sqm += d.yue_sqm;
+
+                sum.iso_3p_sqm += d.iso_3p_sqm || 0; sum.bhs_3p_sqm += d.bhs_3p_sqm || 0; sum.yue_3p_sqm += d.yue_3p_sqm || 0;
+                sum.iso_5p_sqm += d.iso_5p_sqm || 0; sum.bhs_5p_sqm += d.bhs_5p_sqm || 0; sum.yue_5p_sqm += d.yue_5p_sqm || 0;
+
+                if (d.quality > 0) { sum.quality += d.quality; sum.q_count++; }
+                if (d.mix_cost > 0) { sum.mix_sum += d.mix_cost; sum.mix_count++; } 
+                
+                // Raw materials
+                if (d.price_flour > 0) { rm.flour_sum += d.price_flour; rm.flour_cnt++; }
+                if (d.price_soda > 0) { rm.soda_sum += d.price_soda; rm.soda_cnt++; }
+                if (d.price_borax > 0) { rm.borax_sum += d.price_borax; rm.borax_cnt++; }
+                if (d.price_synth_flour > 0) { rm.synth_sum += d.price_synth_flour; rm.synth_cnt++; }
+                if (d.price_x2 > 0) { rm.x2_sum += d.price_x2; rm.x2_cnt++; }
+
+                let d_sf = 0;
+                let d_df = 0;
+                let d_3p = 0;
+                let d_5p = 0;
+
+                if (mcFilter === 'all') {
+                    let sf_s = 0, sf_c = 0;
+                    if (d.iso_sf > 0) { sf_s += d.iso_sf; sf_c++; }
+                    if (d.bhs_sf > 0) { sf_s += d.bhs_sf; sf_c++; }
+                    if (d.yue_sf > 0) { sf_s += d.yue_sf; sf_c++; }
+                    d_sf = sf_c > 0 ? (sf_s / sf_c) : 0;
+
+                    let df_s = 0, df_c = 0;
+                    if (d.iso_df > 0) { df_s += d.iso_df; df_c++; }
+                    if (d.bhs_df > 0) { df_s += d.bhs_df; df_c++; }
+                    if (d.yue_df > 0) { df_s += d.yue_df; df_c++; }
+                    d_df = df_c > 0 ? (df_s / df_c) : 0;
+                    
+                    // 3 Ply for 'All'
+                    if (d.tot_3p > 0) {
+                        d_3p = d.tot_3p;
+                    } else {
+                        let p3_s = 0, p3_c = 0;
+                        if (d.iso_3p > 0) { p3_s += d.iso_3p; p3_c++; }
+                        if (d.bhs_3p > 0) { p3_s += d.bhs_3p; p3_c++; }
+                        if (d.yue_3p > 0) { p3_s += d.yue_3p; p3_c++; }
+                        d_3p = p3_c > 0 ? (p3_s / p3_c) : 0;
+                    }
+
+                    // 5 Ply for 'All'
+                    if (d.tot_5p > 0) {
+                        d_5p = d.tot_5p;
+                    } else {
+                        let p5_s = 0, p5_c = 0;
+                        if (d.iso_5p > 0) { p5_s += d.iso_5p; p5_c++; }
+                        if (d.bhs_5p > 0) { p5_s += d.bhs_5p; p5_c++; }
+                        if (d.yue_5p > 0) { p5_s += d.yue_5p; p5_c++; }
+                        d_5p = p5_c > 0 ? (p5_s / p5_c) : 0;
+                    }
+
+                } else if (mcFilter === 'iso') {
+                    d_sf = d.iso_sf; d_df = d.iso_df;
+                    d_3p = d.iso_3p; d_5p = d.iso_5p;
+                } else if (mcFilter === 'bhs') {
+                    d_sf = d.bhs_sf; d_df = d.bhs_df;
+                    d_3p = d.bhs_3p; d_5p = d.bhs_5p;
+                } else if (mcFilter === 'yue') {
+                    d_sf = d.yue_sf; d_df = d.yue_df;
+                    d_3p = d.yue_3p; d_5p = d.yue_5p;
+                }
+
+                d.display_sf = d_sf;
+                d.display_df = d_df;
+                d.display_3p = d_3p;
+                d.display_5p = d_5p;
+
+                if (d_sf > 0) { sf_total += d_sf; sf_count++; }
+                if (d_df > 0) { df_total += d_df; df_count++; }
+                if (d_3p > 0) { ply3_total += d_3p; ply3_count++; }
+                if (d_5p > 0) { ply5_total += d_5p; ply5_count++; }
+            });
+
+            const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
+            const groups = {};
+
+            filteredData.forEach(d => {
+                const groupInfo = getGroupKeyAndLabel(d.timestamp, timeMode);
+                const key = groupInfo.key;
+
+                if (!groups[key]) {
+                    groups[key] = {
+                        label: groupInfo.label,
+                        timestamp: d.timestamp,
+                        iso_cost: 0, iso_out: 0, iso_usage: 0, iso_sqm: 0,
+                        bhs_cost: 0, bhs_out: 0, bhs_usage: 0, bhs_sqm: 0,
+                        yue_cost: 0, yue_out: 0, yue_usage: 0, yue_sqm: 0,
+                        quality_sum: 0, quality_count: 0,
+                        mix_sum: 0, mix_count: 0,
+                        
+                        sf_sum: 0, sf_count: 0, 
+                        df_sum: 0, df_count: 0, 
+                        ply3_sum: 0, ply3_count: 0,
+                        ply5_sum: 0, ply5_count: 0,
+
+                        flour_sum: 0, flour_cnt: 0,
+                        soda_sum: 0, soda_cnt: 0,
+                        borax_sum: 0, borax_cnt: 0,
+                        synth_sum: 0, synth_cnt: 0,
+                        x2_sum: 0, x2_cnt: 0
+                    };
+                }
+
+                let g = groups[key];
+                let d_iso_cost = d.iso_usage * d.mix_cost;
+                let d_bhs_cost = d.bhs_usage * d.mix_cost;
+                let d_yue_cost = d.yue_usage * d.mix_cost;
+
+                g.iso_out += d.iso_out; g.iso_usage += d.iso_usage; g.iso_sqm += d.iso_sqm; g.iso_cost += d_iso_cost;
+                g.bhs_out += d.bhs_out; g.bhs_usage += d.bhs_usage; g.bhs_sqm += d.bhs_sqm; g.bhs_cost += d_bhs_cost;
+                g.yue_out += d.yue_out; g.yue_usage += d.yue_usage; g.yue_sqm += d.yue_sqm; g.yue_cost += d_yue_cost;
+
+                if (d.quality > 0) { g.quality_sum += d.quality; g.quality_count++; }
+                if (d.mix_cost > 0) { g.mix_sum += d.mix_cost; g.mix_count++; } 
+
+                if (d.display_sf > 0) { g.sf_sum += d.display_sf; g.sf_count++; }
+                if (d.display_df > 0) { g.df_sum += d.display_df; g.df_count++; }
+                if (d.display_3p > 0) { g.ply3_sum += d.display_3p; g.ply3_count++; }
+                if (d.display_5p > 0) { g.ply5_sum += d.display_5p; g.ply5_count++; }
+
+                if (d.price_flour > 0) { g.flour_sum += d.price_flour; g.flour_cnt++; }
+                if (d.price_soda > 0) { g.soda_sum += d.price_soda; g.soda_cnt++; }
+                if (d.price_borax > 0) { g.borax_sum += d.price_borax; g.borax_cnt++; }
+                if (d.price_synth_flour > 0) { g.synth_sum += d.price_synth_flour; g.synth_cnt++; }
+                if (d.price_x2 > 0) { g.x2_sum += d.price_x2; g.x2_cnt++; }
+            });
+
+            let trendData = Object.values(groups).sort((a, b) => a.timestamp - b.timestamp);
+            let rawTotalUsage = 0, rawTotalOutput = 0, rawTotalCost = 0, totalSqm = 0;
+            let totalSqm3Ply = 0, totalSqm5Ply = 0;
+
+            if (mcFilter === 'all') {
+                rawTotalUsage = sum.iso_usage + sum.bhs_usage + sum.yue_usage;
+                rawTotalCost = sum.iso_cost + sum.bhs_cost + sum.yue_cost; 
+                rawTotalOutput = sum.iso_out + sum.bhs_out + sum.yue_out;
+                totalSqm = sum.iso_sqm + sum.bhs_sqm + sum.yue_sqm;
+                totalSqm3Ply = sum.iso_3p_sqm + sum.bhs_3p_sqm + sum.yue_3p_sqm;
+                totalSqm5Ply = sum.iso_5p_sqm + sum.bhs_5p_sqm + sum.yue_5p_sqm;
+            } else if (mcFilter === 'iso') {
+                rawTotalUsage = sum.iso_usage; rawTotalCost = sum.iso_cost; rawTotalOutput = sum.iso_out; totalSqm = sum.iso_sqm;
+                totalSqm3Ply = sum.iso_3p_sqm; totalSqm5Ply = sum.iso_5p_sqm;
+            } else if (mcFilter === 'bhs') {
+                rawTotalUsage = sum.bhs_usage; rawTotalCost = sum.bhs_cost; rawTotalOutput = sum.bhs_out; totalSqm = sum.bhs_sqm;
+                totalSqm3Ply = sum.bhs_3p_sqm; totalSqm5Ply = sum.bhs_5p_sqm;
+            } else if (mcFilter === 'yue') {
+                rawTotalUsage = sum.yue_usage; rawTotalCost = sum.yue_cost; rawTotalOutput = sum.yue_out; totalSqm = sum.yue_sqm;
+                totalSqm3Ply = sum.yue_3p_sqm; totalSqm5Ply = sum.yue_5p_sqm;
+            }
+
+            let dispTotalCost = rawTotalCost;
+            const costNoteEl = document.getElementById('costNote');
+            if (costNoteEl) {
+                costNoteEl.innerText = "คำนวณจาก: ปริมาณการใช้ × ต้นทุนผสมกาว";
+                costNoteEl.className = "kpi-sub text-emerald-400/80 font-semibold mt-1";
+            }
+
+            const trueMixCost = sum.mix_count > 0 ? (sum.mix_sum / sum.mix_count) : 0;
+            const dispTotalUsage = rawTotalUsage;
+            const dispTotalOutput = rawTotalOutput;
+            const dispMixCost = parseFloat(trueMixCost.toFixed(3)); 
+
+            const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
+            const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
+            const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
+            
+            let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
+            let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
+            let avgGramSqm3Ply = ply3_count > 0 ? (ply3_total / ply3_count) : 0;
+            let avgGramSqm5Ply = ply5_count > 0 ? (ply5_total / ply5_count) : 0;
+
+            const avgGramSqm = totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0;
+
+            const safeDiv = (a, b) => b > 0 ? (a / b) : 0;
+            const kpi = {
+                iso: { usage: sum.iso_usage, cost: sum.iso_cost, gSqm: safeDiv(sum.iso_usage, sum.iso_sqm) * 1000 },
+                bhs: { usage: sum.bhs_usage, cost: sum.bhs_cost, gSqm: safeDiv(sum.bhs_usage, sum.bhs_sqm) * 1000 },
+                yue: { usage: sum.yue_usage, cost: sum.yue_cost, gSqm: safeDiv(sum.yue_usage, sum.yue_sqm) * 1000 }
+            };
+
+            const dispRatio = parseFloat(avgRatio.toFixed(3));
+            const dispGramSqm = parseFloat(avgGramSqm.toFixed(3));
+            const dispKgOutput = parseFloat(avgKgOutput.toFixed(3));
+            const dispQuality = parseFloat(avgQuality.toFixed(3));
+            
+            const dispSingleG = parseFloat(avgSingleG.toFixed(3));
+            const dispDoubleG = parseFloat(avgDoubleG.toFixed(3));
+            const disp3PlyG = parseFloat(avgGramSqm3Ply.toFixed(3));
+            const disp5PlyG = parseFloat(avgGramSqm5Ply.toFixed(3));
+
+            // RAW MATERIAL PRICES AVERAGES
+            const avgFlour = rm.flour_cnt > 0 ? (rm.flour_sum / rm.flour_cnt) : 0;
+            const avgSoda = rm.soda_cnt > 0 ? (rm.soda_sum / rm.soda_cnt) : 0;
+            const avgBorax = rm.borax_cnt > 0 ? (rm.borax_sum / rm.borax_cnt) : 0;
+            const avgSynth = rm.synth_cnt > 0 ? (rm.synth_sum / rm.synth_cnt) : 0;
+            const avgX2 = rm.x2_cnt > 0 ? (rm.x2_sum / rm.x2_cnt) : 0;
+
+            // Update Raw Material KPI Cards
+            if (document.getElementById('kpiPriceFlour')) document.getElementById('kpiPriceFlour').innerText = avgFlour > 0 ? `฿${avgFlour.toFixed(2)}` : "--";
+            if (document.getElementById('kpiPriceSoda')) document.getElementById('kpiPriceSoda').innerText = avgSoda > 0 ? `฿${avgSoda.toFixed(2)}` : "--";
+            if (document.getElementById('kpiPriceBorax')) document.getElementById('kpiPriceBorax').innerText = avgBorax > 0 ? `฿${avgBorax.toFixed(2)}` : "--";
+            if (document.getElementById('kpiPriceSynthFlour')) document.getElementById('kpiPriceSynthFlour').innerText = avgSynth > 0 ? `฿${avgSynth.toFixed(2)}` : "--";
+            if (document.getElementById('kpiPriceX2')) document.getElementById('kpiPriceX2').innerText = avgX2 > 0 ? `฿${avgX2.toFixed(2)}` : "--";
+
+            // Compare raw material prices vs Target (lower price = better)
+            renderTargetPct('kpiPriceFlourPct', avgFlour, TARGET_PRICE_FLOUR, true);
+            renderTargetPct('kpiPriceSodaPct', avgSoda, TARGET_PRICE_SODA, true);
+            renderTargetPct('kpiPriceBoraxPct', avgBorax, TARGET_PRICE_BORAX, true);
+            renderTargetPct('kpiPriceSynthFlourPct', avgSynth, TARGET_PRICE_SYNTH, true);
+            renderTargetPct('kpiPriceX2Pct', avgX2, TARGET_PRICE_X2, true);
+
+            const maxRmCnt = Math.max(rm.flour_cnt, rm.soda_cnt, rm.borax_cnt, rm.synth_cnt, rm.x2_cnt);
+            const rmBadge = document.getElementById('rawMaterialCountBadge');
+            if (rmBadge) {
+                rmBadge.innerText = maxRmCnt > 0 ? `บันทึกราคาแล้ว ${maxRmCnt} วัน ในช่วงนี้` : `ไม่มีข้อมูลราคาในช่วงวันที่เลือก`;
+            }
+
+            // 1. UPDATE TARGET VS ACTUAL (0.464 ฿/OUTPUT) SUMMARY BANNER
+            const targetTotalCost = dispTotalOutput > 0 ? (RATIO_TARGET * dispTotalOutput) : 0;
+            const savingCost = targetTotalCost - dispTotalCost; // Target - Actual
+            const savingPercent = targetTotalCost > 0 ? ((savingCost / targetTotalCost) * 100) : 0;
+            const unitDiff = dispRatio - RATIO_TARGET; // Actual ฿/Out - 0.464
+
+            if (document.getElementById('bannerTargetCost')) document.getElementById('bannerTargetCost').innerText = targetTotalCost > 0 ? "฿" + targetTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "--";
+            if (document.getElementById('bannerActualCost')) document.getElementById('bannerActualCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            const bannerDiffEl = document.getElementById('bannerDiffCost');
+            const bannerDiffPctEl = document.getElementById('bannerDiffPct');
+            const bannerBadgeEl = document.getElementById('badgeTargetStatus');
+            const bannerUnitDiffEl = document.getElementById('bannerUnitDiff');
+            const bannerUnitDiffSubEl = document.getElementById('bannerUnitDiffSub');
+
+            if (targetTotalCost > 0) {
+                if (savingCost >= 0) {
+                    if (bannerDiffEl) { bannerDiffEl.innerText = "+฿" + savingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); bannerDiffEl.className = "text-lg font-bold text-emerald-400 mt-1"; }
+                    if (bannerDiffPctEl) { bannerDiffPctEl.innerText = `ประหยัดได้ +${savingPercent.toFixed(2)}%`; bannerDiffPctEl.className = "text-[10px] font-semibold text-emerald-400"; }
+                    if (bannerBadgeEl) { bannerBadgeEl.innerText = `ประหยัดเงินได้ (Saving)`; bannerBadgeEl.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-900/40 text-emerald-300 border border-emerald-500/40"; }
+                } else {
+                    if (bannerDiffEl) { bannerDiffEl.innerText = "-฿" + Math.abs(savingCost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); bannerDiffEl.className = "text-lg font-bold text-rose-400 mt-1"; }
+                    if (bannerDiffPctEl) { bannerDiffPctEl.innerText = `เกินเป้าหมาย ${savingPercent.toFixed(2)}%`; bannerDiffPctEl.className = "text-[10px] font-semibold text-rose-400"; }
+                    if (bannerBadgeEl) { bannerBadgeEl.innerText = `ใช้เกินเป้า (Over Target)`; bannerBadgeEl.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-950/40 text-rose-300 border border-rose-500/40"; }
+                }
+
+                if (bannerUnitDiffEl) {
+                    bannerUnitDiffEl.innerText = `฿${dispRatio.toFixed(3)}`;
+                    bannerUnitDiffEl.className = unitDiff <= 0 ? "text-lg font-bold text-emerald-400 mt-1" : "text-lg font-bold text-rose-400 mt-1";
+                }
+                if (bannerUnitDiffSubEl) {
+                    bannerUnitDiffSubEl.innerHTML = unitDiff <= 0
+                        ? `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-down"></i> ${(Math.abs(unitDiff)).toFixed(3)} ฿</span> ต่ำกว่าเป้า (ดี)`
+                        : `<span class="text-rose-400 font-semibold"><i class="fa-solid fa-arrow-up"></i> +${unitDiff.toFixed(3)} ฿</span> เกินเป้า 0.464`;
+                }
+            } else {
+                if (bannerDiffEl) bannerDiffEl.innerText = "--";
+                if (bannerDiffPctEl) bannerDiffPctEl.innerText = "ยังไม่มีข้อมูล Output";
+                if (bannerBadgeEl) { bannerBadgeEl.innerText = "รอข้อมูล Output"; bannerBadgeEl.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400"; }
+                if (bannerUnitDiffEl) bannerUnitDiffEl.innerText = "--";
+                if (bannerUnitDiffSubEl) bannerUnitDiffSubEl.innerText = "เทียบ 0.464 ฿/Output";
+            }
+
+            // 2. TABLE CALCULATIONS WITH TARGET VALUES
+            const singleBaht = (dispSingleG / 1000) * FIXED_RATE;
+            const doubleBaht = (dispDoubleG / 1000) * FIXED_RATE;
+            const ply3Baht = (disp3PlyG / 1000) * FIXED_RATE;
+            const ply5Baht = (disp5PlyG / 1000) * FIXED_RATE;
+
+            const renderStatusBadge = (actualG, targetG) => {
+                if (actualG <= 0) return '<span class="text-slate-500 text-xs">--</span>';
+                if (actualG <= targetG) {
+                    const diff = ((targetG - actualG) / targetG * 100).toFixed(1);
+                    return `<span class="text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded text-xs font-semibold">ผ่าน (-${diff}%)</span>`;
+                } else {
+                    const diff = ((actualG - targetG) / targetG * 100).toFixed(1);
+                    return `<span class="text-rose-400 bg-rose-950/40 border border-rose-500/30 px-2 py-0.5 rounded text-xs font-semibold">เกิน (+${diff}%)</span>`;
+                }
+            };
+
+            if (document.getElementById('tblSingleG')) document.getElementById('tblSingleG').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
+            if (document.getElementById('tblSingleKg')) document.getElementById('tblSingleKg').innerText = dispSingleG > 0 ? (dispSingleG / 1000).toFixed(6) : "--";
+            if (document.getElementById('tblSingleBaht')) document.getElementById('tblSingleBaht').innerText = dispSingleG > 0 ? "฿" + singleBaht.toFixed(4) : "--";
+            if (document.getElementById('tblSingleStatus')) document.getElementById('tblSingleStatus').innerHTML = renderStatusBadge(dispSingleG, 14.710);
+
+            if (document.getElementById('tblDoubleG')) document.getElementById('tblDoubleG').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
+            if (document.getElementById('tblDoubleKg')) document.getElementById('tblDoubleKg').innerText = dispDoubleG > 0 ? (dispDoubleG / 1000).toFixed(6) : "--";
+            if (document.getElementById('tblDoubleBaht')) document.getElementById('tblDoubleBaht').innerText = dispDoubleG > 0 ? "฿" + doubleBaht.toFixed(4) : "--";
+            if (document.getElementById('tblDoubleStatus')) document.getElementById('tblDoubleStatus').innerHTML = renderStatusBadge(dispDoubleG, 18.310);
+
+            if (document.getElementById('tbl3PlyG')) document.getElementById('tbl3PlyG').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
+            if (document.getElementById('tbl3PlyKg')) document.getElementById('tbl3PlyKg').innerText = disp3PlyG > 0 ? (disp3PlyG / 1000).toFixed(6) : "--";
+            if (document.getElementById('tbl3PlyBaht')) document.getElementById('tbl3PlyBaht').innerText = disp3PlyG > 0 ? "฿" + ply3Baht.toFixed(4) : "--";
+            if (document.getElementById('tbl3PlyStatus')) document.getElementById('tbl3PlyStatus').innerHTML = renderStatusBadge(disp3PlyG, TARGET_3PLY_G);
+
+            if (document.getElementById('tbl5PlyG')) document.getElementById('tbl5PlyG').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
+            if (document.getElementById('tbl5PlyKg')) document.getElementById('tbl5PlyKg').innerText = disp5PlyG > 0 ? (disp5PlyG / 1000).toFixed(6) : "--";
+            if (document.getElementById('tbl5PlyBaht')) document.getElementById('tbl5PlyBaht').innerText = disp5PlyG > 0 ? "฿" + ply5Baht.toFixed(4) : "--";
+            if (document.getElementById('tbl5PlyStatus')) document.getElementById('tbl5PlyStatus').innerHTML = renderStatusBadge(disp5PlyG, TARGET_5PLY_G);
+
+            // KPI Cards
+            if (document.getElementById('kpiTotalUsage')) document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            if (document.getElementById('kpiTotalCost')) document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            if (document.getElementById('kpiTotalOutput')) document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            if (document.getElementById('kpiTotalSqm')) document.getElementById('kpiTotalSqm').innerText = totalSqm.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            if (document.getElementById('kpiTotalSqm3Ply')) document.getElementById('kpiTotalSqm3Ply').innerText = totalSqm3Ply > 0 ? totalSqm3Ply.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : "--";
+            if (document.getElementById('kpiTotalSqm5Ply')) document.getElementById('kpiTotalSqm5Ply').innerText = totalSqm5Ply > 0 ? totalSqm5Ply.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : "--";
+            
+            if (document.getElementById('kpiAvgRatio')) document.getElementById('kpiAvgRatio').innerText = "฿ " + dispRatio.toFixed(3);
+            if (dispRatio > 0) renderTargetPct('kpiAvgRatioPct', dispRatio, RATIO_TARGET, true);
+            else if (document.getElementById('kpiAvgRatioPct')) document.getElementById('kpiAvgRatioPct').innerHTML = "";
+
+            if (document.getElementById('kpiGramSqm')) document.getElementById('kpiGramSqm').innerText = dispGramSqm > 0 ? dispGramSqm.toFixed(3) : "0.000";
+            if (dispGramSqm > 0) renderTargetPct('kpiGramSqmPct', dispGramSqm, 33.020, true);
+            else if (document.getElementById('kpiGramSqmPct')) document.getElementById('kpiGramSqmPct').innerHTML = "";
+
+            const targetGSqm = 33.020;
+            let lostGlueKg = 0;
+            if (totalSqm > 0) {
+                lostGlueKg = ((avgGramSqm - targetGSqm) * totalSqm) / 1000;
+            }
+
+            const kpiLostGlueEl = document.getElementById('kpiLostGlue');
+            const cardLostGlueEl = document.getElementById('cardLostGlue');
+            const iconLostGlueEl = document.getElementById('iconLostGlue');
+
+            if (lostGlueKg > 0) {
+                if (kpiLostGlueEl) { kpiLostGlueEl.innerText = "+" + lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }); kpiLostGlueEl.className = "kpi-value text-rose-400"; }
+                if (cardLostGlueEl) cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50 bg-rose-950/20";
+                if (iconLostGlueEl) iconLostGlueEl.className = "fa-solid fa-arrow-trend-up text-3xl text-rose-400";
+            } else if (lostGlueKg < 0) {
+                if (kpiLostGlueEl) { kpiLostGlueEl.innerText = lostGlueKg.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }); kpiLostGlueEl.className = "kpi-value text-emerald-400"; }
+                if (cardLostGlueEl) cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50 bg-emerald-950/20";
+                if (iconLostGlueEl) iconLostGlueEl.className = "fa-solid fa-arrow-trend-down text-3xl text-emerald-400";
+            } else {
+                if (kpiLostGlueEl) { kpiLostGlueEl.innerText = "0.000"; kpiLostGlueEl.className = "kpi-value text-slate-400"; }
+                if (cardLostGlueEl) cardLostGlueEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
+                if (iconLostGlueEl) iconLostGlueEl.className = "fa-solid fa-minus text-3xl text-slate-400";
+            }
+
+            if (document.getElementById('kpiKgOutput')) document.getElementById('kpiKgOutput').innerText = dispKgOutput > 0 ? dispKgOutput.toFixed(3) : "0.000";
+            if (dispKgOutput > 0) renderTargetPct('kpiKgOutputPct', dispKgOutput, 0.096, true);
+            else if (document.getElementById('kpiKgOutputPct')) document.getElementById('kpiKgOutputPct').innerHTML = "";
+
+            if (document.getElementById('kpiQuality')) document.getElementById('kpiQuality').innerText = dispQuality > 0 ? dispQuality.toFixed(3) + "%" : "--";
+            if (dispQuality > 0) renderTargetPct('kpiQualityPct', dispQuality, 90.0, false, true); 
+            else if (document.getElementById('kpiQualityPct')) document.getElementById('kpiQualityPct').innerHTML = "";
+
+            if (document.getElementById('kpiGramSqmSingle')) document.getElementById('kpiGramSqmSingle').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
+            if (dispSingleG > 0) renderTargetPct('kpiGramSqmSinglePct', dispSingleG, 14.710, true);
+            else if (document.getElementById('kpiGramSqmSinglePct')) document.getElementById('kpiGramSqmSinglePct').innerHTML = "";
+
+            if (document.getElementById('kpiGramSqmDouble')) document.getElementById('kpiGramSqmDouble').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
+            if (dispDoubleG > 0) renderTargetPct('kpiGramSqmDoublePct', dispDoubleG, 18.310, true);
+            else if (document.getElementById('kpiGramSqmDoublePct')) document.getElementById('kpiGramSqmDoublePct').innerHTML = "";
+
+            const kpi3pSub = document.getElementById('kpiGramSqm3PlySub');
+            const kpi5pSub = document.getElementById('kpiGramSqm5PlySub');
+
+            if (disp3PlyG > 0) {
+                if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
+                renderTargetPct('kpiGramSqm3PlyPct', disp3PlyG, TARGET_3PLY_G, true);
+                if (kpi3pSub) kpi3pSub.innerText = `Target: 14.710 g/Sqm (บันทึก ${ply3_count} วัน)`;
+            } else {
+                if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = "--";
+                if (document.getElementById('kpiGramSqm3PlyPct')) document.getElementById('kpiGramSqm3PlyPct').innerHTML = "";
+                if (kpi3pSub) kpi3pSub.innerText = `ไม่มีข้อมูลในช่วงวันที่เลือก`;
+            }
+
+            if (disp5PlyG > 0) {
+                if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
+                renderTargetPct('kpiGramSqm5PlyPct', disp5PlyG, TARGET_5PLY_G, true);
+                if (kpi5pSub) kpi5pSub.innerText = `Target: 18.310 g/Sqm (บันทึก ${ply5_count} วัน)`;
+            } else {
+                if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = "--";
+                if (document.getElementById('kpiGramSqm5PlyPct')) document.getElementById('kpiGramSqm5PlyPct').innerHTML = "";
+                if (kpi5pSub) kpi5pSub.innerText = `ไม่มีข้อมูลในช่วงวันที่เลือก`;
+            }
+
+            const kpiYueMixEl = document.getElementById('kpiYueMix');
+            const cardYueMixEl = document.getElementById('cardYueMix');
+            const iconYueMixEl = document.getElementById('iconYueMix');
+
+            if (dispMixCost > 0) {
+                if (kpiYueMixEl) kpiYueMixEl.innerText = "฿ " + dispMixCost.toFixed(3);
+                renderTargetPct('kpiYueMixPct', dispMixCost, TARGET_MIX_COST, true);
+                
+                if (dispMixCost <= TARGET_MIX_COST) {
+                    if (kpiYueMixEl) kpiYueMixEl.className = "kpi-value text-emerald-400";
+                    if (cardYueMixEl) cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-emerald-500/50";
+                    if (iconYueMixEl) iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-emerald-400";
+                } else {
+                    if (kpiYueMixEl) kpiYueMixEl.className = "kpi-value text-rose-400";
+                    if (cardYueMixEl) cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-rose-500/50";
+                    if (iconYueMixEl) iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-rose-400";
+                }
+            } else {
+                if (kpiYueMixEl) { kpiYueMixEl.innerText = "--"; kpiYueMixEl.className = "kpi-value text-slate-400"; }
+                if (document.getElementById('kpiYueMixPct')) document.getElementById('kpiYueMixPct').innerHTML = "";
+                if (cardYueMixEl) cardYueMixEl.className = "glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-slate-500/50";
+                if (iconYueMixEl) iconYueMixEl.className = "fa-solid fa-bullseye text-3xl text-slate-400";
+            }
+
+            // CHARTS UPDATES
+            try {
+                updateBarChart('barUsage', 'ปริมาณกาว (kg)', { iso: kpi.iso.usage, bhs: kpi.bhs.usage, yue: kpi.yue.usage });
+                updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
+                updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
+
+                updateBahtSqmTypeChart(singleBaht, doubleBaht, ply3Baht, ply5Baht);
+
+                updateTrendRatioChart(trendData);
+                updateTrendGramSqmChart(trendData);
+                updateTrendKgOutputChart(trendData);
+                updateTrendQualityChart(trendData);
+                updateTrendYueMixChart(trendData);
+                
+                updateTrendGramSqmSingleChart(trendData);
+                updateTrendGramSqmDoubleChart(trendData);
+                
+                updateTrendGramSqm3PlyChart(trendData);
+                updateTrendGramSqm5PlyChart(trendData);
+
+                updateTrendRawMaterialsChart(trendData);
+                updateBarRawMaterialsChart(avgFlour, avgSoda, avgBorax, avgSynth, avgX2);
+
+            } catch (error) {
+                console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
+            }
+
+            try { updateCostShareDonut(kpi); } catch (error) { console.error("Donut error:", error); }
+            try { updateTargetActualColumn(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Target/Actual error:", error); }
+            try { updateSavingGauge(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Gauge error:", error); }
+        }
+
+        function updateTrendRawMaterialsChart(trendData) {
+            const canvas = document.getElementById('trendRawMaterials');
+            if (!canvas) return;
+            if (charts['trendRawMaterials']) charts['trendRawMaterials'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const labels = trendData.map(d => d.label);
+            const getAvg = (sum, cnt) => cnt > 0 ? parseFloat((sum / cnt).toFixed(2)) : null;
+
+            const flourData = trendData.map(d => getAvg(d.flour_sum, d.flour_cnt));
+            const sodaData = trendData.map(d => getAvg(d.soda_sum, d.soda_cnt));
+            const boraxData = trendData.map(d => getAvg(d.borax_sum, d.borax_cnt));
+            const synthData = trendData.map(d => getAvg(d.synth_sum, d.synth_cnt));
+            const x2Data = trendData.map(d => getAvg(d.x2_sum, d.x2_cnt));
+
+            charts['trendRawMaterials'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'แป้ง', data: flourData, borderColor: '#f59e0b', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'โซดาไฟ', data: sodaData, borderColor: '#38bdf8', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'บอแรกซ์', data: boraxData, borderColor: '#34d399', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'แป้งสังเคราะห์', data: synthData, borderColor: '#c084fc', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'x-2', data: x2Data, borderColor: '#fb7185', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: `Target แป้ง (${TARGET_PRICE_FLOUR})`, data: trendData.map(() => TARGET_PRICE_FLOUR), borderColor: '#f59e0b', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, fill: false, datalabels: { display: false } },
+                        { label: `Target โซดาไฟ (${TARGET_PRICE_SODA})`, data: trendData.map(() => TARGET_PRICE_SODA), borderColor: '#38bdf8', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, fill: false, datalabels: { display: false } },
+                        { label: `Target บอแรกซ์ (${TARGET_PRICE_BORAX})`, data: trendData.map(() => TARGET_PRICE_BORAX), borderColor: '#34d399', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, fill: false, datalabels: { display: false } },
+                        { label: `Target สังเคราะห์ (${TARGET_PRICE_SYNTH})`, data: trendData.map(() => TARGET_PRICE_SYNTH), borderColor: '#c084fc', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, fill: false, datalabels: { display: false } },
+                        { label: `Target x-2 (${TARGET_PRICE_X2})`, data: trendData.map(() => TARGET_PRICE_X2), borderColor: '#fb7185', borderDash: [4, 4], borderWidth: 1, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.dataset.label}: ฿${Number(ctx.raw || 0).toFixed(2)} /กก.`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false, ticks: { callback: v => '฿' + v } },
+                        x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } }
+                    }
+                }
+            });
+        }
+
+        function updateBarRawMaterialsChart(flour, soda, borax, synth, x2) {
+            const canvas = document.getElementById('barRawMaterials');
+            if (!canvas) return;
+            if (charts['barRawMaterials']) charts['barRawMaterials'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            charts['barRawMaterials'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['แป้ง', 'โซดาไฟ', 'บอแรกซ์', 'สังเคราะห์', 'x-2'],
+                    datasets: [{
+                        label: 'ราคาเฉลี่ย (฿/กก.)',
+                        data: [flour, soda, borax, synth, x2],
+                        backgroundColor: [
+                            'rgba(245, 158, 11, 0.6)',
+                            'rgba(56, 189, 248, 0.6)',
+                            'rgba(52, 211, 153, 0.6)',
+                            'rgba(192, 132, 252, 0.6)',
+                            'rgba(251, 113, 133, 0.6)'
+                        ],
+                        borderColor: ['#f59e0b', '#38bdf8', '#34d399', '#c084fc', '#fb7185'],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ฿${Number(ctx.raw || 0).toFixed(2)} บาท/กก.`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, ticks: { callback: v => '฿' + v } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateBahtSqmTypeChart(singleVal, doubleVal, ply3Val, ply5Val) {
+            const canvas = document.getElementById('barBahtSqmType');
+            if (!canvas) return;
+            if (charts['barBahtSqmType']) charts['barBahtSqmType'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            charts['barBahtSqmType'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Single', 'Double', '3 ชั้น (3 Ply)', '5 ชั้น (5 Ply)'],
+                    datasets: [
+                        {
+                            label: 'ต้นทุนจริง (Actual)',
+                            data: [singleVal, doubleVal, ply3Val, ply5Val],
+                            backgroundColor: ['rgba(249, 115, 22, 0.6)', 'rgba(99, 102, 241, 0.6)', 'rgba(132, 204, 22, 0.6)', 'rgba(217, 70, 239, 0.6)'],
+                            borderColor: ['#f97316', '#6366f1', '#84cc16', '#d946ef'],
+                            borderWidth: 2,
+                            borderRadius: 8
+                        },
+                        {
+                            label: 'ต้นทุนเป้าหมาย (Target)',
+                            data: [0.0645, 0.0803, 0.0645, 0.0803],
+                            backgroundColor: 'rgba(244, 63, 94, 0.25)',
+                            borderColor: '#f43f5e',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            borderRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } }, 
+                        tooltip: { 
+                            callbacks: { 
+                                label: (ctx) => ` ${ctx.dataset.label}: ฿${(Number(ctx.raw) || 0).toFixed(4)} บาท/ตรม.` 
+                            } 
+                        } 
+                    },
+                    scales: { 
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, 
+                        x: { grid: { display: false } } 
+                    }
+                }
+            });
+        }
+
+        function updateBarChart(canvasId, label, dataObj) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            if (charts[canvasId]) charts[canvasId].destroy();
+            const ctx = canvas.getContext('2d');
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+
+            let dispLabels = []; let dispData = []; let dispBg = []; let dispBorder = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') { dispLabels.push('ISOWA'); dispData.push(dataObj.iso); dispBg.push(colors.iso.bg); dispBorder.push(colors.iso.border); }
+            if (mcFilter === 'all' || mcFilter === 'bhs') { dispLabels.push('BHS'); dispData.push(dataObj.bhs); dispBg.push(colors.bhs.bg); dispBorder.push(colors.bhs.border); }
+            if (mcFilter === 'all' || mcFilter === 'yue') { dispLabels.push('YUELI'); dispData.push(dataObj.yue); dispBg.push(colors.yue.bg); dispBorder.push(colors.yue.border); }
+
+            charts[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dispLabels,
+                    datasets: [{
+                        label: label, data: dispData,
+                        backgroundColor: dispBg,
+                        borderColor: dispBorder,
+                        borderWidth: 2, borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })}` } } },
+                    scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        function updateTrendRatioChart(trendData) {
+            const canvas = document.getElementById('trendRatio');
+            if (!canvas) return;
+            if (charts['trendRatio']) charts['trendRatio'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const calcKPI = (cost, out) => out > 0 ? (cost / out) : null;
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcKPI(d.iso_cost, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcKPI(d.bhs_cost, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcKPI(d.yue_cost, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 3, spanGaps: true });
+
+            datasets.push({
+                label: 'Target (0.464)',
+                data: trendData.map(() => RATIO_TARGET),
+                borderColor: '#f43f5e',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                datalabels: { display: false }
+            });
+
+            charts['trendRatio'] = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqmChart(trendData) {
+            const canvas = document.getElementById('trendGramSqm');
+            if (!canvas) return;
+            if (charts['trendGramSqm']) charts['trendGramSqm'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const calcGramSqm = (g, mc) => {
+                return (g[`${mc}_sqm`] > 0) ? ((g[`${mc}_usage`] / g[`${mc}_sqm`]) * 1000) : null;
+            };
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcGramSqm(d, 'iso')), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcGramSqm(d, 'bhs')), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcGramSqm(d, 'yue')), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+
+            datasets.push({
+                label: 'Target (33.020)',
+                data: trendData.map(() => 33.020),
+                borderColor: '#f43f5e',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                datalabels: { display: false }
+            });
+
+            charts['trendGramSqm'] = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendKgOutputChart(trendData) {
+            const canvas = document.getElementById('trendKgOutput');
+            if (!canvas) return;
+            if (charts['trendKgOutput']) charts['trendKgOutput'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const calcKgOut = (usage, out) => out > 0 ? (usage / out) : null;
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+            let datasets = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') datasets.push({ label: 'ISOWA', data: trendData.map(d => calcKgOut(d.iso_usage, d.iso_out)), borderColor: colors.iso.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'bhs') datasets.push({ label: 'BHS', data: trendData.map(d => calcKgOut(d.bhs_usage, d.bhs_out)), borderColor: colors.bhs.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+            if (mcFilter === 'all' || mcFilter === 'yue') datasets.push({ label: 'YUELI', data: trendData.map(d => calcKgOut(d.yue_usage, d.yue_out)), borderColor: colors.yue.border, backgroundColor: 'transparent', tension: 0.3, pointRadius: 4, spanGaps: true });
+
+            datasets.push({
+                label: 'Target (0.096)',
+                data: trendData.map(() => 0.096),
+                borderColor: '#f43f5e',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                datalabels: { display: false }
+            });
+
+            charts['trendKgOutput'] = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendQualityChart(trendData) {
+            const canvas = document.getElementById('trendQuality');
+            if (!canvas) return;
+            if (charts['trendQuality']) charts['trendQuality'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.quality_count > 0 ? (d.quality_sum / d.quality_count) : null);
+
+            charts['trendQuality'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: '% คุณภาพกาวเฉลี่ย', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Target (90%)', data: trendData.map(() => 90), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendYueMixChart(trendData) {
+            const canvas = document.getElementById('trendYueMix');
+            if (!canvas) return;
+            if (charts['trendYueMix']) charts['trendYueMix'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const labels = trendData.map(d => d.label);
+            const calcMixCost = (g) => g.mix_count > 0 ? (g.mix_sum / g.mix_count) : null;
+
+            const actualData = trendData.map(d => calcMixCost(d));
+            const targetData = trendData.map(() => TARGET_MIX_COST); 
+
+            charts['trendYueMix'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'ต้นทุนผสมจริง', data: actualData, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Target (5.090)', data: targetData, borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqmSingleChart(trendData) {
+            const canvas = document.getElementById('trendGramSqmSingle');
+            if (!canvas) return;
+            if (charts['trendGramSqmSingle']) charts['trendGramSqmSingle'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.sf_count > 0 ? (d.sf_sum / d.sf_count) : null);
+
+            charts['trendGramSqmSingle'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'กรัม/ตรม. (Single)', data: data, borderColor: '#f97316', backgroundColor: 'rgba(249, 115, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Target (14.710)', data: trendData.map(() => 14.710), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqmDoubleChart(trendData) {
+            const canvas = document.getElementById('trendGramSqmDouble');
+            if (!canvas) return;
+            if (charts['trendGramSqmDouble']) charts['trendGramSqmDouble'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.df_count > 0 ? (d.df_sum / d.df_count) : null);
+
+            charts['trendGramSqmDouble'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'กรัม/ตรม. (Double)', data: data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Target (18.310)', data: trendData.map(() => 18.310), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqm3PlyChart(trendData) {
+            const canvas = document.getElementById('trendGramSqm3Ply');
+            if (!canvas) return;
+            if (charts['trendGramSqm3Ply']) charts['trendGramSqm3Ply'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.ply3_count > 0 ? (d.ply3_sum / d.ply3_count) : null);
+
+            charts['trendGramSqm3Ply'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'กรัม/ตรม. (3 ชั้น)', data: data, borderColor: '#84cc16', backgroundColor: 'rgba(132, 204, 22, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: `Target (${TARGET_3PLY_G.toFixed(3)})`, data: trendData.map(() => TARGET_3PLY_G), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateTrendGramSqm5PlyChart(trendData) {
+            const canvas = document.getElementById('trendGramSqm5Ply');
+            if (!canvas) return;
+            if (charts['trendGramSqm5Ply']) charts['trendGramSqm5Ply'].destroy();
+            const ctx = canvas.getContext('2d');
+            
+            const labels = trendData.map(d => d.label);
+            const data = trendData.map(d => d.ply5_count > 0 ? (d.ply5_sum / d.ply5_count) : null);
+
+            charts['trendGramSqm5Ply'] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'กรัม/ตรม. (5 ชั้น)', data: data, borderColor: '#d946ef', backgroundColor: 'rgba(217, 70, 239, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: `Target (${TARGET_5PLY_G.toFixed(3)})`, data: trendData.map(() => TARGET_5PLY_G), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+            });
+        }
+
+        function updateCostShareDonut(kpi) {
+            const canvas = document.getElementById('donutCostShare');
+            if (!canvas) return;
+            if (charts['donutCostShare']) charts['donutCostShare'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
+
+            let labels = []; let data = []; let bg = []; let border = [];
+            if (mcFilter === 'all' || mcFilter === 'iso') { labels.push('ISOWA'); data.push(kpi.iso.cost); bg.push(colors.iso.bg); border.push(colors.iso.border); }
+            if (mcFilter === 'all' || mcFilter === 'bhs') { labels.push('BHS'); data.push(kpi.bhs.cost); bg.push(colors.bhs.bg); border.push(colors.bhs.border); }
+            if (mcFilter === 'all' || mcFilter === 'yue') { labels.push('YUELI'); data.push(kpi.yue.cost); bg.push(colors.yue.bg); border.push(colors.yue.border); }
+
+            const total = data.reduce((a, b) => a + b, 0);
+
+            charts['donutCostShare'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: labels, datasets: [{ data: data, backgroundColor: bg, borderColor: border, borderWidth: 2 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '62%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const val = Number(ctx.raw) || 0;
+                                    const pct = total > 0 ? (val / total * 100) : 0;
+                                    return ` ${ctx.label}: ฿${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pct.toFixed(2)}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true, color: '#fff', font: { size: 12, weight: 'bold' },
+                            formatter: (value) => {
+                                const pct = total > 0 ? (value / total * 100) : 0;
+                                return pct > 0 ? pct.toFixed(1) + '%' : '';
+                            },
+                            anchor: 'center', align: 'center', offset: 0
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateTargetActualColumn(actualCost, totalOutput) {
+            const canvas = document.getElementById('colTargetActual');
+            if (!canvas) return;
+            if (charts['colTargetActual']) charts['colTargetActual'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const targetCost = totalOutput > 0 ? (RATIO_TARGET * totalOutput) : 0;
+            const savingBaht = targetCost - actualCost;
+
+            charts['colTargetActual'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ต้นทุนเป้าหมาย (Target: 0.464 ฿/Output)', 'ต้นทุนจริง (Actual Cost)'],
+                    datasets: [{
+                        label: 'ต้นทุนรวม (บาท)',
+                        data: [targetCost, actualCost],
+                        backgroundColor: ['rgba(245, 158, 11, 0.6)', savingBaht >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(244, 63, 94, 0.6)'],
+                        borderColor: ['#f59e0b', savingBaht >= 0 ? '#10b981' : '#f43f5e'],
+                        borderWidth: 2, borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ` ฿${(Number(ctx.raw) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` } } },
+                    scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+
+            const noteEl = document.getElementById('savingMoneyNote');
+            if (noteEl) {
+                if (targetCost <= 0) {
+                    noteEl.innerHTML = `<span class="text-slate-400"><i class="fa-solid fa-circle-info"></i> ช่วงที่เลือกยังไม่มีข้อมูล Output ในชีต จึงคำนวณเงินประหยัดไม่ได้</span>`;
+                } else if (savingBaht >= 0) {
+                    noteEl.innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-piggy-bank"></i> ประหยัดได้ ฿${savingBaht.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`;
+                } else {
+                    noteEl.innerHTML = `<span class="text-rose-400"><i class="fa-solid fa-triangle-exclamation"></i> ใช้เกินเป้า ฿${Math.abs(savingBaht).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`;
+                }
+            }
+        }
+
+        function updateSavingGauge(actualCost, totalOutput) {
+            const canvas = document.getElementById('gaugeSaving');
+            if (!canvas) return;
+            if (charts['gaugeSaving']) charts['gaugeSaving'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            const targetCost = totalOutput > 0 ? (RATIO_TARGET * totalOutput) : 0;
+            const savingBaht = targetCost - actualCost;
+            const savingPct = targetCost > 0 ? (savingBaht / targetCost) * 100 : 0;
+
+            const clamped = Math.max(-50, Math.min(50, savingPct));
+            const gaugeFraction = (clamped + 50) / 100;
+            const needleColor = savingPct >= 0 ? '#10b981' : '#f43f5e';
+
+            charts['gaugeSaving'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: ['ใช้เกินเป้า', 'ประหยัด'], datasets: [{ data: [gaugeFraction, 1 - gaugeFraction], backgroundColor: [needleColor, 'rgba(148, 163, 184, 0.15)'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, circumference: 180, rotation: 270, cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false }, datalabels: { display: false } } }
+            });
+
+            const valEl = document.getElementById('gaugeSavingValue');
+            const bahtEl = document.getElementById('gaugeSavingBaht');
+
+            if (targetCost <= 0) {
+                if (valEl) { valEl.innerText = "--"; valEl.className = "text-center kpi-value mt-1 text-slate-400"; }
+                if (bahtEl) bahtEl.innerText = "ช่วงที่เลือกยังไม่มีข้อมูล Output ในชีต";
+                return;
+            }
+
+            if (valEl) {
+                valEl.innerText = (savingPct >= 0 ? "+" : "") + savingPct.toFixed(2) + "%";
+                valEl.className = "text-center kpi-value mt-1 " + (savingPct >= 0 ? "text-emerald-400" : "text-rose-400");
+            }
+            if (bahtEl) {
+                bahtEl.innerHTML = savingPct >= 0
+                    ? `คิดเป็น <span class="text-emerald-400">฿${savingBaht.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> ที่ประหยัดได้`
+                    : `คิดเป็น <span class="text-rose-400">฿${Math.abs(savingBaht).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> ที่ใช้เกินเป้า`;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
