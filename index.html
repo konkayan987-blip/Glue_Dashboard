@@ -473,7 +473,7 @@
                             <th class="p-3 text-right">คิดเป็น (กก./ตรม.)</th>
                             <th class="p-3 text-center">× เรท (฿/กก.)</th>
                             <th class="p-3 text-right">ต้นทุนจริง (฿/ตรม.)</th>
-                            <th class="p-3 text-right">ต้นทุนเป้าหมาย (฿/ตรม.)</th>
+                            <th class="p-3 text-right">ผลต่างต้นทุน (Target−Actual) ฿/ตรม.</th>
                             <th class="p-3 text-center">สถานะ</th>
                         </tr>
                     </thead>
@@ -1509,10 +1509,10 @@
             const ply3Baht = (disp3PlyG / 1000) * activeRate;
             const ply5Baht = (disp5PlyG / 1000) * activeRate;
 
-            const singleTargetBaht = (14.710 / 1000) * activeRate;
-            const doubleTargetBaht = (18.310 / 1000) * activeRate;
-            const ply3TargetBaht = (TARGET_3PLY_G / 1000) * activeRate;
-            const ply5TargetBaht = (TARGET_5PLY_G / 1000) * activeRate;
+            const singleTargetBaht = ((14.710 - dispSingleG) / 1000) * activeRate;
+            const doubleTargetBaht = ((18.310 - dispDoubleG) / 1000) * activeRate;
+            const ply3TargetBaht = ((TARGET_3PLY_G - disp3PlyG) / 1000) * activeRate;
+            const ply5TargetBaht = ((TARGET_5PLY_G - disp5PlyG) / 1000) * activeRate;
 
             const rateLabel = "× " + activeRate.toFixed(3);
             if (document.getElementById('mixRateHeaderVal')) document.getElementById('mixRateHeaderVal').innerText = activeRate.toFixed(3);
@@ -1533,28 +1533,37 @@
                 }
             };
 
+            const renderDiffBaht = (actualG, diffBaht) => {
+                if (actualG <= 0) return '<span class="text-slate-500">--</span>';
+                if (diffBaht >= 0) {
+                    return `<span class="text-emerald-400 font-semibold">+฿${diffBaht.toFixed(4)}</span>`;
+                } else {
+                    return `<span class="text-rose-400 font-semibold">-฿${Math.abs(diffBaht).toFixed(4)}</span>`;
+                }
+            };
+
             if (document.getElementById('tblSingleG')) document.getElementById('tblSingleG').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
             if (document.getElementById('tblSingleKg')) document.getElementById('tblSingleKg').innerText = dispSingleG > 0 ? (dispSingleG / 1000).toFixed(6) : "--";
             if (document.getElementById('tblSingleBaht')) document.getElementById('tblSingleBaht').innerText = dispSingleG > 0 ? "฿" + singleBaht.toFixed(4) : "--";
-            if (document.getElementById('tblSingleTargetBaht')) document.getElementById('tblSingleTargetBaht').innerText = "฿" + singleTargetBaht.toFixed(4);
+            if (document.getElementById('tblSingleTargetBaht')) document.getElementById('tblSingleTargetBaht').innerHTML = renderDiffBaht(dispSingleG, singleTargetBaht);
             if (document.getElementById('tblSingleStatus')) document.getElementById('tblSingleStatus').innerHTML = renderStatusBadge(dispSingleG, 14.710);
 
             if (document.getElementById('tblDoubleG')) document.getElementById('tblDoubleG').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
             if (document.getElementById('tblDoubleKg')) document.getElementById('tblDoubleKg').innerText = dispDoubleG > 0 ? (dispDoubleG / 1000).toFixed(6) : "--";
             if (document.getElementById('tblDoubleBaht')) document.getElementById('tblDoubleBaht').innerText = dispDoubleG > 0 ? "฿" + doubleBaht.toFixed(4) : "--";
-            if (document.getElementById('tblDoubleTargetBaht')) document.getElementById('tblDoubleTargetBaht').innerText = "฿" + doubleTargetBaht.toFixed(4);
+            if (document.getElementById('tblDoubleTargetBaht')) document.getElementById('tblDoubleTargetBaht').innerHTML = renderDiffBaht(dispDoubleG, doubleTargetBaht);
             if (document.getElementById('tblDoubleStatus')) document.getElementById('tblDoubleStatus').innerHTML = renderStatusBadge(dispDoubleG, 18.310);
 
             if (document.getElementById('tbl3PlyG')) document.getElementById('tbl3PlyG').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
             if (document.getElementById('tbl3PlyKg')) document.getElementById('tbl3PlyKg').innerText = disp3PlyG > 0 ? (disp3PlyG / 1000).toFixed(6) : "--";
             if (document.getElementById('tbl3PlyBaht')) document.getElementById('tbl3PlyBaht').innerText = disp3PlyG > 0 ? "฿" + ply3Baht.toFixed(4) : "--";
-            if (document.getElementById('tbl3PlyTargetBaht')) document.getElementById('tbl3PlyTargetBaht').innerText = "฿" + ply3TargetBaht.toFixed(4);
+            if (document.getElementById('tbl3PlyTargetBaht')) document.getElementById('tbl3PlyTargetBaht').innerHTML = renderDiffBaht(disp3PlyG, ply3TargetBaht);
             if (document.getElementById('tbl3PlyStatus')) document.getElementById('tbl3PlyStatus').innerHTML = renderStatusBadge(disp3PlyG, TARGET_3PLY_G);
 
             if (document.getElementById('tbl5PlyG')) document.getElementById('tbl5PlyG').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
             if (document.getElementById('tbl5PlyKg')) document.getElementById('tbl5PlyKg').innerText = disp5PlyG > 0 ? (disp5PlyG / 1000).toFixed(6) : "--";
             if (document.getElementById('tbl5PlyBaht')) document.getElementById('tbl5PlyBaht').innerText = disp5PlyG > 0 ? "฿" + ply5Baht.toFixed(4) : "--";
-            if (document.getElementById('tbl5PlyTargetBaht')) document.getElementById('tbl5PlyTargetBaht').innerText = "฿" + ply5TargetBaht.toFixed(4);
+            if (document.getElementById('tbl5PlyTargetBaht')) document.getElementById('tbl5PlyTargetBaht').innerHTML = renderDiffBaht(disp5PlyG, ply5TargetBaht);
             if (document.getElementById('tbl5PlyStatus')) document.getElementById('tbl5PlyStatus').innerHTML = renderStatusBadge(disp5PlyG, TARGET_5PLY_G);
 
             // KPI Cards
