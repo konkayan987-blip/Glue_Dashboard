@@ -343,7 +343,7 @@
                 <div class="kpi-sub">Target: 18.310 g/Sqm</div>
             </div>
 
-            <!-- 3 ชั้น (3 Ply) with Target 14.710 -->
+            <!-- 3 ชั้น (3 Ply) with Target 26.740 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
                 <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (3 ชั้น)</div>
@@ -351,10 +351,10 @@
                     <div id="kpiGramSqm3Ply" class="kpi-value text-lime-400">--</div>
                     <div id="kpiGramSqm3PlyPct"></div>
                 </div>
-                <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 26.74 g/Sqm (น้อย=ดี)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 26.740 g/Sqm (น้อย=ดี)</div>
             </div>
 
-            <!-- 5 ชั้น (5 Ply) with Target 18.310 -->
+            <!-- 5 ชั้น (5 Ply) with Target 40.100 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
@@ -362,7 +362,7 @@
                     <div id="kpiGramSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
                     <div id="kpiGramSqm5PlyPct"></div>
                 </div>
-                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 40.10 g/Sqm (น้อย=ดี)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 40.100 g/Sqm (น้อย=ดี)</div>
             </div>
         </div>
 
@@ -461,7 +461,7 @@
         <!-- TABLE: COST ANALYSIS PER SQM (WITH TARGET COMPARISON) -->
         <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
             <h3 class="text-lg font-semibold mb-4 text-emerald-300 flex items-center gap-2">
-                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร เทียบ Target [เรทราคาผสมอ้างอิง: 5.090 ฿/กก.]
+                <i class="fa-solid fa-calculator"></i> ตารางวิเคราะห์ต้นทุนกาวต่อตารางเมตร เทียบ Target [เรทราคาผสมอ้างอิง (Actual): <span id="mixRateHeaderVal">--</span> ฿/กก.]
             </h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-sm">
@@ -483,9 +483,9 @@
                             <td id="tblSingleG" class="p-3 text-right font-bold text-orange-400">--</td>
                             <td class="p-3 text-right text-slate-400 font-semibold">14.710</td>
                             <td id="tblSingleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td id="tblSingleRate" class="p-3 text-center text-slate-400">--</td>
                             <td id="tblSingleBaht" class="p-3 text-right font-bold text-orange-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0645</td>
+                            <td id="tblSingleTargetBaht" class="p-3 text-right text-slate-400 font-semibold">--</td>
                             <td id="tblSingleStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition">
@@ -493,29 +493,29 @@
                             <td id="tblDoubleG" class="p-3 text-right font-bold text-indigo-400">--</td>
                             <td class="p-3 text-right text-slate-400 font-semibold">18.310</td>
                             <td id="tblDoubleKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td id="tblDoubleRate" class="p-3 text-center text-slate-400">--</td>
                             <td id="tblDoubleBaht" class="p-3 text-right font-bold text-indigo-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0803</td>
+                            <td id="tblDoubleTargetBaht" class="p-3 text-right text-slate-400 font-semibold">--</td>
                             <td id="tblDoubleStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
                             <td class="p-3 font-semibold text-lime-300">3 ชั้น (3 Ply)</td>
                             <td id="tbl3PlyG" class="p-3 text-right font-bold text-lime-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">26.73</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">26.740</td>
                             <td id="tbl3PlyKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td id="tbl3PlyRate" class="p-3 text-center text-slate-400">--</td>
                             <td id="tbl3PlyBaht" class="p-3 text-right font-bold text-lime-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0645</td>
+                            <td id="tbl3PlyTargetBaht" class="p-3 text-right text-slate-400 font-semibold">--</td>
                             <td id="tbl3PlyStatus" class="p-3 text-center">--</td>
                         </tr>
                         <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
                             <td class="p-3 font-semibold text-fuchsia-300">5 ชั้น (5 Ply)</td>
                             <td id="tbl5PlyG" class="p-3 text-right font-bold text-fuchsia-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">40.10</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">40.100</td>
                             <td id="tbl5PlyKg" class="p-3 text-right text-slate-300">--</td>
-                            <td class="p-3 text-center text-slate-400">× 5.090</td>
+                            <td id="tbl5PlyRate" class="p-3 text-center text-slate-400">--</td>
                             <td id="tbl5PlyBaht" class="p-3 text-right font-bold text-fuchsia-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">฿0.0803</td>
+                            <td id="tbl5PlyTargetBaht" class="p-3 text-right text-slate-400 font-semibold">--</td>
                             <td id="tbl5PlyStatus" class="p-3 text-center">--</td>
                         </tr>
                     </tbody>
@@ -541,7 +541,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-teal-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 เปรียบเทียบต้นทุน บาท/ตรม. (อิงเรท 5.090)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-teal-300">💵 เปรียบเทียบต้นทุน บาท/ตรม. (อิงเรทจริง <span id="barBahtRateVal">--</span> ฿/กก.)</h3>
                 <div class="w-full h-[280px]"><canvas id="barBahtSqmType"></canvas></div>
             </div>
         </div>
@@ -579,14 +579,14 @@
             <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 bg-lime-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-lime-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (3 ชั้น)</span>
-                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 14.710 g/Sqm</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 26.740 g/Sqm</span>
                 </h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm3Ply"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50 bg-fuchsia-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-fuchsia-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (5 ชั้น)</span>
-                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 18.310 g/Sqm</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 40.100 g/Sqm</span>
                 </h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm5Ply"></canvas></div>
             </div>
@@ -1190,10 +1190,9 @@
 
         // CONSTANT TARGET VALUES
         const RATIO_TARGET = 0.464;     // Target ฿ / Output
-        const TARGET_3PLY_G = 14.710;   // Target g/Sqm for 3 Ply
-        const TARGET_5PLY_G = 18.310;   // Target g/Sqm for 5 Ply
-        const TARGET_MIX_COST = 5.090;  // Target Mix Cost ฿
-        const FIXED_RATE = 4.386;       // Rate ฿/kg for Glue Sqm table
+        const TARGET_3PLY_G = 26.740;   // Target g/Sqm for 3 Ply
+        const TARGET_5PLY_G = 40.100;   // Target g/Sqm for 5 Ply
+        const TARGET_MIX_COST = 5.090;  // Target Mix Cost ฿ (used as fallback rate if no Actual data)
 
         // TARGET RAW MATERIAL PRICES (฿/กก.)
         const TARGET_PRICE_FLOUR = 20;   // Target แป้งมัน ฿/กก.
@@ -1501,10 +1500,27 @@
             }
 
             // 2. TABLE CALCULATIONS WITH TARGET VALUES
-            const singleBaht = (dispSingleG / 1000) * FIXED_RATE;
-            const doubleBaht = (dispDoubleG / 1000) * FIXED_RATE;
-            const ply3Baht = (disp3PlyG / 1000) * FIXED_RATE;
-            const ply5Baht = (disp5PlyG / 1000) * FIXED_RATE;
+            // เรทราคาผสมอ้างอิง (฿/กก.) ใช้ค่า Actual จริงจากข้อมูล (เฉลี่ยต้นทุนผสมกาวในช่วงที่เลือก)
+            // ถ้ายังไม่มีข้อมูล Actual ในช่วงนี้ ใช้ Target Mix Cost เป็นค่าสำรองชั่วคราว
+            const activeRate = dispMixCost > 0 ? dispMixCost : TARGET_MIX_COST;
+
+            const singleBaht = (dispSingleG / 1000) * activeRate;
+            const doubleBaht = (dispDoubleG / 1000) * activeRate;
+            const ply3Baht = (disp3PlyG / 1000) * activeRate;
+            const ply5Baht = (disp5PlyG / 1000) * activeRate;
+
+            const singleTargetBaht = (14.710 / 1000) * activeRate;
+            const doubleTargetBaht = (18.310 / 1000) * activeRate;
+            const ply3TargetBaht = (TARGET_3PLY_G / 1000) * activeRate;
+            const ply5TargetBaht = (TARGET_5PLY_G / 1000) * activeRate;
+
+            const rateLabel = "× " + activeRate.toFixed(3);
+            if (document.getElementById('mixRateHeaderVal')) document.getElementById('mixRateHeaderVal').innerText = activeRate.toFixed(3);
+            if (document.getElementById('barBahtRateVal')) document.getElementById('barBahtRateVal').innerText = activeRate.toFixed(3);
+            if (document.getElementById('tblSingleRate')) document.getElementById('tblSingleRate').innerText = rateLabel;
+            if (document.getElementById('tblDoubleRate')) document.getElementById('tblDoubleRate').innerText = rateLabel;
+            if (document.getElementById('tbl3PlyRate')) document.getElementById('tbl3PlyRate').innerText = rateLabel;
+            if (document.getElementById('tbl5PlyRate')) document.getElementById('tbl5PlyRate').innerText = rateLabel;
 
             const renderStatusBadge = (actualG, targetG) => {
                 if (actualG <= 0) return '<span class="text-slate-500 text-xs">--</span>';
@@ -1520,21 +1536,25 @@
             if (document.getElementById('tblSingleG')) document.getElementById('tblSingleG').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
             if (document.getElementById('tblSingleKg')) document.getElementById('tblSingleKg').innerText = dispSingleG > 0 ? (dispSingleG / 1000).toFixed(6) : "--";
             if (document.getElementById('tblSingleBaht')) document.getElementById('tblSingleBaht').innerText = dispSingleG > 0 ? "฿" + singleBaht.toFixed(4) : "--";
+            if (document.getElementById('tblSingleTargetBaht')) document.getElementById('tblSingleTargetBaht').innerText = "฿" + singleTargetBaht.toFixed(4);
             if (document.getElementById('tblSingleStatus')) document.getElementById('tblSingleStatus').innerHTML = renderStatusBadge(dispSingleG, 14.710);
 
             if (document.getElementById('tblDoubleG')) document.getElementById('tblDoubleG').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
             if (document.getElementById('tblDoubleKg')) document.getElementById('tblDoubleKg').innerText = dispDoubleG > 0 ? (dispDoubleG / 1000).toFixed(6) : "--";
             if (document.getElementById('tblDoubleBaht')) document.getElementById('tblDoubleBaht').innerText = dispDoubleG > 0 ? "฿" + doubleBaht.toFixed(4) : "--";
+            if (document.getElementById('tblDoubleTargetBaht')) document.getElementById('tblDoubleTargetBaht').innerText = "฿" + doubleTargetBaht.toFixed(4);
             if (document.getElementById('tblDoubleStatus')) document.getElementById('tblDoubleStatus').innerHTML = renderStatusBadge(dispDoubleG, 18.310);
 
             if (document.getElementById('tbl3PlyG')) document.getElementById('tbl3PlyG').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
             if (document.getElementById('tbl3PlyKg')) document.getElementById('tbl3PlyKg').innerText = disp3PlyG > 0 ? (disp3PlyG / 1000).toFixed(6) : "--";
             if (document.getElementById('tbl3PlyBaht')) document.getElementById('tbl3PlyBaht').innerText = disp3PlyG > 0 ? "฿" + ply3Baht.toFixed(4) : "--";
+            if (document.getElementById('tbl3PlyTargetBaht')) document.getElementById('tbl3PlyTargetBaht').innerText = "฿" + ply3TargetBaht.toFixed(4);
             if (document.getElementById('tbl3PlyStatus')) document.getElementById('tbl3PlyStatus').innerHTML = renderStatusBadge(disp3PlyG, TARGET_3PLY_G);
 
             if (document.getElementById('tbl5PlyG')) document.getElementById('tbl5PlyG').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
             if (document.getElementById('tbl5PlyKg')) document.getElementById('tbl5PlyKg').innerText = disp5PlyG > 0 ? (disp5PlyG / 1000).toFixed(6) : "--";
             if (document.getElementById('tbl5PlyBaht')) document.getElementById('tbl5PlyBaht').innerText = disp5PlyG > 0 ? "฿" + ply5Baht.toFixed(4) : "--";
+            if (document.getElementById('tbl5PlyTargetBaht')) document.getElementById('tbl5PlyTargetBaht').innerText = "฿" + ply5TargetBaht.toFixed(4);
             if (document.getElementById('tbl5PlyStatus')) document.getElementById('tbl5PlyStatus').innerHTML = renderStatusBadge(disp5PlyG, TARGET_5PLY_G);
 
             // KPI Cards
@@ -1599,7 +1619,7 @@
             if (disp3PlyG > 0) {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm3PlyPct', disp3PlyG, TARGET_3PLY_G, true);
-                if (kpi3pSub) kpi3pSub.innerText = `Target: 14.710 g/Sqm (บันทึก ${ply3_count} วัน)`;
+                if (kpi3pSub) kpi3pSub.innerText = `Target: 26.740 g/Sqm (บันทึก ${ply3_count} วัน)`;
             } else {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm3PlyPct')) document.getElementById('kpiGramSqm3PlyPct').innerHTML = "";
@@ -1609,7 +1629,7 @@
             if (disp5PlyG > 0) {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm5PlyPct', disp5PlyG, TARGET_5PLY_G, true);
-                if (kpi5pSub) kpi5pSub.innerText = `Target: 18.310 g/Sqm (บันทึก ${ply5_count} วัน)`;
+                if (kpi5pSub) kpi5pSub.innerText = `Target: 40.100 g/Sqm (บันทึก ${ply5_count} วัน)`;
             } else {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm5PlyPct')) document.getElementById('kpiGramSqm5PlyPct').innerHTML = "";
@@ -1646,7 +1666,7 @@
                 updateBarChart('barCost', 'ค่ากาว (Baht)', { iso: kpi.iso.cost, bhs: kpi.bhs.cost, yue: kpi.yue.cost });
                 updateBarChart('barGramSqm', 'กรัม / ตรม. (g/Sqm)', { iso: kpi.iso.gSqm, bhs: kpi.bhs.gSqm, yue: kpi.yue.gSqm });
 
-                updateBahtSqmTypeChart(singleBaht, doubleBaht, ply3Baht, ply5Baht);
+                updateBahtSqmTypeChart(singleBaht, doubleBaht, ply3Baht, ply5Baht, singleTargetBaht, doubleTargetBaht, ply3TargetBaht, ply5TargetBaht);
 
                 updateTrendRatioChart(trendData);
                 updateTrendGramSqmChart(trendData);
@@ -1766,7 +1786,7 @@
             });
         }
 
-        function updateBahtSqmTypeChart(singleVal, doubleVal, ply3Val, ply5Val) {
+        function updateBahtSqmTypeChart(singleVal, doubleVal, ply3Val, ply5Val, singleTarget, doubleTarget, ply3Target, ply5Target) {
             const canvas = document.getElementById('barBahtSqmType');
             if (!canvas) return;
             if (charts['barBahtSqmType']) charts['barBahtSqmType'].destroy();
@@ -1787,7 +1807,7 @@
                         },
                         {
                             label: 'ต้นทุนเป้าหมาย (Target)',
-                            data: [0.0645, 0.0803, 0.0645, 0.0803],
+                            data: [singleTarget, doubleTarget, ply3Target, ply5Target],
                             backgroundColor: 'rgba(244, 63, 94, 0.25)',
                             borderColor: '#f43f5e',
                             borderWidth: 2,
