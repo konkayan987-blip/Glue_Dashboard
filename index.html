@@ -354,7 +354,7 @@
                 <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 26.740 g/Sqm (น้อย=ดี)</div>
             </div>
 
-            <!-- 5 ชั้น (5 Ply) with Target 40.100 -->
+            <!-- 5 ชั้น (5 Ply) with Target 39.15 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
@@ -586,7 +586,7 @@
             <div class="glass-card rounded-2xl p-6 border-t-2 border-fuchsia-500/50 bg-fuchsia-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-fuchsia-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (5 ชั้น)</span>
-                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 40.100 g/Sqm</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 39.15 g/Sqm</span>
                 </h3>
                 <div class="w-full h-[250px]"><canvas id="trendGramSqm5Ply"></canvas></div>
             </div>
@@ -1191,7 +1191,7 @@
         // CONSTANT TARGET VALUES
         const RATIO_TARGET = 0.464;     // Target ฿ / Output
         const TARGET_3PLY_G = 26.740;   // Target g/Sqm for 3 Ply
-        const TARGET_5PLY_G = 40.100;   // Target g/Sqm for 5 Ply
+        const TARGET_5PLY_G = 39.15;   // Target g/Sqm for 5 Ply
         const TARGET_MIX_COST = 5.090;  // Target Mix Cost ฿ (used as fallback rate if no Actual data)
 
         // TARGET RAW MATERIAL PRICES (฿/กก.)
@@ -1628,7 +1628,7 @@
             if (disp3PlyG > 0) {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm3PlyPct', disp3PlyG, TARGET_3PLY_G, true);
-                if (kpi3pSub) kpi3pSub.innerText = `Target: 26.740 g/Sqm (บันทึก ${ply3_count} วัน)`;
+                if (kpi3pSub) kpi3pSub.innerText = `Target: 26.740 g/Sqm ;
             } else {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm3PlyPct')) document.getElementById('kpiGramSqm3PlyPct').innerHTML = "";
@@ -1638,7 +1638,7 @@
             if (disp5PlyG > 0) {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm5PlyPct', disp5PlyG, TARGET_5PLY_G, true);
-                if (kpi5pSub) kpi5pSub.innerText = `Target: 40.100 g/Sqm (บันทึก ${ply5_count} วัน)`;
+                if (kpi5pSub) kpi5pSub.innerText = `Target: 39.15 g/Sqm ;
             } else {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm5PlyPct')) document.getElementById('kpiGramSqm5PlyPct').innerHTML = "";
