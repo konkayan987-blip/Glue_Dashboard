@@ -119,7 +119,7 @@
             </div>
         </header>
 
-        <!-- SECTION: TARGET VS ACTUAL (0.464 ฿/OUTPUT) SUMMARY BANNER -->
+        <!-- SECTION: TARGET VS ACTUAL SUMMARY BANNER -->
         <div id="targetSummaryBanner" class="glass-card rounded-2xl p-6 border-l-4 border-l-amber-500 bg-gradient-to-r from-slate-900/90 via-slate-800/80 to-slate-900/90">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                 <div class="space-y-1">
@@ -466,7 +466,7 @@
                         <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
                             <td class="p-3 font-semibold text-fuchsia-300">5 ชั้น (5 Ply)</td>
                             <td id="tbl5PlyG" class="p-3 text-right font-bold text-fuchsia-400">--</td>
-                            <td class="p-3 text-right text-slate-400 font-semibold">39.15</td>
+                            <td class="p-3 text-right text-slate-400 font-semibold">39.150</td>
                             <td id="tbl5PlyKg" class="p-3 text-right text-slate-300">--</td>
                             <td id="tbl5PlyRate" class="p-3 text-center text-slate-400">--</td>
                             <td id="tbl5PlyBaht" class="p-3 text-right font-bold text-fuchsia-400">--</td>
@@ -478,8 +478,130 @@
             </div>
         </div>
 
+        <!-- SECTION: GLUE USAGE PER SQM REPORT (TABLE & CHART) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-sky-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-sky-300 flex items-center gap-2">
+                    <i class="fa-solid fa-table"></i> รายงานการใช้กาวต่อตารางเมตร (g/Sqm)
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
+                                <th class="p-3">Description</th>
+                                <th class="p-3 text-center">Target</th>
+                                <th class="p-3 text-center">Actual</th>
+                                <th class="p-3 text-center">Diff</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-orange-300">ปริมาณการใช้กาวต่อตรม. SF</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold">14.710</td>
+                                <td id="repActualSF" class="p-3 text-center font-bold text-orange-400">--</td>
+                                <td id="repDiffSF" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-indigo-300">ปริมาณการใช้กาวต่อตรม. DF</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold">18.310</td>
+                                <td id="repActualDF" class="p-3 text-center font-bold text-indigo-400">--</td>
+                                <td id="repDiffDF" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
+                                <td class="p-3 font-semibold text-lime-300">ปริมาณการใช้กาวต่อตรม. 3 Ply</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold">26.740</td>
+                                <td id="repActual3Ply" class="p-3 text-center font-bold text-lime-400">--</td>
+                                <td id="repDiff3Ply" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
+                                <td class="p-3 font-semibold text-fuchsia-300">ปริมาณการใช้กาวต่อตรม. 5 Ply</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold">39.150</td>
+                                <td id="repActual5Ply" class="p-3 text-center font-bold text-fuchsia-400">--</td>
+                                <td id="repDiff5Ply" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="border-t-2 border-slate-700 bg-slate-800/60">
+                            <tr>
+                                <td class="p-3 text-right font-semibold text-slate-300">เฉลี่ยรวม</td>
+                                <td class="p-3 text-center text-sky-400 font-bold" id="repAvgTarget">--</td>
+                                <td class="p-3 text-center text-sky-400 font-bold" id="repAvgActual">--</td>
+                                <td class="p-3 text-center font-bold" id="repAvgDiff">--</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-rose-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-rose-300 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-bar"></i> กราฟเปรียบเทียบ Target vs Actual
+                </h3>
+                <div class="w-full h-[260px]"><canvas id="barUsagePerSqmRep"></canvas></div>
+            </div>
+        </div>
+
+        <!-- SECTION: RAW MATERIAL PRICES REPORT (TABLE & CHART) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-amber-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-amber-300 flex items-center gap-2">
+                    <i class="fa-solid fa-table"></i> รายงานราคาวัตถุดิบผสมกาว (฿/กก.)
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
+                                <th class="p-3">Description</th>
+                                <th class="p-3 text-center">Target (฿)</th>
+                                <th class="p-3 text-center">Actual (฿)</th>
+                                <th class="p-3 text-center">Diff</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-amber-300">ราคาแป้งมัน</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold" id="repTgtFlour">--</td>
+                                <td id="repActualFlour" class="p-3 text-center font-bold text-amber-400">--</td>
+                                <td id="repDiffFlour" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-sky-300">ราคาโซดาไฟ</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold" id="repTgtSoda">--</td>
+                                <td id="repActualSoda" class="p-3 text-center font-bold text-sky-400">--</td>
+                                <td id="repDiffSoda" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-emerald-300">ราคาบอแรกซ์</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold" id="repTgtBorax">--</td>
+                                <td id="repActualBorax" class="p-3 text-center font-bold text-emerald-400">--</td>
+                                <td id="repDiffBorax" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-purple-300">ราคาแป้งสังเคราะห์</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold" id="repTgtSynth">--</td>
+                                <td id="repActualSynth" class="p-3 text-center font-bold text-purple-400">--</td>
+                                <td id="repDiffSynth" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="p-3 font-semibold text-rose-300">ราคาเคมี X-2</td>
+                                <td class="p-3 text-center text-slate-400 font-semibold" id="repTgtX2">--</td>
+                                <td id="repActualX2" class="p-3 text-center font-bold text-rose-400">--</td>
+                                <td id="repDiffX2" class="p-3 text-center font-semibold">--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50">
+                <h3 class="text-lg font-semibold mb-4 text-orange-300 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-column"></i> กราฟเปรียบเทียบราคา Target vs Actual
+                </h3>
+                <div class="w-full h-[260px]"><canvas id="barRawMatRep"></canvas></div>
+            </div>
+        </div>
+
         <!-- MAIN PRODUCTION CHARTS -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-emerald-500/50">
                 <h3 class="text-lg font-semibold mb-4 text-emerald-300">📊 ปริมาณกาวที่ใช้ (kg)</h3>
                 <div class="w-full h-[250px]"><canvas id="barUsage"></canvas></div>
@@ -550,7 +672,10 @@
         <!-- TREND CHARTS: QUALITY & MIX COST -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="glass-card rounded-2xl p-6">
-                <h3 class="text-lg font-semibold mb-4 text-violet-300">🧪 แนวโน้มเปอร์เซ็นต์คุณภาพกาว (%)</h3>
+                <h3 class="text-lg font-semibold mb-4 text-violet-300 flex items-center justify-between">
+                    <span>🧪 แนวโน้มคุณภาพกาว (Actual %)</span>
+                    <span class="text-xs text-rose-400 font-normal border border-rose-500/30 px-2 py-0.5 rounded-md bg-rose-950/40">Target: 90%</span>
+                </h3>
                 <div class="w-full h-[250px]"><canvas id="trendQuality"></canvas></div>
             </div>
             <div class="glass-card rounded-2xl p-6 border-t-2 border-cyan-500/50">
@@ -1175,7 +1300,7 @@
         const TARGET_MIX_COST = 5.090;  // Target Mix Cost ฿ (used as fallback rate if no Actual data)
 
         // TARGET RAW MATERIAL PRICES (฿/กก.)
-        const TARGET_PRICE_FLOUR = 20;   // Target แป้งมัน ฿/กก.
+        const TARGET_PRICE_FLOUR = 20.00;   // Target แป้งมัน ฿/กก. (Updated)
         const TARGET_PRICE_SODA = 14;    // Target โซดาไฟ ฿/กก.
         const TARGET_PRICE_BORAX = 24;   // Target Borax ฿/กก.
         const TARGET_PRICE_SYNTH = 33;   // Target แป้งสังเคราะห์ ฿/กก.
@@ -1383,7 +1508,8 @@
 
             const avgRatio = dispTotalOutput > 0 ? (dispTotalCost / dispTotalOutput) : 0;
             const avgKgOutput = dispTotalOutput > 0 ? (dispTotalUsage / dispTotalOutput) : 0;
-            const avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
+            let avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
+            if (avgQuality > 0 && avgQuality <= 1) avgQuality = avgQuality * 100; // แปลงค่า 0.xx ให้เป็นเปอร์เซ็นต์ (เช่น 0.94 -> 94)
             
             let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
             let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
@@ -1519,6 +1645,21 @@
                 }
             };
 
+            const renderUsageDiff = (actual, target, elementId, decimals = 3) => {
+                const el = document.getElementById(elementId);
+                if (!el) return;
+                if (actual <= 0) { el.innerHTML = '--'; return; }
+                const diff = actual - target;
+                const formattedDiff = Math.abs(diff).toFixed(decimals);
+                if (diff > 0) {
+                    el.innerHTML = `<span class="text-rose-400">+${formattedDiff}</span>`;
+                } else if (diff < 0) {
+                    el.innerHTML = `<span class="text-emerald-400">-${formattedDiff}</span>`;
+                } else {
+                    el.innerHTML = `<span class="text-slate-400">0.${'0'.repeat(decimals)}</span>`;
+                }
+            };
+
             if (document.getElementById('tblSingleG')) document.getElementById('tblSingleG').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
             if (document.getElementById('tblSingleKg')) document.getElementById('tblSingleKg').innerText = dispSingleG > 0 ? (dispSingleG / 1000).toFixed(6) : "--";
             if (document.getElementById('tblSingleBaht')) document.getElementById('tblSingleBaht').innerText = dispSingleG > 0 ? "฿" + singleBaht.toFixed(4) : "--";
@@ -1543,7 +1684,45 @@
             if (document.getElementById('tbl5PlyTargetBaht')) document.getElementById('tbl5PlyTargetBaht').innerHTML = renderDiffBaht(disp5PlyG, ply5TargetBaht);
             if (document.getElementById('tbl5PlyStatus')) document.getElementById('tbl5PlyStatus').innerHTML = renderStatusBadge(disp5PlyG, TARGET_5PLY_G);
 
-            // KPI Cards
+            // GLUE USAGE PER SQM REPORT (TABLE)
+            if (document.getElementById('repActualSF')) document.getElementById('repActualSF').innerText = dispSingleG > 0 ? dispSingleG.toFixed(3) : "--";
+            if (document.getElementById('repActualDF')) document.getElementById('repActualDF').innerText = dispDoubleG > 0 ? dispDoubleG.toFixed(3) : "--";
+            if (document.getElementById('repActual3Ply')) document.getElementById('repActual3Ply').innerText = disp3PlyG > 0 ? disp3PlyG.toFixed(3) : "--";
+            if (document.getElementById('repActual5Ply')) document.getElementById('repActual5Ply').innerText = disp5PlyG > 0 ? disp5PlyG.toFixed(3) : "--";
+
+            renderUsageDiff(dispSingleG, 14.710, 'repDiffSF');
+            renderUsageDiff(dispDoubleG, 18.310, 'repDiffDF');
+            renderUsageDiff(disp3PlyG, TARGET_3PLY_G, 'repDiff3Ply');
+            renderUsageDiff(disp5PlyG, TARGET_5PLY_G, 'repDiff5Ply');
+
+            // ปรับค่าเฉลี่ยรวมให้แสดง Target 33.020 และเปรียบเทียบกับ Actual แบบ Total ตามที่ต้องการ
+            const repAvgTarget = 33.020;
+            const repAvgActual = dispGramSqm; // ใช้ค่าเฉลี่ยรวมทั้งหมด (Total Actual)
+
+            if (document.getElementById('repAvgTarget')) document.getElementById('repAvgTarget').innerText = repAvgTarget.toFixed(3);
+            if (document.getElementById('repAvgActual')) document.getElementById('repAvgActual').innerText = repAvgActual > 0 ? repAvgActual.toFixed(3) : "--";
+            renderUsageDiff(repAvgActual, repAvgTarget, 'repAvgDiff');
+
+            // RAW MAT PRICES REPORT (TABLE)
+            if (document.getElementById('repTgtFlour')) document.getElementById('repTgtFlour').innerText = TARGET_PRICE_FLOUR.toFixed(2);
+            if (document.getElementById('repTgtSoda')) document.getElementById('repTgtSoda').innerText = TARGET_PRICE_SODA.toFixed(2);
+            if (document.getElementById('repTgtBorax')) document.getElementById('repTgtBorax').innerText = TARGET_PRICE_BORAX.toFixed(2);
+            if (document.getElementById('repTgtSynth')) document.getElementById('repTgtSynth').innerText = TARGET_PRICE_SYNTH.toFixed(2);
+            if (document.getElementById('repTgtX2')) document.getElementById('repTgtX2').innerText = TARGET_PRICE_X2.toFixed(2);
+
+            if (document.getElementById('repActualFlour')) document.getElementById('repActualFlour').innerText = avgFlour > 0 ? avgFlour.toFixed(2) : "--";
+            if (document.getElementById('repActualSoda')) document.getElementById('repActualSoda').innerText = avgSoda > 0 ? avgSoda.toFixed(2) : "--";
+            if (document.getElementById('repActualBorax')) document.getElementById('repActualBorax').innerText = avgBorax > 0 ? avgBorax.toFixed(2) : "--";
+            if (document.getElementById('repActualSynth')) document.getElementById('repActualSynth').innerText = avgSynth > 0 ? avgSynth.toFixed(2) : "--";
+            if (document.getElementById('repActualX2')) document.getElementById('repActualX2').innerText = avgX2 > 0 ? avgX2.toFixed(2) : "--";
+
+            renderUsageDiff(avgFlour, TARGET_PRICE_FLOUR, 'repDiffFlour', 2);
+            renderUsageDiff(avgSoda, TARGET_PRICE_SODA, 'repDiffSoda', 2);
+            renderUsageDiff(avgBorax, TARGET_PRICE_BORAX, 'repDiffBorax', 2);
+            renderUsageDiff(avgSynth, TARGET_PRICE_SYNTH, 'repDiffSynth', 2);
+            renderUsageDiff(avgX2, TARGET_PRICE_X2, 'repDiffX2', 2);
+
+            // KPI Cards update
             if (document.getElementById('kpiTotalUsage')) document.getElementById('kpiTotalUsage').innerText = dispTotalUsage.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             if (document.getElementById('kpiTotalCost')) document.getElementById('kpiTotalCost').innerText = "฿" + dispTotalCost.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             if (document.getElementById('kpiTotalOutput')) document.getElementById('kpiTotalOutput').innerText = dispTotalOutput.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
@@ -1669,6 +1848,9 @@
                 updateTrendRawMaterialsChart(trendData);
                 updateBarRawMaterialsChart(avgFlour, avgSoda, avgBorax, avgSynth, avgX2);
 
+                updateBarUsagePerSqmRepChart(dispSingleG, dispDoubleG, disp3PlyG, disp5PlyG, 14.710, 18.310, TARGET_3PLY_G, TARGET_5PLY_G);
+                updateBarRawMatRepChart(avgFlour, avgSoda, avgBorax, avgSynth, avgX2, TARGET_PRICE_FLOUR, TARGET_PRICE_SODA, TARGET_PRICE_BORAX, TARGET_PRICE_SYNTH, TARGET_PRICE_X2);
+
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดขณะวาดกราฟ:", error);
             }
@@ -1676,6 +1858,94 @@
             try { updateCostShareDonut(kpi); } catch (error) { console.error("Donut error:", error); }
             try { updateTargetActualColumn(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Target/Actual error:", error); }
             try { updateSavingGauge(dispTotalCost, dispTotalOutput); } catch (error) { console.error("Gauge error:", error); }
+        }
+
+        function updateBarUsagePerSqmRepChart(actSF, actDF, act3P, act5P, tgtSF, tgtDF, tgt3P, tgt5P) {
+            const canvas = document.getElementById('barUsagePerSqmRep');
+            if (!canvas) return;
+            if (charts['barUsagePerSqmRep']) charts['barUsagePerSqmRep'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            charts['barUsagePerSqmRep'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['SF', 'DF', '3 Ply', '5 Ply'],
+                    datasets: [
+                        {
+                            label: 'Target',
+                            data: [tgtSF, tgtDF, tgt3P, tgt5P],
+                            backgroundColor: 'rgba(56, 189, 248, 0.6)', 
+                            borderColor: '#38bdf8',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Actual',
+                            data: [actSF || 0, actDF || 0, act3P || 0, act5P || 0],
+                            backgroundColor: 'rgba(244, 63, 94, 0.6)', 
+                            borderColor: '#f43f5e',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${(Number(ctx.raw) || 0).toFixed(3)} g/Sqm` } }
+                    },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, title: { display: true, text: 'กรัม/ตรม.', color: '#94a3b8' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateBarRawMatRepChart(actF, actS, actB, actSy, actX, tgtF, tgtS, tgtB, tgtSy, tgtX) {
+            const canvas = document.getElementById('barRawMatRep');
+            if (!canvas) return;
+            if (charts['barRawMatRep']) charts['barRawMatRep'].destroy();
+            const ctx = canvas.getContext('2d');
+
+            charts['barRawMatRep'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['แป้งมัน', 'โซดาไฟ', 'บอแรกซ์', 'สังเคราะห์', 'X-2'],
+                    datasets: [
+                        {
+                            label: 'Target',
+                            data: [tgtF, tgtS, tgtB, tgtSy, tgtX],
+                            backgroundColor: 'rgba(56, 189, 248, 0.6)', 
+                            borderColor: '#38bdf8',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Actual',
+                            data: [actF || 0, actS || 0, actB || 0, actSy || 0, actX || 0],
+                            backgroundColor: 'rgba(245, 158, 11, 0.6)',
+                            borderColor: '#f59e0b',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ฿${(Number(ctx.raw) || 0).toFixed(2)} /กก.` } }
+                    },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, title: { display: true, text: 'ราคา (฿/กก.)', color: '#94a3b8' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
         }
 
         function updateTrendRawMaterialsChart(trendData) {
@@ -1959,18 +2229,37 @@
             const ctx = canvas.getContext('2d');
             
             const labels = trendData.map(d => d.label);
-            const data = trendData.map(d => d.quality_count > 0 ? (d.quality_sum / d.quality_count) : null);
+            const data = trendData.map(d => {
+                if (d.quality_count > 0) {
+                    let val = (d.quality_sum / d.quality_count);
+                    return (val > 0 && val <= 1) ? val * 100 : val; // แปลงทศนิยมเป็นเปอร์เซ็นต์
+                }
+                return null;
+            });
 
             charts['trendQuality'] = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: '% คุณภาพกาวเฉลี่ย', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
+                        { label: 'Actual (%)', data: data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3, pointRadius: 4, spanGaps: true },
                         { label: 'Target (90%)', data: trendData.map(() => 90), borderColor: '#f43f5e', borderDash: [5, 5], borderWidth: 2, pointRadius: 0, fill: false, datalabels: { display: false } }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    interaction: { mode: 'index', intersect: false }, 
+                    plugins: { 
+                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.dataset.label}: ${Number(ctx.raw || 0).toFixed(2)}%`
+                            }
+                        }
+                    }, 
+                    scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: false }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } } 
+                }
             });
         }
 
