@@ -1372,11 +1372,11 @@
 
             const mcFilter = document.getElementById('machineFilter') ? document.getElementById('machineFilter').value : 'all';
             
-            let sf_total = 0, sf_count = 0;
-            let df_total = 0, df_count = 0;
+            let sf_glue_sum = 0, sf_sqm_sum = 0;
+            let df_glue_sum = 0, df_sqm_sum = 0;
             
-            let ply3_total = 0, ply3_count = 0;
-            let ply5_total = 0, ply5_count = 0;
+            let ply3_glue_sum = 0, ply3_sqm_sum = 0;
+            let ply5_glue_sum = 0, ply5_sqm_sum = 0;
 
             // Raw material accumulators
             let rm = {
@@ -1409,66 +1409,56 @@
                 if (d.price_synth_flour > 0) { rm.synth_sum += d.price_synth_flour; rm.synth_cnt++; }
                 if (d.price_x2 > 0) { rm.x2_sum += d.price_x2; rm.x2_cnt++; }
 
-                let d_sf = 0;
-                let d_df = 0;
-                let d_3p = 0;
-                let d_5p = 0;
+                let daily_iso_3p_sqm = d.iso_3p_sqm || 0;
+                let daily_iso_5p_sqm = d.iso_5p_sqm || 0;
+                let daily_bhs_3p_sqm = d.bhs_3p_sqm || 0;
+                let daily_bhs_5p_sqm = d.bhs_5p_sqm || 0;
+                let daily_yue_3p_sqm = d.yue_3p_sqm || 0;
+                let daily_yue_5p_sqm = d.yue_5p_sqm || 0;
+
+                let d_sf_glue = 0, d_sf_sqm = 0;
+                let d_df_glue = 0, d_df_sqm = 0;
+                let d_3p_glue = 0, d_3p_sqm = 0;
+                let d_5p_glue = 0, d_5p_sqm = 0;
 
                 if (mcFilter === 'all') {
-                    let sf_s = 0, sf_c = 0;
-                    if (d.iso_sf > 0) { sf_s += d.iso_sf; sf_c++; }
-                    if (d.bhs_sf > 0) { sf_s += d.bhs_sf; sf_c++; }
-                    if (d.yue_sf > 0) { sf_s += d.yue_sf; sf_c++; }
-                    d_sf = sf_c > 0 ? (sf_s / sf_c) : 0;
+                    d_sf_glue = ((d.iso_sf * daily_iso_3p_sqm) + (d.bhs_sf * daily_bhs_3p_sqm) + (d.yue_sf * daily_yue_3p_sqm)) / 1000;
+                    d_sf_sqm = daily_iso_3p_sqm + daily_bhs_3p_sqm + daily_yue_3p_sqm;
 
-                    let df_s = 0, df_c = 0;
-                    if (d.iso_df > 0) { df_s += d.iso_df; df_c++; }
-                    if (d.bhs_df > 0) { df_s += d.bhs_df; df_c++; }
-                    if (d.yue_df > 0) { df_s += d.yue_df; df_c++; }
-                    d_df = df_c > 0 ? (df_s / df_c) : 0;
-                    
-                    // 3 Ply for 'All'
-                    if (d.tot_3p > 0) {
-                        d_3p = d.tot_3p;
-                    } else {
-                        let p3_s = 0, p3_c = 0;
-                        if (d.iso_3p > 0) { p3_s += d.iso_3p; p3_c++; }
-                        if (d.bhs_3p > 0) { p3_s += d.bhs_3p; p3_c++; }
-                        if (d.yue_3p > 0) { p3_s += d.yue_3p; p3_c++; }
-                        d_3p = p3_c > 0 ? (p3_s / p3_c) : 0;
-                    }
+                    d_df_glue = ((d.iso_df * daily_iso_5p_sqm) + (d.bhs_df * daily_bhs_5p_sqm) + (d.yue_df * daily_yue_5p_sqm)) / 1000;
+                    d_df_sqm = daily_iso_5p_sqm + daily_bhs_5p_sqm + daily_yue_5p_sqm;
 
-                    // 5 Ply for 'All'
-                    if (d.tot_5p > 0) {
-                        d_5p = d.tot_5p;
-                    } else {
-                        let p5_s = 0, p5_c = 0;
-                        if (d.iso_5p > 0) { p5_s += d.iso_5p; p5_c++; }
-                        if (d.bhs_5p > 0) { p5_s += d.bhs_5p; p5_c++; }
-                        if (d.yue_5p > 0) { p5_s += d.yue_5p; p5_c++; }
-                        d_5p = p5_c > 0 ? (p5_s / p5_c) : 0;
-                    }
+                    d_3p_glue = ((d.iso_3p * daily_iso_3p_sqm) + (d.bhs_3p * daily_bhs_3p_sqm) + (d.yue_3p * daily_yue_3p_sqm)) / 1000;
+                    d_3p_sqm = daily_iso_3p_sqm + daily_bhs_3p_sqm + daily_yue_3p_sqm;
 
+                    d_5p_glue = ((d.iso_5p * daily_iso_5p_sqm) + (d.bhs_5p * daily_bhs_5p_sqm) + (d.yue_5p * daily_yue_5p_sqm)) / 1000;
+                    d_5p_sqm = daily_iso_5p_sqm + daily_bhs_5p_sqm + daily_yue_5p_sqm;
                 } else if (mcFilter === 'iso') {
-                    d_sf = d.iso_sf; d_df = d.iso_df;
-                    d_3p = d.iso_3p; d_5p = d.iso_5p;
+                    d_sf_glue = (d.iso_sf * daily_iso_3p_sqm) / 1000; d_sf_sqm = daily_iso_3p_sqm;
+                    d_df_glue = (d.iso_df * daily_iso_5p_sqm) / 1000; d_df_sqm = daily_iso_5p_sqm;
+                    d_3p_glue = (d.iso_3p * daily_iso_3p_sqm) / 1000; d_3p_sqm = daily_iso_3p_sqm;
+                    d_5p_glue = (d.iso_5p * daily_iso_5p_sqm) / 1000; d_5p_sqm = daily_iso_5p_sqm;
                 } else if (mcFilter === 'bhs') {
-                    d_sf = d.bhs_sf; d_df = d.bhs_df;
-                    d_3p = d.bhs_3p; d_5p = d.bhs_5p;
+                    d_sf_glue = (d.bhs_sf * daily_bhs_3p_sqm) / 1000; d_sf_sqm = daily_bhs_3p_sqm;
+                    d_df_glue = (d.bhs_df * daily_bhs_5p_sqm) / 1000; d_df_sqm = daily_bhs_5p_sqm;
+                    d_3p_glue = (d.bhs_3p * daily_bhs_3p_sqm) / 1000; d_3p_sqm = daily_bhs_3p_sqm;
+                    d_5p_glue = (d.bhs_5p * daily_bhs_5p_sqm) / 1000; d_5p_sqm = daily_bhs_5p_sqm;
                 } else if (mcFilter === 'yue') {
-                    d_sf = d.yue_sf; d_df = d.yue_df;
-                    d_3p = d.yue_3p; d_5p = d.yue_5p;
+                    d_sf_glue = (d.yue_sf * daily_yue_3p_sqm) / 1000; d_sf_sqm = daily_yue_3p_sqm;
+                    d_df_glue = (d.yue_df * daily_yue_5p_sqm) / 1000; d_df_sqm = daily_yue_5p_sqm;
+                    d_3p_glue = (d.yue_3p * daily_yue_3p_sqm) / 1000; d_3p_sqm = daily_yue_3p_sqm;
+                    d_5p_glue = (d.yue_5p * daily_yue_5p_sqm) / 1000; d_5p_sqm = daily_yue_5p_sqm;
                 }
 
-                d.display_sf = d_sf;
-                d.display_df = d_df;
-                d.display_3p = d_3p;
-                d.display_5p = d_5p;
+                d.display_sf = d_sf_sqm > 0 ? (d_sf_glue / d_sf_sqm) * 1000 : 0;
+                d.display_df = d_df_sqm > 0 ? (d_df_glue / d_df_sqm) * 1000 : 0;
+                d.display_3p = d_3p_sqm > 0 ? (d_3p_glue / d_3p_sqm) * 1000 : 0;
+                d.display_5p = d_5p_sqm > 0 ? (d_5p_glue / d_5p_sqm) * 1000 : 0;
 
-                if (d_sf > 0) { sf_total += d_sf; sf_count++; }
-                if (d_df > 0) { df_total += d_df; df_count++; }
-                if (d_3p > 0) { ply3_total += d_3p; ply3_count++; }
-                if (d_5p > 0) { ply5_total += d_5p; ply5_count++; }
+                if (!isNaN(d_sf_glue) && d_sf_sqm > 0) { sf_glue_sum += d_sf_glue; sf_sqm_sum += d_sf_sqm; }
+                if (!isNaN(d_df_glue) && d_df_sqm > 0) { df_glue_sum += d_df_glue; df_sqm_sum += d_df_sqm; }
+                if (!isNaN(d_3p_glue) && d_3p_sqm > 0) { ply3_glue_sum += d_3p_glue; ply3_sqm_sum += d_3p_sqm; }
+                if (!isNaN(d_5p_glue) && d_5p_sqm > 0) { ply5_glue_sum += d_5p_glue; ply5_sqm_sum += d_5p_sqm; }
             });
 
             const timeMode = document.getElementById('timeGroupFilter') ? document.getElementById('timeGroupFilter').value : 'daily';
@@ -1564,10 +1554,10 @@
             let avgQuality = sum.q_count > 0 ? (sum.quality / sum.q_count) : 0;
             if (avgQuality > 0 && avgQuality <= 1) avgQuality = avgQuality * 100; // แปลงค่า 0.xx ให้เป็นเปอร์เซ็นต์ (เช่น 0.94 -> 94)
             
-            let avgSingleG = sf_count > 0 ? (sf_total / sf_count) : 0;
-            let avgDoubleG = df_count > 0 ? (df_total / df_count) : 0;
-            let avgGramSqm3Ply = ply3_count > 0 ? (ply3_total / ply3_count) : 0;
-            let avgGramSqm5Ply = ply5_count > 0 ? (ply5_total / ply5_count) : 0;
+            let avgSingleG = sf_sqm_sum > 0 ? (sf_glue_sum / sf_sqm_sum) * 1000 : 0;
+            let avgDoubleG = df_sqm_sum > 0 ? (df_glue_sum / df_sqm_sum) * 1000 : 0;
+            let avgGramSqm3Ply = ply3_sqm_sum > 0 ? (ply3_glue_sum / ply3_sqm_sum) * 1000 : 0;
+            let avgGramSqm5Ply = ply5_sqm_sum > 0 ? (ply5_glue_sum / ply5_sqm_sum) * 1000 : 0;
 
             const avgGramSqm = totalSqm > 0 ? ((dispTotalUsage / totalSqm) * 1000) : 0;
 
