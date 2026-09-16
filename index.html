@@ -298,7 +298,7 @@
                 <div class="kpi-sub">Target: 18.310 g/Sqm</div>
             </div>
 
-            <!-- 3 ชั้น (3 Ply) with Target 32.240 -->
+            <!-- 3 ชั้น (3 Ply) with Target 26.740 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
                 <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (3 ชั้น)</div>
@@ -309,7 +309,7 @@
                 <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 32.240 g/Sqm (น้อย=ดี)</div>
             </div>
 
-            <!-- 5 ชั้น (5 Ply) with Target 33.710 -->
+            <!-- 5 ชั้น (5 Ply) with Target 39.15 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
@@ -317,7 +317,7 @@
                     <div id="kpiGramSqm5Ply" class="kpi-value text-fuchsia-400">--</div>
                     <div id="kpiGramSqm5PlyPct"></div>
                 </div>
-                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 33.71 g/Sqm (น้อย=ดี)</div>
+                <div class="kpi-sub text-[10px]" id="kpiGramSqm5PlySub">Target: 33.710 g/Sqm (น้อย=ดี)</div>
             </div>
         </div>
 
@@ -480,63 +480,108 @@
 
         <!-- SECTION: GLUE USAGE PER SQM REPORT (TABLE & CHART) -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <div class="glass-card rounded-2xl p-6 border-t-2 border-sky-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-sky-300 flex items-center gap-2">
-                    <i class="fa-solid fa-table"></i> รายงานการใช้กาวต่อตารางเมตร (g/Sqm)
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
-                                <th class="p-3">Description</th>
-                                <th class="p-3 text-center">Target</th>
-                                <th class="p-3 text-center">Actual</th>
-                                <th class="p-3 text-center">Diff</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800">
-                            <tr class="hover:bg-slate-800/20 transition">
-                                <td class="p-3 font-semibold text-orange-300">ปริมาณการใช้กาวต่อตรม. SF</td>
-                                <td class="p-3 text-center text-slate-400 font-semibold">14.710</td>
-                                <td id="repActualSF" class="p-3 text-center font-bold text-orange-400">--</td>
-                                <td id="repDiffSF" class="p-3 text-center font-semibold">--</td>
-                            </tr>
-                            <tr class="hover:bg-slate-800/20 transition">
-                                <td class="p-3 font-semibold text-indigo-300">ปริมาณการใช้กาวต่อตรม. DF</td>
-                                <td class="p-3 text-center text-slate-400 font-semibold">18.310</td>
-                                <td id="repActualDF" class="p-3 text-center font-bold text-indigo-400">--</td>
-                                <td id="repDiffDF" class="p-3 text-center font-semibold">--</td>
-                            </tr>
-                            <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
-                                <td class="p-3 font-semibold text-lime-300">ปริมาณการใช้กาวต่อตรม. 3 Ply</td>
-                                <td class="p-3 text-center text-slate-400 font-semibold">32.240</td>
-                                <td id="repActual3Ply" class="p-3 text-center font-bold text-lime-400">--</td>
-                                <td id="repDiff3Ply" class="p-3 text-center font-semibold">--</td>
-                            </tr>
-                            <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
-                                <td class="p-3 font-semibold text-fuchsia-300">ปริมาณการใช้กาวต่อตรม. 5 Ply</td>
-                                <td class="p-3 text-center text-slate-400 font-semibold">33.710</td>
-                                <td id="repActual5Ply" class="p-3 text-center font-bold text-fuchsia-400">--</td>
-                                <td id="repDiff5Ply" class="p-3 text-center font-semibold">--</td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="border-t-2 border-slate-700 bg-slate-800/60">
-                            <tr>
-                                <td class="p-3 text-right font-semibold text-slate-300">เฉลี่ยรวม</td>
-                                <td class="p-3 text-center text-sky-400 font-bold" id="repAvgTarget">--</td>
-                                <td class="p-3 text-center text-sky-400 font-bold" id="repAvgActual">--</td>
-                                <td class="p-3 text-center font-bold" id="repAvgDiff">--</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+            
+            <div class="flex flex-col gap-6">
+                <!-- TABLE: SF & DF -->
+                <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50">
+                    <h3 class="text-lg font-semibold mb-4 text-orange-300 flex items-center gap-2">
+                        <i class="fa-solid fa-table"></i> รายงานการใช้กาวต่อตารางเมตร (SF & DF)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
+                                    <th class="p-3">Description</th>
+                                    <th class="p-3 text-center">Target</th>
+                                    <th class="p-3 text-center">Actual</th>
+                                    <th class="p-3 text-center">Diff</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800">
+                                <tr class="hover:bg-slate-800/20 transition">
+                                    <td class="p-3 font-semibold text-orange-300">ปริมาณการใช้กาวต่อตรม. SF</td>
+                                    <td class="p-3 text-center text-slate-400 font-semibold">14.710</td>
+                                    <td id="repActualSF" class="p-3 text-center font-bold text-orange-400">--</td>
+                                    <td id="repDiffSF" class="p-3 text-center font-semibold">--</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/20 transition">
+                                    <td class="p-3 font-semibold text-indigo-300">ปริมาณการใช้กาวต่อตรม. DF</td>
+                                    <td class="p-3 text-center text-slate-400 font-semibold">18.310</td>
+                                    <td id="repActualDF" class="p-3 text-center font-bold text-indigo-400">--</td>
+                                    <td id="repDiffDF" class="p-3 text-center font-semibold">--</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TABLE: 3 PLY & 5 PLY -->
+                <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50">
+                    <h3 class="text-lg font-semibold mb-4 text-lime-300 flex items-center gap-2">
+                        <i class="fa-solid fa-table"></i> รายงานการใช้กาวต่อตารางเมตร (3 Ply & 5 Ply)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-slate-400 bg-slate-800/40">
+                                    <th class="p-3">Description</th>
+                                    <th class="p-3 text-center">Target</th>
+                                    <th class="p-3 text-center">Actual</th>
+                                    <th class="p-3 text-center">Diff</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800">
+                                <tr class="hover:bg-slate-800/20 transition bg-lime-950/20">
+                                    <td class="p-3 font-semibold text-lime-300">ปริมาณการใช้กาวต่อตรม. 3 Ply</td>
+                                    <td class="p-3 text-center text-slate-400 font-semibold">32.240</td>
+                                    <td id="repActual3Ply" class="p-3 text-center font-bold text-lime-400">--</td>
+                                    <td id="repDiff3Ply" class="p-3 text-center font-semibold">--</td>
+                                </tr>
+                                <tr class="hover:bg-slate-800/20 transition bg-fuchsia-950/20">
+                                    <td class="p-3 font-semibold text-fuchsia-300">ปริมาณการใช้กาวต่อตรม. 5 Ply</td>
+                                    <td class="p-3 text-center text-slate-400 font-semibold">33.710</td>
+                                    <td id="repActual5Ply" class="p-3 text-center font-bold text-fuchsia-400">--</td>
+                                    <td id="repDiff5Ply" class="p-3 text-center font-semibold">--</td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="border-t-2 border-slate-700 bg-slate-800/60">
+                                <tr>
+                                    <td class="p-3 text-right font-semibold text-slate-300">เฉลี่ยรวม (Total Actual)</td>
+                                    <td class="p-3 text-center text-sky-400 font-bold" id="repAvgTarget">--</td>
+                                    <td class="p-3 text-center text-sky-400 font-bold" id="repAvgActual">--</td>
+                                    <td class="p-3 text-center font-bold" id="repAvgDiff">--</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- NOTE: วิธีคิด Target -->
+                    <div class="mt-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/60">
+                        <h4 class="text-xs font-bold text-slate-300 mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-info text-sky-400"></i> วิธีคิด Target (g/Sqm):
+                        </h4>
+                        <ul class="text-[11.5px] text-slate-400 list-disc list-inside space-y-1.5 leading-relaxed">
+                            <li><b class="text-lime-300">3 Ply:</b> <span class="text-white">32.240 g/Sqm</span> (อิงจากค่าเป้าหมายมาตรฐาน หรือ ระบุสูตรคำนวณที่นี่...)</li>
+                            <li><b class="text-fuchsia-300">5 Ply:</b> <span class="text-white">33.710 g/Sqm</span> (อิงจากค่าเป้าหมายมาตรฐาน หรือ ระบุสูตรคำนวณที่นี่...)</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 border-t-2 border-rose-500/50">
-                <h3 class="text-lg font-semibold mb-4 text-rose-300 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-bar"></i> กราฟเปรียบเทียบ Target vs Actual
-                </h3>
-                <div class="w-full h-[260px]"><canvas id="barUsagePerSqmRep"></canvas></div>
+            <div class="flex flex-col gap-6">
+                <div class="glass-card rounded-2xl p-6 border-t-2 border-orange-500/50 flex-1">
+                    <h3 class="text-lg font-semibold mb-4 text-orange-300 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar"></i> กราฟเปรียบเทียบ Target vs Actual (SF & DF)
+                    </h3>
+                    <div class="w-full h-[180px]"><canvas id="barUsagePerSqmRepSFDF"></canvas></div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 flex-1">
+                    <h3 class="text-lg font-semibold mb-4 text-lime-300 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-bar"></i> กราฟเปรียบเทียบ Target vs Actual (3 Ply & 5 Ply)
+                    </h3>
+                    <div class="w-full h-[180px]"><canvas id="barUsagePerSqmRepPly"></canvas></div>
+                </div>
             </div>
         </div>
 
@@ -652,7 +697,7 @@
         </div>
 
         <!-- TREND CHARTS: 3 PLY & 5 PLY WITH TARGET DASHED LINES -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
             <div class="glass-card rounded-2xl p-6 border-t-2 border-lime-500/50 bg-lime-950/10">
                 <h3 class="text-lg font-semibold mb-4 text-lime-300 flex items-center justify-between">
                     <span>📉 แนวโน้ม กรัม/ตรม. (3 ชั้น)</span>
@@ -1784,7 +1829,7 @@
             if (disp3PlyG > 0) {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm3PlyPct', disp3PlyG, TARGET_3PLY_G, true);
-                if (kpi3pSub) kpi3pSub.innerText = `Target: 32.240 g/Sqm`;
+                if (kpi3pSub) kpi3pSub.innerText = `Target: 26.740 g/Sqm`;
             } else {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm3PlyPct')) document.getElementById('kpiGramSqm3PlyPct').innerHTML = "";
@@ -1794,7 +1839,7 @@
             if (disp5PlyG > 0) {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm5PlyPct', disp5PlyG, TARGET_5PLY_G, true);
-                if (kpi5pSub) kpi5pSub.innerText = `Target: 33.710 g/Sqm`;
+                if (kpi5pSub) kpi5pSub.innerText = `Target: 39.15 g/Sqm`;
             } else {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm5PlyPct')) document.getElementById('kpiGramSqm5PlyPct').innerHTML = "";
@@ -1861,47 +1906,91 @@
         }
 
         function updateBarUsagePerSqmRepChart(actSF, actDF, act3P, act5P, tgtSF, tgtDF, tgt3P, tgt5P) {
-            const canvas = document.getElementById('barUsagePerSqmRep');
-            if (!canvas) return;
-            if (charts['barUsagePerSqmRep']) charts['barUsagePerSqmRep'].destroy();
-            const ctx = canvas.getContext('2d');
-
-            charts['barUsagePerSqmRep'] = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['SF', 'DF', '3 Ply', '5 Ply'],
-                    datasets: [
-                        {
-                            label: 'Target',
-                            data: [tgtSF, tgtDF, tgt3P, tgt5P],
-                            backgroundColor: 'rgba(56, 189, 248, 0.6)', 
-                            borderColor: '#38bdf8',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Actual',
-                            data: [actSF || 0, actDF || 0, act3P || 0, act5P || 0],
-                            backgroundColor: 'rgba(244, 63, 94, 0.6)', 
-                            borderColor: '#f43f5e',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
-                        tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${(Number(ctx.raw) || 0).toFixed(3)} g/Sqm` } }
+            // Chart 1: SF & DF
+            const canvasSFDF = document.getElementById('barUsagePerSqmRepSFDF');
+            if (canvasSFDF) {
+                if (charts['barUsagePerSqmRepSFDF']) charts['barUsagePerSqmRepSFDF'].destroy();
+                const ctxSFDF = canvasSFDF.getContext('2d');
+                charts['barUsagePerSqmRepSFDF'] = new Chart(ctxSFDF, {
+                    type: 'bar',
+                    data: {
+                        labels: ['SF', 'DF'],
+                        datasets: [
+                            {
+                                label: 'Target',
+                                data: [tgtSF, tgtDF],
+                                backgroundColor: 'rgba(56, 189, 248, 0.6)', 
+                                borderColor: '#38bdf8',
+                                borderWidth: 1,
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Actual',
+                                data: [actSF || 0, actDF || 0],
+                                backgroundColor: 'rgba(249, 115, 22, 0.6)', 
+                                borderColor: '#f97316',
+                                borderWidth: 1,
+                                borderRadius: 4
+                            }
+                        ]
                     },
-                    scales: {
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, title: { display: true, text: 'กรัม/ตรม.', color: '#94a3b8' } },
-                        x: { grid: { display: false } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                            tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${(Number(ctx.raw) || 0).toFixed(3)} g/Sqm` } }
+                        },
+                        scales: {
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, title: { display: true, text: 'กรัม/ตรม.', color: '#94a3b8' } },
+                            x: { grid: { display: false } }
+                        }
                     }
-                }
-            });
+                });
+            }
+
+            // Chart 2: 3 Ply & 5 Ply
+            const canvasPly = document.getElementById('barUsagePerSqmRepPly');
+            if (canvasPly) {
+                if (charts['barUsagePerSqmRepPly']) charts['barUsagePerSqmRepPly'].destroy();
+                const ctxPly = canvasPly.getContext('2d');
+                charts['barUsagePerSqmRepPly'] = new Chart(ctxPly, {
+                    type: 'bar',
+                    data: {
+                        labels: ['3 Ply', '5 Ply'],
+                        datasets: [
+                            {
+                                label: 'Target',
+                                data: [tgt3P, tgt5P],
+                                backgroundColor: 'rgba(56, 189, 248, 0.6)', 
+                                borderColor: '#38bdf8',
+                                borderWidth: 1,
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Actual',
+                                data: [act3P || 0, act5P || 0],
+                                backgroundColor: 'rgba(132, 204, 22, 0.6)', 
+                                borderColor: '#84cc16',
+                                borderWidth: 1,
+                                borderRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top', labels: { color: '#f8fafc', usePointStyle: true, boxWidth: 8 } },
+                            tooltip: { callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${(Number(ctx.raw) || 0).toFixed(3)} g/Sqm` } }
+                        },
+                        scales: {
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, title: { display: true, text: 'กรัม/ตรม.', color: '#94a3b8' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
         }
 
         function updateBarRawMatRepChart(actF, actS, actB, actSy, actX, tgtF, tgtS, tgtB, tgtSy, tgtX) {
