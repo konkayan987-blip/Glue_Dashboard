@@ -1745,24 +1745,21 @@
             if (document.getElementById('repTotalAvgActual')) document.getElementById('repTotalAvgActual').innerText = repTotalAvgActual > 0 ? repTotalAvgActual.toFixed(3) : "--";
             renderUsageDiff(repTotalAvgActual, repTotalAvgTarget, 'repTotalAvgDiff');
 
-            // --- คำนวณ Target และ Actual เฉลี่ยเฉพาะสำหรับ 3 ชั้น และ 5 ชั้น (แบบค่าเฉลี่ยเลขคณิต) ---
-            let repPlyAvgTarget = (TARGET_3PLY_G + TARGET_5PLY_G) / 2;
-            
+            // --- คำนวณ Target และ Actual เฉลี่ยรวมสำหรับ 3 ชั้น และ 5 ชั้น (แบบถ่วงน้ำหนัก - Weighted Average) ---
+            let totalPlySqm = ply3_sqm_sum + ply5_sqm_sum;
+            let totalPlyGlueKg = ply3_glue_sum + ply5_glue_sum;
+
+            let repPlyAvgTarget = 0;
             let repPlyAvgActual = 0;
-            let plyActualSum = 0;
-            let plyCount = 0;
-            
-            if (disp3PlyG > 0) {
-                plyActualSum += disp3PlyG;
-                plyCount++;
-            }
-            if (disp5PlyG > 0) {
-                plyActualSum += disp5PlyG;
-                plyCount++;
-            }
-            
-            if (plyCount > 0) {
-                repPlyAvgActual = plyActualSum / plyCount;
+
+            if (totalPlySqm > 0) {
+                // Target แบบถ่วงน้ำหนักตามสัดส่วนพื้นที่การผลิตจริง
+                repPlyAvgTarget = ((TARGET_3PLY_G * ply3_sqm_sum) + (TARGET_5PLY_G * ply5_sqm_sum)) / totalPlySqm;
+                // Actual แบบถ่วงน้ำหนัก (เอาน้ำหนักกาวรวม หาร พื้นที่รวม) * 1000 เพื่อแปลง kg เป็น g
+                repPlyAvgActual = (totalPlyGlueKg / totalPlySqm) * 1000;
+            } else {
+                // กรณีไม่มีข้อมูลพื้นที่ผลิต ให้ใช้ค่าเฉลี่ยเลขคณิตไปก่อน
+                repPlyAvgTarget = (TARGET_3PLY_G + TARGET_5PLY_G) / 2;
             }
 
             if (document.getElementById('repPlyAvgTarget')) document.getElementById('repPlyAvgTarget').innerText = repPlyAvgTarget > 0 ? repPlyAvgTarget.toFixed(3) : "--";
