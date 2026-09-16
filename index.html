@@ -1755,37 +1755,24 @@
             if (document.getElementById('repTotalAvgActual')) document.getElementById('repTotalAvgActual').innerText = repTotalAvgActual > 0 ? repTotalAvgActual.toFixed(3) : "--";
             renderUsageDiff(repTotalAvgActual, repTotalAvgTarget, 'repTotalAvgDiff');
 
-            // --- คำนวณ Target และ Actual เฉลี่ยเฉพาะสำหรับ 3 ชั้น และ 5 ชั้น (ถ่วงน้ำหนัก) ---
-            let repPlyAvgTarget = 0;
-            if ((totalSqm3Ply + totalSqm5Ply) > 0) {
-                repPlyAvgTarget = ((totalSqm3Ply * TARGET_3PLY_G) + (totalSqm5Ply * TARGET_5PLY_G)) / (totalSqm3Ply + totalSqm5Ply);
-            }
-
-            // คำนวณ Actual รวมของ 3Ply และ 5Ply (ตามสูตร: (SUM(กาว 3 ชั้น) + SUM(กาว 5 ชั้น)) * 1000 / (SUM(SQM 3 ชั้น) + SUM(SQM 5 ชั้น)))
-            let sumGlue3Ply = 0;
-            let sumGlue5Ply = 0;
+            // --- คำนวณ Target และ Actual เฉลี่ยเฉพาะสำหรับ 3 ชั้น และ 5 ชั้น (แบบค่าเฉลี่ยเลขคณิต) ---
+            let repPlyAvgTarget = (TARGET_3PLY_G + TARGET_5PLY_G) / 2;
             
-            filteredData.forEach(d => {
-                let d_3p = d.display_3p || 0;
-                let sq_3p = 0;
-                if (mcFilter === 'all') sq_3p = (d.iso_3p_sqm||0) + (d.bhs_3p_sqm||0) + (d.yue_3p_sqm||0);
-                else if (mcFilter === 'iso') sq_3p = d.iso_3p_sqm||0;
-                else if (mcFilter === 'bhs') sq_3p = d.bhs_3p_sqm||0;
-                else if (mcFilter === 'yue') sq_3p = d.yue_3p_sqm||0;
-                sumGlue3Ply += (d_3p * sq_3p) / 1000;
-
-                let d_5p = d.display_5p || 0;
-                let sq_5p = 0;
-                if (mcFilter === 'all') sq_5p = (d.iso_5p_sqm||0) + (d.bhs_5p_sqm||0) + (d.yue_5p_sqm||0);
-                else if (mcFilter === 'iso') sq_5p = d.iso_5p_sqm||0;
-                else if (mcFilter === 'bhs') sq_5p = d.bhs_5p_sqm||0;
-                else if (mcFilter === 'yue') sq_5p = d.yue_5p_sqm||0;
-                sumGlue5Ply += (d_5p * sq_5p) / 1000;
-            });
-
             let repPlyAvgActual = 0;
-            if ((totalSqm3Ply + totalSqm5Ply) > 0) {
-                repPlyAvgActual = ((sumGlue3Ply + sumGlue5Ply) * 1000) / (totalSqm3Ply + totalSqm5Ply);
+            let plyActualSum = 0;
+            let plyCount = 0;
+            
+            if (disp3PlyG > 0) {
+                plyActualSum += disp3PlyG;
+                plyCount++;
+            }
+            if (disp5PlyG > 0) {
+                plyActualSum += disp5PlyG;
+                plyCount++;
+            }
+            
+            if (plyCount > 0) {
+                repPlyAvgActual = plyActualSum / plyCount;
             }
 
             if (document.getElementById('repPlyAvgTarget')) document.getElementById('repPlyAvgTarget').innerText = repPlyAvgTarget > 0 ? repPlyAvgTarget.toFixed(3) : "--";
