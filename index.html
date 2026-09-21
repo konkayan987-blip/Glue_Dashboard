@@ -360,7 +360,7 @@
 
                 <div class="bg-slate-900/60 p-4 rounded-xl border border-emerald-500/30">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-emerald-300 font-semibold">🧂 ราคาบอแรกซ์</span>
+                        <span class="text-xs text-emerald-300 font-semibold">🧂 ราคาบอแรกซ์เฉลี่ย</span>
                         <i class="fa-solid fa-mortar-pestle text-emerald-400/30 text-lg"></i>
                     </div>
                     <div class="text-xl font-bold text-emerald-400 mt-2" id="kpiPriceBorax">--</div>
@@ -869,7 +869,11 @@
         const parseNum = (val) => {
             if (val === null || val === undefined || val === '') return 0;
             if (typeof val === 'number') return isNaN(val) ? 0 : val;
-            const parsed = parseFloat(String(val).replace(/,/g, "").replace(/%/g, "").trim());
+            const parsed = parseFloat(String(val)
+                .replace(/,/g, "")
+                .replace(/%/g, "")
+                .replace(/[฿$€£]/g, "")
+                .trim());
             return isNaN(parsed) ? 0 : parsed;
         };
 
