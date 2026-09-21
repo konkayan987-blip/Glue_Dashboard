@@ -298,7 +298,7 @@
                 <div class="kpi-sub">Target: 18.310 g/Sqm</div>
             </div>
 
-            <!-- 3 ชั้น (3 Ply) with Target 26.740 -->
+            <!-- 3 ชั้น (3 Ply) with Target 32.240 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-lime-500/50 bg-lime-950/10">
                 <div class="absolute top-4 right-4 text-lime-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (3 ชั้น)</div>
@@ -309,7 +309,7 @@
                 <div class="kpi-sub text-[10px]" id="kpiGramSqm3PlySub">Target: 32.240 g/Sqm (น้อย=ดี)</div>
             </div>
 
-            <!-- 5 ชั้น (5 Ply) with Target 39.15 -->
+            <!-- 5 ชั้น (5 Ply) with Target 33.710 -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden border-b-2 border-b-fuchsia-500/50 bg-fuchsia-950/10">
                 <div class="absolute top-4 right-4 text-fuchsia-400 opacity-20"><i class="fa-solid fa-cubes-stacked text-3xl"></i></div>
                 <div class="kpi-label">เฉลี่ย กรัม/ตรม. (5 ชั้น)</div>
@@ -1847,7 +1847,7 @@
             if (disp3PlyG > 0) {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = disp3PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm3PlyPct', disp3PlyG, TARGET_3PLY_G, true);
-                if (kpi3pSub) kpi3pSub.innerText = `Target: 26.740 g/Sqm`;
+                if (kpi3pSub) kpi3pSub.innerText = `Target: 32.240 g/Sqm`;
             } else {
                 if (document.getElementById('kpiGramSqm3Ply')) document.getElementById('kpiGramSqm3Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm3PlyPct')) document.getElementById('kpiGramSqm3PlyPct').innerHTML = "";
@@ -1857,7 +1857,7 @@
             if (disp5PlyG > 0) {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = disp5PlyG.toFixed(3);
                 renderTargetPct('kpiGramSqm5PlyPct', disp5PlyG, TARGET_5PLY_G, true);
-                if (kpi5pSub) kpi5pSub.innerText = `Target: 39.15 g/Sqm`;
+                if (kpi5pSub) kpi5pSub.innerText = `Target: 33.710 g/Sqm`;
             } else {
                 if (document.getElementById('kpiGramSqm5Ply')) document.getElementById('kpiGramSqm5Ply').innerText = "--";
                 if (document.getElementById('kpiGramSqm5PlyPct')) document.getElementById('kpiGramSqm5PlyPct').innerHTML = "";
